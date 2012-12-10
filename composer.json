@@ -1,0 +1,7 @@
+{
+    "name": "xabbuh/panda-client",
+    "autoload": {
+        "psr-0": { "Xabbuh\\PandaClient": "" }
+    },
+    "target-dir": "Xabbuh/PandaClient"
+}
