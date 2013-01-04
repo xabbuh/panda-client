@@ -11,6 +11,8 @@
 
 namespace Xabbuh\PandaClient;
 
+use Xabbuh\PandaClient\Exception\HttpException;
+
 /**
  * Panda REST client implementation.
  * 
@@ -143,6 +145,12 @@ class PandaRestClient
         }
         
         $response = curl_exec($ch);
+
+        // throw exception if the http request failed
+        if (curl_errno($ch) > 0) {
+            throw new HttpException(curl_error($ch), curl_errno($ch));
+        }
+        
         curl_close($ch);
         
         return $response;
