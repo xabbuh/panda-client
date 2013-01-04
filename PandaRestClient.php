@@ -11,6 +11,7 @@
 
 namespace Xabbuh\PandaClient;
 
+use Xabbuh\PandaClient\Exception\ApiException;
 use Xabbuh\PandaClient\Exception\HttpException;
 
 /**
@@ -150,7 +151,15 @@ class PandaRestClient
         if (curl_errno($ch) > 0) {
             throw new HttpException(curl_error($ch), curl_errno($ch));
         }
-        
+
+        // check for positive api answers
+        if (curl_getinfo($ch, CURLINFO_HTTP_CODE) != 200) {
+            // throw api exception otherwise
+            $decodedResponse = json_decode($response);
+            $message = "{$decodedResponse->error}: {$decodedResponse->message}";
+            throw new ApiException($message, curl_getinfo($ch, CURLINFO_HTTP_CODE));
+        }
+
         curl_close($ch);
         
         return $response;
