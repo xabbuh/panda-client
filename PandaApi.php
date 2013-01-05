@@ -72,6 +72,27 @@ class PandaApi
     {
         return $this->restClient->post("/videos.json", array("file" => "@$localPath"));
     }
+
+    /**
+     * Retrieve all profiles.
+     *
+     * @return string The server response
+     */
+    public function getProfiles()
+    {
+        return $this->restClient->get("/profiles.json");
+    }
+
+    /**
+     * Retrieve informations for a profile.
+     *
+     * @param $profileId The id of the profile being fetched
+     * @return string The server response
+     */
+    public function getProfile($profileId)
+    {
+        return $this->restClient->get("/profiles/$profileId.json");
+    }
     
     /**
      * Retrieve the cloud's notifications configuration.
