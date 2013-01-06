@@ -68,6 +68,46 @@ class PandaRestClient
         $this->secretKey = $secretKey;
         $this->apiHost = $apiHost;
     }
+
+    /**
+     * Get the cloud id.
+     *
+     * @return string
+     */
+    public function getCloudId()
+    {
+        return $this->cloudId;
+    }
+
+    /**
+     * Get the cloud's access key.
+     *
+     * @return string
+     */
+    public function getAccessKey()
+    {
+        return $this->accessKey;
+    }
+
+    /**
+     * Get the cloud's secret key.
+     *
+     * @return string
+     */
+    public function getSecretKey()
+    {
+        return $this->secretKey;
+    }
+
+    /**
+     * Get the api host.
+     *
+     * @return string
+     */
+    public function getApiHost()
+    {
+        return $this->apiHost;
+    }
     
     /**
      * Helper method to send GET requests to the Panda API.
