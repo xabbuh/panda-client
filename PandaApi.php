@@ -72,6 +72,17 @@ class PandaApi
     {
         return $this->restClient->post("/videos.json", array("file" => "@$localPath"));
     }
+
+    /**
+     * Retrieve a cloud's details
+     *
+     * @param $cloudId The id of the cloud being fetched
+     * @return string The server response
+     */
+    public function getCloud($cloudId)
+    {
+        return $this->restClient->get("/clouds/$cloudId.json");
+    }
     
     /**
      * Retrieve the cloud's notifications configuration.
