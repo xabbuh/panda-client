@@ -83,6 +83,18 @@ class PandaApi
     {
         return $this->restClient->get("/clouds/$cloudId.json");
     }
+
+    /**
+     * Change cloud data.
+     *
+     * @param $cloudId
+     * @param array $data
+     * @return string The server response
+     */
+    public function setCloud($cloudId, array $data)
+    {
+        return $this->restClient->put("/clouds/$cloudId.json", $data);
+    }
     
     /**
      * Retrieve the cloud's notifications configuration.
