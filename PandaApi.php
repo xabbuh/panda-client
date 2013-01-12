@@ -49,6 +49,16 @@ class PandaApi
     {
         return $this->restClient;
     }
+
+    /**
+     * Retrieve a collection of videos from the server.
+     *
+     * @return string The server response
+     */
+    public function getVideos()
+    {
+        return $this->restClient->get("/videos.json");
+    }
     
     /**
      * Send a request to the Panda encoding service to encode a video file that
