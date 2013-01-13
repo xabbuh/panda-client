@@ -59,6 +59,17 @@ class PandaApi
     {
         return $this->restClient->get("/videos.json");
     }
+
+    /**
+     * Delete a video from the server.
+     *
+     * @param string $videoId The id of the video being removed
+     * @return string The server response
+     */
+    public function deleteVideo($videoId)
+    {
+        return $this->restClient->delete("/videos/$videoId.json");
+    }
     
     /**
      * Send a request to the Panda encoding service to encode a video file that
