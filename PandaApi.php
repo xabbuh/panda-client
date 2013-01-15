@@ -174,6 +174,27 @@ class PandaApi
     }
 
     /**
+     * Retrieve all profiles.
+     *
+     * @return string The server response
+     */
+    public function getProfiles()
+    {
+        return $this->restClient->get("/profiles.json");
+    }
+
+    /**
+     * Retrieve informations for a profile.
+     *
+     * @param $profileId The id of the profile being fetched
+     * @return string The server response
+     */
+    public function getProfile($profileId)
+    {
+        return $this->restClient->get("/profiles/$profileId.json");
+    }
+
+    /**
      * Retrieve a cloud's details
      *
      * @param $cloudId The id of the cloud being fetched
