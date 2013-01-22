@@ -12,53 +12,25 @@
 namespace Xabbuh\PandaClient;
 
 /**
- * Intuitive PHP interface for the Panda video encoding service API.
- * 
- * The implementation provides methodes for accessing all endpoints of the Panda
- * encoding REST webservice. Each method is mapped to a corresponding HTTP
- * request.
+ * Interface definition for Panda API implementations.
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-class PandaApi
+interface ApiInterface
 {
     /**
-     * The client which is used to perform the requests to the REST api
-     * 
-     * @var \Xabbuh\PandaClient\PandaRestClient
-     */
-    private $restClient;
-    
-    
-    /**
-     * Constructs the Panda API instance on a given REST client.
-     * 
-     * @param \Xabbuh\PandaClient\PandaRestClient $restClient The client for REST requests
-     */
-    public function __construct(PandaRestClient $restClient)
-    {
-        $this->restClient = $restClient;
-    }
-    
-    /**
      * Returns the Panda REST client.
-     * 
-     * @return \Xabbuh\PandaClient\PandaRestClient The Panda REST client
+     *
+     * @return \Xabbuh\PandaClient\RestClient The Panda REST client
      */
-    public function getRestClient()
-    {
-        return $this->restClient;
-    }
+    public function getRestClient();
 
     /**
      * Retrieve a collection of videos from the server.
      *
      * @return string The server response
      */
-    public function getVideos()
-    {
-        return $this->restClient->get("/videos.json");
-    }
+    public function getVideos();
 
     /**
      * Delete a video from the server.
@@ -66,33 +38,24 @@ class PandaApi
      * @param string $videoId The id of the video being removed
      * @return string The server response
      */
-    public function deleteVideo($videoId)
-    {
-        return $this->restClient->delete("/videos/$videoId.json");
-    }
-    
+    public function deleteVideo($videoId);
+
     /**
      * Send a request to the Panda encoding service to encode a video file that
      * can be found under a particular url.
-     * 
+     *
      * @param string $url The url where the encoding service can fetch the video
      * @return string The server response
      */
-    public function encodeVideoByUrl($url)
-    {
-        return $this->restClient->post("/videos.json", array("source_url" => $url));
-    }
-    
+    public function encodeVideoByUrl($url);
+
     /**
      * Upload a video file to the Panda encoding service.
-     * 
+     *
      * @param string $localPath The path to the local video file
      * @return string The server response
      */
-    public function encodeVideoFile($localPath)
-    {
-        return $this->restClient->post("/videos.json", array("file" => "@$localPath"));
-    }
+    public function encodeVideoFile($localPath);
 
     /**
      * Receive encodings from the server.
@@ -108,10 +71,7 @@ class PandaApi
      * @param array $filter Optional set of filters
      * @return string The server response
      */
-    public function getEncodings(array $filter = null)
-    {
-        return $this->restClient->get("/encodings.json", $filter);
-    }
+    public function getEncodings(array $filter = null);
 
     /**
      * Receive encodings filtered by status from the server.
@@ -123,10 +83,7 @@ class PandaApi
      *     of the filters which can be used)
      * @return string The server response
      */
-    public function getEncodingsWithStatus($status, array $filter = null)
-    {
-        return $this->getEncodings(array("status" => $status), $filter);
-    }
+    public function getEncodingsWithStatus($status, array $filter = null);
 
     /**
      * Receive encodings filtered by a profile id from the server.
@@ -138,10 +95,7 @@ class PandaApi
      *     of the filters which can be used)
      * @return string The server response
      */
-    public function getEncodingsForProfile($profileId, array $filter = null)
-    {
-        return $this->getEncodings(array("profile_id" => $profileId), $filter);
-    }
+    public function getEncodingsForProfile($profileId, array $filter = null);
 
     /**
      * Receive encodings filtered by profile name from the server.
@@ -153,10 +107,7 @@ class PandaApi
      *     of the filters which can be used)
      * @return string The server response
      */
-    public function getEncodingsForProfileByName($profileName, array $filter = null)
-    {
-        return $this->getEncodings(array("profile_name" => $profileName), $filter);
-    }
+    public function getEncodingsForProfileByName($profileName, array $filter = null);
 
     /**
      * Receive encodings filtered by video from the server.
@@ -168,20 +119,14 @@ class PandaApi
      *     of the filters which can be used)
      * @return string The server response
      */
-    public function getEncodingsForVideo($videoId, array $filter = null)
-    {
-        return $this->getEncodings(array("video_id" => $videoId), $filter);
-    }
+    public function getEncodingsForVideo($videoId, array $filter = null);
 
     /**
      * Retrieve all profiles.
      *
      * @return string The server response
      */
-    public function getProfiles()
-    {
-        return $this->restClient->get("/profiles.json");
-    }
+    public function getProfiles();
 
     /**
      * Retrieve informations for a profile.
@@ -189,10 +134,7 @@ class PandaApi
      * @param $profileId The id of the profile being fetched
      * @return string The server response
      */
-    public function getProfile($profileId)
-    {
-        return $this->restClient->get("/profiles/$profileId.json");
-    }
+    public function getProfile($profileId);
 
     /**
      * Retrieve a cloud's details
@@ -200,10 +142,7 @@ class PandaApi
      * @param $cloudId The id of the cloud being fetched
      * @return string The server response
      */
-    public function getCloud($cloudId)
-    {
-        return $this->restClient->get("/clouds/$cloudId.json");
-    }
+    public function getCloud($cloudId);
 
     /**
      * Change cloud data.
@@ -212,29 +151,20 @@ class PandaApi
      * @param array $data
      * @return string The server response
      */
-    public function setCloud($cloudId, array $data)
-    {
-        return $this->restClient->put("/clouds/$cloudId.json", $data);
-    }
-    
+    public function setCloud($cloudId, array $data);
+
     /**
      * Retrieve the cloud's notifications configuration.
-     * 
+     *
      * @return string The server response
      */
-    public function getNotifications()
-    {
-        return $this->restClient->get("/notifications.json");
-    }
-    
+    public function getNotifications();
+
     /**
      * Change the notifications configuration.
-     * 
+     *
      * @param array $notifications The new configuration
      * @return string The server response
      */
-    public function setNotifications(array $notifications)
-    {
-        return $this->restClient->put("/notifications.json", $notifications);
-    }
+    public function setNotifications(array $notifications);
 }

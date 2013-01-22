@@ -22,7 +22,7 @@ use Xabbuh\PandaClient\Exception\HttpException;
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-class PandaRestClient
+class RestClient implements RestClientInterface
 {
     /**
      * Panda cloud id
@@ -70,9 +70,7 @@ class PandaRestClient
     }
 
     /**
-     * Get the cloud id.
-     *
-     * @return string
+     * {@inheritDoc}
      */
     public function getCloudId()
     {
@@ -80,9 +78,7 @@ class PandaRestClient
     }
 
     /**
-     * Get the cloud's access key.
-     *
-     * @return string
+     * {@inheritDoc}
      */
     public function getAccessKey()
     {
@@ -90,9 +86,7 @@ class PandaRestClient
     }
 
     /**
-     * Get the cloud's secret key.
-     *
-     * @return string
+     * {@inheritDoc}
      */
     public function getSecretKey()
     {
@@ -100,57 +94,39 @@ class PandaRestClient
     }
 
     /**
-     * Get the api host.
-     *
-     * @return string
+     * {@inheritDoc}
      */
     public function getApiHost()
     {
         return $this->apiHost;
     }
-    
+
     /**
-     * Helper method to send GET requests to the Panda API.
-     * 
-     * @param string $path The path to send requests to
-     * @param array $params Url parameters
-     * @return string The server response
+     * {@inheritDoc}
      */
     public function get($path, array $params = array())
     {
         return $this->request("GET", $path, $params);
     }
-    
+
     /**
-     * Helper method to send POST requests to the Panda API.
-     * 
-     * @param string $path The path to send requests to
-     * @param array $params Url parameters
-     * @return string The server response
+     * {@inheritDoc}
      */
     public function post($path, array $params = array())
     {
         return $this->request("POST", $path, $params);
     }
-    
+
     /**
-     * Helper method to send PUT requests to the Panda API.
-     * 
-     * @param string $path The path to send requests to
-     * @param array $params Parameters
-     * @return string The server response
+     * {@inheritDoc}
      */
     public function put($path, array $params = array())
     {
         return $this->request("PUT", $path, $params);
     }
-    
+
     /**
-     * Helper method to send DELETE requests to the Panda API.
-     * 
-     * @param string $path The path to send requests to
-     * @param array $params Parameters
-     * @return string The server response
+     * {@inheritDoc}
      */
     public function delete($path, array $params = array())
     {
@@ -204,15 +180,9 @@ class PandaRestClient
         
         return $response;
     }
-    
+
     /**
-     * Generate signature for a given set of request parameters and add the
-     * signature to the parameters.
-     * 
-     * @param string $method The HTTP method
-     * @param string $path The request path
-     * @param array $params Request parameters
-     * @return array The signed parameters 
+     * {@inheritDoc}
      */
     public function signParams($method, $path, array $params)
     {
@@ -235,14 +205,9 @@ class PandaRestClient
         
         return $params;
     }
-    
+
     /**
-     * Generates the signature for an API requests based on its parameters.
-     * 
-     * @param string $method The HTTP method
-     * @param string $path The request path
-     * @param array $params Request parameters
-     * @return string The generated signature
+     * {@inheritDoc}
      */
     public function signature($method, $path, array $params)
     {
