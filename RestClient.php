@@ -169,11 +169,12 @@ class RestClient implements RestClientInterface
         }
 
         // check for positive api answers
-        if (curl_getinfo($ch, CURLINFO_HTTP_CODE) != 200) {
+        $httpStatusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        if ($httpStatusCode < 200 || $httpStatusCode > 207) {
             // throw api exception otherwise
             $decodedResponse = json_decode($response);
             $message = "{$decodedResponse->error}: {$decodedResponse->message}";
-            throw new ApiException($message, curl_getinfo($ch, CURLINFO_HTTP_CODE));
+            throw new ApiException($message, $httpStatusCode);
         }
 
         curl_close($ch);
