@@ -25,7 +25,7 @@ class Api implements ApiInterface
     /**
      * The client which is used to perform the requests to the REST api
      * 
-     * @var \Xabbuh\PandaClient\RestClient
+     * @var \Xabbuh\PandaClient\RestClientInterface
      */
     private $restClient;
     
@@ -33,9 +33,9 @@ class Api implements ApiInterface
     /**
      * Constructs the Panda API instance on a given REST client.
      * 
-     * @param \Xabbuh\PandaClient\RestClient $restClient The client for REST requests
+     * @param \Xabbuh\PandaClient\RestClientInterface $restClient The client for REST requests
      */
-    public function __construct(RestClient $restClient)
+    public function __construct(RestClientInterface $restClient)
     {
         $this->restClient = $restClient;
     }

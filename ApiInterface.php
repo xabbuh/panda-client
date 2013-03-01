@@ -21,7 +21,7 @@ interface ApiInterface
     /**
      * Returns the Panda REST client.
      *
-     * @return \Xabbuh\PandaClient\RestClient The Panda REST client
+     * @return \Xabbuh\PandaClient\RestClientInterface The Panda REST client
      */
     public function getRestClient();
 
