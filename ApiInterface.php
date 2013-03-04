@@ -58,6 +58,20 @@ interface ApiInterface
     public function encodeVideoFile($localPath);
 
     /**
+     * Register an upload session for a specific file.
+     *
+     * @param $filename The name of the file to transfer
+     * @param $filesize The size of the file in bytes
+     * @param array $profiles Array of profile names for which encodings will
+     * be created (by default no encodings will be created)
+     * @param bool $useAllProfiles If true create encodings for all profiles
+     * (is only taken in account if the list of profile names is null)
+     * @return string A JSON encoded object containing the id of the video
+     * after uploading and a URL to which the file needs to be pushed.
+     */
+    public function registerUpload($filename, $filesize, array $profiles = null, $useAllProfiles = false);
+
+    /**
      * Receive encodings from the server.
      *
      * Filters can be any set of key-value-pairs:

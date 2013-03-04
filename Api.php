@@ -83,6 +83,27 @@ class Api implements ApiInterface
     /**
      * {@inheritDoc}
      */
+    public function registerUpload($filename, $filesize, array $profiles = null, $useAllProfiles = false)
+    {
+        if (!is_null($profiles)) {
+            $options = array(
+                "file_name" => $filename,
+                "file_size" => $filesize,
+                "profiles" => implode(",", $profiles)
+            );
+        } else {
+            $options = array(
+                "file_name" => $filename,
+                "file_size" => $filesize,
+                "use_all_profiles" => $useAllProfiles
+            );
+        }
+        return $this->restClient->post("/videos/upload.json", $options);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getEncodings(array $filter = null)
     {
         return $this->restClient->get("/encodings.json", $filter);
