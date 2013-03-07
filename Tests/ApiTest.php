@@ -80,7 +80,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
         $id = md5(uniqid());
         $this->restClient->expects($this->once())
             ->method("delete")
-            ->with("/videos/$id.json")
+            ->with($this->equalTo("/videos/$id.json"))
             ->will($this->returnValue("status: 200"))
         ;
         $this->assertEquals("status: 200", $this->api->deleteVideo($id));
@@ -690,9 +690,9 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             ->with(
             $this->equalTo("/encodings.json"),
             $this->equalTo(
-                array("video_id" => $id, "status" => "success")
+                    array("video_id" => $id, "status" => "success")
+                )
             )
-        )
             ->will($this->returnValue($returnValue));
         $response = $this->api->getEncodingsForVideo(
             $id,
