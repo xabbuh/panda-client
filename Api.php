@@ -114,7 +114,8 @@ class Api implements ApiInterface
      */
     public function getEncodingsWithStatus($status, array $filter = array())
     {
-        return $this->getEncodings(array("status" => $status), $filter);
+        $filter["status"] = $status;
+        return $this->getEncodings($filter);
     }
 
     /**
@@ -122,7 +123,8 @@ class Api implements ApiInterface
      */
     public function getEncodingsForProfile($profileId, array $filter = array())
     {
-        return $this->getEncodings(array("profile_id" => $profileId), $filter);
+        $filter["profile_id"] = $profileId;
+        return $this->getEncodings($filter);
     }
 
     /**
@@ -130,7 +132,8 @@ class Api implements ApiInterface
      */
     public function getEncodingsForProfileByName($profileName, array $filter = array())
     {
-        return $this->getEncodings(array("profile_name" => $profileName), $filter);
+        $filter["profile_name"] = $profileName;
+        return $this->getEncodings($filter);
     }
 
     /**
@@ -138,7 +141,8 @@ class Api implements ApiInterface
      */
     public function getEncodingsForVideo($videoId, array $filter = array())
     {
-        return $this->getEncodings(array("video_id" => $videoId), $filter);
+        $filter["video_id"] = $videoId;
+        return $this->getEncodings($filter);
     }
 
     /**
