@@ -91,7 +91,7 @@ interface ApiInterface
      * Receive encodings filtered by status from the server.
      *
      * @see PandaApi::getEncodings()
-     * @param $status Status to filter by (one of 'success', 'fail' or 'processing')
+     * @param string $status Status to filter by (one of 'success', 'fail' or 'processing')
      * @param array $filter Additional optional filters (see
      *     {@link PandaApi::getEncodings() PandaApi::getEncodings()} for a description
      *     of the filters which can be used)
@@ -103,7 +103,7 @@ interface ApiInterface
      * Receive encodings filtered by a profile id from the server.
      *
      * @see PandaApi::getEncodings()
-     * @param $profileId Id of the profile to filter by
+     * @param string $profileId Id of the profile to filter by
      * @param array $filter Additional optional filters (see
      *     {@link PandaApi::getEncodings() PandaApi::getEncodings()} for a description
      *     of the filters which can be used)
@@ -115,7 +115,7 @@ interface ApiInterface
      * Receive encodings filtered by profile name from the server.
      *
      * @see PandaApi::getEncodings()
-     * @param $profileName Name of the profile to filter by
+     * @param string $profileName Name of the profile to filter by
      * @param array $filter Additional optional filters (see
      *     {@link PandaApi::getEncodings() PandaApi::getEncodings()} for a description
      *     of the filters which can be used)
@@ -127,7 +127,7 @@ interface ApiInterface
      * Receive encodings filtered by video from the server.
      *
      * @see PandaApi::getEncodings()
-     * @param $videoId Id of the video to filter by
+     * @param string $videoId Id of the video to filter by
      * @param array $filter Additional optional filters (see
      *     {@link PandaApi::getEncodings() PandaApi::getEncodings()} for a description
      *     of the filters which can be used)
@@ -145,7 +145,7 @@ interface ApiInterface
     /**
      * Retrieve informations for a profile.
      *
-     * @param $profileId The id of the profile being fetched
+     * @param string $profileId The id of the profile being fetched
      * @return string The server response
      */
     public function getProfile($profileId);
@@ -153,7 +153,7 @@ interface ApiInterface
     /**
      * Retrieve a cloud's details
      *
-     * @param $cloudId The id of the cloud being fetched
+     * @param string $cloudId The id of the cloud being fetched
      * @return string The server response
      */
     public function getCloud($cloudId);
@@ -161,7 +161,7 @@ interface ApiInterface
     /**
      * Change cloud data.
      *
-     * @param $cloudId
+     * @param string $cloudId
      * @param array $data
      * @return string The server response
      */
