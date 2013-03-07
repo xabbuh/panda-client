@@ -104,7 +104,7 @@ class Api implements ApiInterface
     /**
      * {@inheritDoc}
      */
-    public function getEncodings(array $filter = null)
+    public function getEncodings(array $filter = array())
     {
         return $this->restClient->get("/encodings.json", $filter);
     }
@@ -112,7 +112,7 @@ class Api implements ApiInterface
     /**
      * {@inheritDoc}
      */
-    public function getEncodingsWithStatus($status, array $filter = null)
+    public function getEncodingsWithStatus($status, array $filter = array())
     {
         return $this->getEncodings(array("status" => $status), $filter);
     }
@@ -120,7 +120,7 @@ class Api implements ApiInterface
     /**
      * {@inheritDoc}
      */
-    public function getEncodingsForProfile($profileId, array $filter = null)
+    public function getEncodingsForProfile($profileId, array $filter = array())
     {
         return $this->getEncodings(array("profile_id" => $profileId), $filter);
     }
@@ -128,7 +128,7 @@ class Api implements ApiInterface
     /**
      * {@inheritDoc}
      */
-    public function getEncodingsForProfileByName($profileName, array $filter = null)
+    public function getEncodingsForProfileByName($profileName, array $filter = array())
     {
         return $this->getEncodings(array("profile_name" => $profileName), $filter);
     }
@@ -136,7 +136,7 @@ class Api implements ApiInterface
     /**
      * {@inheritDoc}
      */
-    public function getEncodingsForVideo($videoId, array $filter = null)
+    public function getEncodingsForVideo($videoId, array $filter = array())
     {
         return $this->getEncodings(array("video_id" => $videoId), $filter);
     }
