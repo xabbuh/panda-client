@@ -33,6 +33,23 @@ interface ApiInterface
     public function getVideos();
 
     /**
+     * Retrieve a part of all videos for pagination.
+     *
+     * This method returns a JSON encoded object with four properties:
+     * <ul>
+     * <li>videos: a JSON encoded array of video objects</li>
+     * <li>page: the current page</li>
+     * <li>per_page: number of videos per page (as requested)</li>
+     * <li>total: total number of videos</li>
+     * </ul>
+     *
+     * @param int $page The current page
+     * @param int $per_page Number of videos per page
+     * @return string The JSON encoded result object
+     */
+    public function getVideosForPagination($page = 1, $per_page = 100);
+
+    /**
      * Delete a video from the server.
      *
      * @param string $videoId The id of the video being removed

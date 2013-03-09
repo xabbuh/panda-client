@@ -59,6 +59,21 @@ class Api implements ApiInterface
     /**
      * {@inheritDoc}
      */
+    public function getVideosForPagination($page = 1, $per_page = 100)
+    {
+        return $this->restClient->get(
+            "/videos.json",
+            array(
+                "include_root" => true,
+                "page" => $page,
+                "per_page" => $per_page
+            )
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function deleteVideo($videoId)
     {
         return $this->restClient->delete("/videos/$videoId.json");

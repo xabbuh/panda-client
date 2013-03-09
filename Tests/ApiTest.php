@@ -75,6 +75,144 @@ class ApiTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($returnValue, $response);
     }
 
+    public function testGetVideosForPaginationWithDefaultParameters()
+    {
+        $returnValue = '{ "videos": [{
+              "id":"d891d9a45c698d587831466f236c6c6c",
+              "original_filename":"test.mp4",
+              "extname":".mp4",
+              "path":"d891d9a45c698d587831466f236c6c6c",
+              "video_codec":"h264",
+              "audio_codec":"aac",
+              "height":240,
+              "width":300,
+              "fps":29,
+              "duration":14000,
+              "file_size": 39458349,
+              "created_at":"2009/10/13 19:11:26 +0100",
+              "updated_at":"2009/10/13 19:11:26 +0100"
+            },
+            {
+              "id":"130466751aaaac1f88eb7e31c93ce40c",
+              "source_url": "http://example.com/test2.mp4",
+              "extname":".mp4",
+              "path":"130466751aaaac1f88eb7e31c93ce40c",
+              "video_codec":"h264",
+              "audio_codec":"aac",
+              "height":640,
+              "width":360
+            }],
+        "page": 1,
+        "per_page": 100,
+        "total": 17
+        }';
+        $this->restClient->expects($this->once())
+            ->method("get")
+            ->with(
+                $this->equalTo("/videos.json"),
+                $this->equalTo(array(
+                    "include_root" => true,
+                    "page" => 1,
+                    "per_page" => 100
+                ))
+            )
+            ->will($this->returnValue($returnValue));
+        $response = $this->api->getVideosForPagination();
+        $this->assertEquals($returnValue, $response);
+    }
+
+    public function testGetVideosForPaginationWithPageParameter()
+    {
+        $returnValue = '{ "videos": [{
+              "id":"d891d9a45c698d587831466f236c6c6c",
+              "original_filename":"test.mp4",
+              "extname":".mp4",
+              "path":"d891d9a45c698d587831466f236c6c6c",
+              "video_codec":"h264",
+              "audio_codec":"aac",
+              "height":240,
+              "width":300,
+              "fps":29,
+              "duration":14000,
+              "file_size": 39458349,
+              "created_at":"2009/10/13 19:11:26 +0100",
+              "updated_at":"2009/10/13 19:11:26 +0100"
+            },
+            {
+              "id":"130466751aaaac1f88eb7e31c93ce40c",
+              "source_url": "http://example.com/test2.mp4",
+              "extname":".mp4",
+              "path":"130466751aaaac1f88eb7e31c93ce40c",
+              "video_codec":"h264",
+              "audio_codec":"aac",
+              "height":640,
+              "width":360
+            }],
+        "page": 5,
+        "per_page": 100,
+        "total": 17
+        }';
+        $this->restClient->expects($this->once())
+            ->method("get")
+            ->with(
+                $this->equalTo("/videos.json"),
+                $this->equalTo(array(
+                    "include_root" => true,
+                    "page" => 5,
+                    "per_page" => 100
+                ))
+            )
+            ->will($this->returnValue($returnValue));
+        $response = $this->api->getVideosForPagination(5);
+        $this->assertEquals($returnValue, $response);
+    }
+
+    public function testGetVideosForPaginationWithPageAndPerPageParameters()
+    {
+        $returnValue = '{ "videos": [{
+              "id":"d891d9a45c698d587831466f236c6c6c",
+              "original_filename":"test.mp4",
+              "extname":".mp4",
+              "path":"d891d9a45c698d587831466f236c6c6c",
+              "video_codec":"h264",
+              "audio_codec":"aac",
+              "height":240,
+              "width":300,
+              "fps":29,
+              "duration":14000,
+              "file_size": 39458349,
+              "created_at":"2009/10/13 19:11:26 +0100",
+              "updated_at":"2009/10/13 19:11:26 +0100"
+            },
+            {
+              "id":"130466751aaaac1f88eb7e31c93ce40c",
+              "source_url": "http://example.com/test2.mp4",
+              "extname":".mp4",
+              "path":"130466751aaaac1f88eb7e31c93ce40c",
+              "video_codec":"h264",
+              "audio_codec":"aac",
+              "height":640,
+              "width":360
+            }],
+        "page": 7,
+        "per_page": 25,
+        "total": 17
+        }';
+        $this->restClient->expects($this->once())
+            ->method("get")
+            ->with(
+                $this->equalTo("/videos.json"),
+                $this->equalTo(array(
+                    "include_root" => true,
+                    "page" => 7,
+                    "per_page" => 25
+                ))
+            )
+            ->will($this->returnValue($returnValue));
+        $response = $this->api->getVideosForPagination(7, 25);
+        $this->assertEquals($returnValue, $response);
+    }
+
     public function testDeleteVideo()
     {
         $id = md5(uniqid());
