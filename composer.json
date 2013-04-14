@@ -1,5 +1,14 @@
 {
     "name": "xabbuh/panda-client",
+    "description": "PHP client for the Panda encoding REST-API",
+    "keywords": ["Panda", "video encoding", "REST", "client"],
+    "homepage": "https://github.com/xabbuh/PandaClient",
+    "authors": [
+        {
+            "name": "Christian Flothmann",
+            "homepage": "https://github.com/xabbuh"
+        }
+    ],
     "autoload": {
         "psr-0": { "Xabbuh\\PandaClient": "" }
     },
