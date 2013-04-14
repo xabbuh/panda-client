@@ -178,8 +178,8 @@ interface ApiInterface
     /**
      * Change cloud data.
      *
-     * @param string $cloudId
-     * @param array $data
+     * @param string $cloudId The id of the cloud being modified
+     * @param array $data The cloud's new data
      * @return string The server response
      */
     public function setCloud($cloudId, array $data);
