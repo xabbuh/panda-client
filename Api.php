@@ -179,6 +179,41 @@ class Api implements ApiInterface
     /**
      * {@inheritDoc}
      */
+    public function addProfile(array $data)
+    {
+        return $this->restClient->post("/profiles.json", $data);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addProfileFromPreset($presetName)
+    {
+        return $this->restClient->post(
+            "/profiles.json",
+            array("preset_name" => $presetName)
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setProfile($profileId, array $data)
+    {
+        return $this->restClient->put("/profiles/$profileId.json", $data);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function deleteProfile($profileId)
+    {
+        return $this->restClient->delete("/profiles/$profileId.json");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getCloud($cloudId)
     {
         return $this->restClient->get("/clouds/$cloudId.json");

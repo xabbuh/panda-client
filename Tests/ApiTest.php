@@ -901,6 +901,98 @@ class ApiTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($returnValue, $response);
     }
 
+    public function testAddProfile()
+    {
+        $returnValue = '{
+           "id":"40d9f8711d64aaa74f88462e9274f39a",
+           "title":"MP4 (H.264)",
+           "name": "h264",
+           "extname":".mp4",
+           "width":320,
+           "height":240,
+           "audio_bitrate": 128,
+           "video_bitrate": 500,
+           "aspect_mode": "letterbox",
+           "command":"ffmpeg -i $input_file$ -c:a libfaac $audio_bitrate$ -c:v libx264 $video_bitrate$ -preset medium $filters$ -y $output_file$",
+           "created_at":"2009/10/14 18:36:30 +0000",
+           "updated_at":"2009/10/14 19:38:42 +0000"
+        }';
+        $data = array();
+        $this->restClient->expects($this->once())
+            ->method("post")
+            ->with(
+                "/profiles.json",
+                $this->equalTo($data)
+            )
+            ->will($this->returnValue($returnValue));
+        $response = $this->api->addProfile($data);
+        $this->assertEquals($returnValue, $response);
+    }
+
+    public function testAddProfileFromPreset()
+    {
+        $returnValue = '{
+          "id":"40d9f8711d64aaa74f88462e9274f39a",
+          "title": "H264 (MP4)",
+          "name": "h264",
+          "extname":".mp4",
+          "width":480,
+          "height":320,
+          "audio_bitrate": 128,
+          "video_bitrate": 500,
+          "preset_name": "h264",
+          "created_at":"2009/10/14 18:36:30 +0000",
+          "updated_at":"2009/10/14 19:38:42 +0000"
+        }';
+        $this->restClient->expects($this->once())
+            ->method("post")
+            ->with(
+                "/profiles.json",
+                $this->equalTo(array("preset_name" => "h264"))
+            )
+            ->will($this->returnValue($returnValue));
+        $response = $this->api->addProfileFromPreset("h264");
+        $this->assertEquals($returnValue, $response);
+    }
+
+    public function testSetProfile()
+    {
+        $id = md5(uniqid());
+        $returnValue = "{
+              'id':'40d9f8711d64aaa74f88462e9274f39a',
+              'title':'The best custom profile',
+              'extname':'.mp4',
+              'width':320,
+              'height':240,
+              'audio_bitrate':128,
+              'video_bitrate':500,
+              'command':'ffmpeg -i \$input_file\$ -c:a libfaac \$audio_bitrate\$ -c:v libx264 \$video_bitrate\$ -preset medium \$filters\$ -y \$output_file\$',
+              'created_at':'2009/10/14 18:36:30 +0000',
+              'updated_at':'2009/10/14 19:38:42 +0000'
+            }
+        ";
+        $data = array("title" => "The best custom profile");
+        $this->restClient->expects($this->once())
+            ->method("put")
+            ->with(
+                $this->equalTo("/profiles/$id.json"),
+                $this->equalTo($data)
+            )
+            ->will($this->returnValue($returnValue));
+        $response = $this->api->setProfile($id, $data);
+        $this->assertEquals($returnValue, $response);
+    }
+
+    public function testDeleteProfile()
+    {
+        $id = md5(uniqid());
+        $this->restClient->expects($this->once())
+            ->method("delete")
+            ->with($this->equalTo("/profiles/$id.json"))
+            ->will($this->returnValue("status: 200"));
+        $this->assertEquals("status: 200", $this->api->deleteProfile($id));
+    }
+
     public function testGetCloud()
     {
         $id = md5(uniqid());

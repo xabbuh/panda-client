@@ -176,6 +176,39 @@ interface ApiInterface
     public function getCloud($cloudId);
 
     /**
+     * Add a profile with the given data.
+     *
+     * @param array $data The new profile's data
+     * @return string The server response
+     */
+    public function addProfile(array $data);
+
+    /**
+     * Create a profile based on a given preset.
+     *
+     * @param string $presetName Name of the preset to use
+     * @return string The server response
+     */
+    public function addProfileFromPreset($presetName);
+
+    /**
+     * Change the data of a profile.
+     *
+     * @param string $profileId Id of the profile being modified
+     * @param array $data The profile's new data
+     * @return string The server response
+     */
+    public function setProfile($profileId, array $data);
+
+    /**
+     * Delete a profile.
+     *
+     * @param string $profileId The profile being removed
+     * @return string The server response
+     */
+    public function deleteProfile($profileId);
+
+    /**
      * Change cloud data.
      *
      * @param string $cloudId The id of the cloud being modified
