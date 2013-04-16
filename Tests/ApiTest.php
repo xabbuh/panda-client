@@ -839,6 +839,143 @@ class ApiTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($returnValue, $response);
     }
 
+    public function testGetEncoding()
+    {
+        $encodingId = md5(uniqid());
+        $returnValue = '{
+          "id":"2f8760b7e0d4c7dbe609b5872be9bc3b",
+          "video_id":"d891d9a45c698d587831466f236c6c6c",
+          "extname":".mp4",
+          "path":"2f8760b7e0d4c7dbe609b5872be9bc3b",
+          "profile_id":"40d9f8711d64aaa74f88462e9274f39a",
+          "profile_name":"h264",
+          "status":"success",
+          "encoding_progress":99,
+          "height":240,
+          "width":300,
+          "started_encoding_at":"2009/10/13 21:28:45 +0000",
+          "encoding_time":9000,
+          "files":["2f8760b7e0d4c7dbe609b5872be9bc3b.mp4"],
+          "created_at":"2009/10/13 20:58:29 +0000",
+          "updated_at":"2009/10/13 21:30:34 +0000"
+        }';
+        $this->restClient->expects($this->once())
+            ->method("get")
+            ->with(
+                $this->equalTo("/encodings/$encodingId.json")
+            )
+            ->will($this->returnValue($returnValue));
+        $response = $this->api->getEncoding($encodingId);
+        $this->assertEquals($returnValue, $response);
+    }
+
+    public function testCreateEncoding()
+    {
+        $videoId = md5(uniqid());
+        $profileid = md5(uniqid());
+        $returnValue = '{
+          "id":"2f8760b7e0d4c7dbe609b5872be9bc3b",
+          "video_id":"' . $videoId . '",
+          "extname":".mp4",
+          "path":"2f8760b7e0d4c7dbe609b5872be9bc3b",
+          "profile_id":"' . $profileid . '",
+          "profile_name":"h264",
+          "status":"processing",
+          "encoding_progress":0,
+          "height":240,
+          "width":300,
+          "started_encoding_at":"",
+          "encoding_time":0,
+          "files":[],
+          "created_at":"2009/10/13 20:58:29 +0000",
+          "updated_at":"2009/10/13 21:30:34 +0000"
+        }';
+        $this->restClient->expects($this->once())
+            ->method("post")
+            ->with(
+                $this->equalTo("/encodings.json"),
+                $this->equalTo(
+                    array(
+                        "video_id" => $videoId,
+                        "profile_id" => $profileid,
+                    )
+                )
+            )
+            ->will($this->returnValue($returnValue));
+        $response = $this->api->createEncoding($videoId, $profileid);
+        $this->assertEquals($returnValue, $response);
+    }
+
+    public function testCreateEncodingWithProfileName()
+    {
+        $videoId = md5(uniqid());
+        $profileid = md5(uniqid());
+        $returnValue = '{
+          "id":"2f8760b7e0d4c7dbe609b5872be9bc3b",
+          "video_id":"' . $videoId . '",
+          "extname":".mp4",
+          "path":"2f8760b7e0d4c7dbe609b5872be9bc3b",
+          "profile_id":"' . $profileid . '",
+          "profile_name":"h264",
+          "status":"processing",
+          "encoding_progress":0,
+          "height":240,
+          "width":300,
+          "started_encoding_at":"",
+          "encoding_time":0,
+          "files":[],
+          "created_at":"2009/10/13 20:58:29 +0000",
+          "updated_at":"2009/10/13 21:30:34 +0000"
+        }';
+        $this->restClient->expects($this->once())
+            ->method("post")
+            ->with(
+                $this->equalTo("/encodings.json"),
+                $this->equalTo(
+                    array(
+                        "video_id" => $videoId,
+                        "profile_name" => "h264",
+                    )
+                )
+            )
+            ->will($this->returnValue($returnValue));
+        $response = $this->api->createEncodingWithProfileName($videoId, "h264");
+        $this->assertEquals($returnValue, $response);
+    }
+
+    public function testCancelEncoding()
+    {
+        $encodingId = md5(uniqid());
+        $this->restClient->expects($this->once())
+            ->method("post")
+            ->with($this->equalTo("/encodings/$encodingId/cancel.json"))
+            ->will($this->returnValue("status: 200"));
+        $response = $this->api->cancelEncoding($encodingId);
+        $this->assertEquals("status: 200", $response);
+    }
+
+    public function testRetryEncoding()
+    {
+        $encodingId = md5(uniqid());
+        $this->restClient->expects($this->once())
+            ->method("post")
+            ->with($this->equalTo("/encodings/$encodingId/retry.json"))
+            ->will($this->returnValue("status: 200"));
+        $response = $this->api->retryEncoding($encodingId);
+        $this->assertEquals("status: 200", $response);
+    }
+
+    public function testDeleteEncoding()
+    {
+        $encodingId = md5(uniqid());
+        $this->restClient->expects($this->once())
+            ->method("delete")
+            ->with($this->equalTo("/encodings/$encodingId.json"))
+            ->will($this->returnValue("status: 200"));
+        $response = $this->api->deleteEncoding($encodingId);
+        $this->assertEquals("status: 200", $response);
+    }
+
     public function testGetProfiles()
     {
         $returnValue = '[{

@@ -153,6 +153,56 @@ interface ApiInterface
     public function getEncodingsForVideo($videoId, array $filter = null);
 
     /**
+     * Get an encoding's data.
+     *
+     * @param string $encodingId Id of the encoding
+     * @return string The server response
+     */
+    public function getEncoding($encodingId);
+
+    /**
+     * Create an encoding based on a profile.
+     *
+     * @param string $videoId Id of the video being encoded
+     * @param string $profileId Id of the profile used to encode the video
+     * @return string The server response
+     */
+    public function createEncoding($videoId, $profileId);
+
+    /**
+     * Create an encoding for the profile with the given name.
+     *
+     * @param string $videoId Id of the video being encoded
+     * @param string $profileName Name of the profile used to encode the video
+     * @return string The server response
+     */
+    public function createEncodingWithProfileName($videoId, $profileName);
+
+    /**
+     * Cancel an encoding.
+     *
+     * @param string $encodingId The id of the encoding being canceled
+     * @return string The server response
+     */
+    public function cancelEncoding($encodingId);
+
+    /**
+     * Retry a failed encoding.
+     *
+     * @param string $encodingId The id of the failed encoding
+     * @return string The server response
+     */
+    public function retryEncoding($encodingId);
+
+    /**
+     * Delete an encoding.
+     *
+     * @param string $encodingId The id of the encoding being deleted
+     * @return string The server response
+     */
+    public function deleteEncoding($encodingId);
+
+    /**
      * Retrieve all profiles.
      *
      * @return string The server response

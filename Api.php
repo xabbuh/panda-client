@@ -163,6 +163,60 @@ class Api implements ApiInterface
     /**
      * {@inheritDoc}
      */
+    public function getEncoding($encodingId)
+    {
+        return $this->restClient->get("/encodings/$encodingId.json");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function createEncoding($videoId, $profileId)
+    {
+        return $this->restClient->post(
+            "/encodings.json",
+            array("video_id" => $videoId, "profile_id" => $profileId,)
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function createEncodingWithProfileName($videoId, $profileName)
+    {
+        return $this->restClient->post(
+            "/encodings.json",
+            array("video_id" => $videoId, "profile_name" => $profileName,)
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function cancelEncoding($encodingId)
+    {
+        return $this->restClient->post("/encodings/$encodingId/cancel.json");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function retryEncoding($encodingId)
+    {
+        return $this->restClient->post("/encodings/$encodingId/retry.json");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function deleteEncoding($encodingId)
+    {
+        return $this->restClient->delete("/encodings/$encodingId.json");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getProfiles()
     {
         return $this->restClient->get("/profiles.json");
