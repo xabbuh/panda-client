@@ -74,6 +74,22 @@ class Api implements ApiInterface
     /**
      * {@inheritDoc}
      */
+    public function getVideo($videoId)
+    {
+        return $this->restClient->get("/videos/$videoId.json");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getVideoMetadata($videoId)
+    {
+        return $this->restClient->get("/videos/$videoId/metadata.json");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function deleteVideo($videoId)
     {
         return $this->restClient->delete("/videos/$videoId.json");

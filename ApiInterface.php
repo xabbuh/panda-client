@@ -50,6 +50,22 @@ interface ApiInterface
     public function getVideosForPagination($page = 1, $per_page = 100);
 
     /**
+     * Fetch data of a video.
+     *
+     * @param string $videoId The video id
+     * @return string The server response
+     */
+    public function getVideo($videoId);
+
+    /**
+     * Fetch metadata of a video.
+     *
+     * @param string $videoId The video id
+     * @return string The server response
+     */
+    public function getVideoMetadata($videoId);
+
+    /**
      * Delete a video from the server.
      *
      * @param string $videoId The id of the video being removed

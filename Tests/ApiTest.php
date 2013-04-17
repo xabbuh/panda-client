@@ -213,6 +213,64 @@ class ApiTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($returnValue, $response);
     }
 
+    public function testGetVideo()
+    {
+        $videoId = md5(uniqid());
+        $returnValue = '{
+          "id":"d891d9a45c698d587831466f236c6c6c",
+          "original_filename":"test.mp4",
+          "extname":".mp4",
+          "path":"d891d9a45c698d587831466f236c6c6c",
+          "video_codec":"h264",
+          "audio_codec":"aac",
+          "height":240,
+          "width":300,
+          "fps":29,
+          "duration":14000,
+          "file_size":39458349,
+          "created_at":"2009/10/13 19:11:26 +0100",
+          "updated_at":"2009/10/13 19:11:26 +0100"
+        }';
+        $this->restClient->expects($this->once())
+            ->method("get")
+            ->with($this->equalTo("/videos/$videoId.json"))
+            ->will($this->returnValue($returnValue));
+        $response = $this->api->getVideo($videoId);
+        $this->assertEquals($returnValue, $response);
+    }
+
+    public function testGetVideoMetadata()
+    {
+        $videoId = md5(uniqid());
+        $returnValue = '{
+          "image_height":208,
+          "audio_format":"mp4a",
+          "selection_time":"0 s",
+          "track_layer":0,
+          "poster_time":"0 s",
+          "video_frame_rate":30.0,
+          "duration":"19.35 s",
+          "media_create_date":"Tue Jan 28 20:59:44 +0000 1913",
+          "audio_sample_rate":48000,
+          "compressor_id":"avc1",
+          "graphics_mode":"srcCopy",
+          "audio_channels":2,
+          "media_header_version":0,
+          "track_modify_date":"Tue Jan 28 20:59:39 +0000 1913",
+          "preferred_volume":"100.00%",
+          "mime_type":"video/mp4",
+          "file_size":"1435 kB",
+          "create_date":"Tue Jan 28 20:59:39 +0000 1913",
+          "rotation":0
+        }';
+        $this->restClient->expects($this->once())
+            ->method("get")
+            ->with($this->equalTo("/videos/$videoId/metadata.json"))
+            ->will($this->returnValue($returnValue));
+        $response = $this->api->getVideoMetadata($videoId);
+        $this->assertEquals($returnValue, $response);
+    }
+
     public function testDeleteVideo()
     {
         $id = md5(uniqid());
