@@ -16,5 +16,10 @@
     "autoload": {
         "psr-0": { "Xabbuh\\PandaClient": "" }
     },
-    "target-dir": "Xabbuh/PandaClient"
+    "target-dir": "Xabbuh/PandaClient",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
 }
