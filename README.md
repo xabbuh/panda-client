@@ -1,6 +1,8 @@
 PandaClient
 ===========
 
+[![Build Status](https://secure.travis-ci.org/xabbuh/PandaClient.png?branch=master)](http://travis-ci.org/xabbuh/PandaClient)
+
 The PandaClient package provides an easy to use implementation of the
 [Panda encoding services](https://www.pandastream.com/) REST API.
 
