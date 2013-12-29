@@ -50,7 +50,14 @@ class Notifications implements ModelInterface
         $eventName = strtr($eventName, '_', '-');
         return isset($this->events[$eventName]);
     }
-    
+
+    /**
+     * @param string $eventName
+     *
+     * @return NotificationEvent
+     *
+     * @throws \InvalidArgumentException
+     */
     public function getNotificationEvent($eventName)
     {
         // normalise the event name
@@ -58,7 +65,7 @@ class Notifications implements ModelInterface
         if ($this->hasNotificationEvent($eventName)) {
             return $this->events[$eventName];
         } else {
-            throw new \InvalidArgumentException('Event '.$eventName.'is not registered');
+            throw new \InvalidArgumentException('Event '.$eventName.' is not registered');
         }
     }
 }
