@@ -1,15 +1,21 @@
 <?php
 
 /*
-* This file is part of the XabbuhPandaClient package.
-*
-* (c) Christian Flothmann <christian.flothmann@xabbuh.de>
-*
-* For the full copyright and license information, please view the LICENSE
-* file that was distributed with this source code.
-*/
+ * This file is part of the XabbuhPandaClient package.
+ *
+ * (c) Christian Flothmann <christian.flothmann@xabbuh.de>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Xabbuh\PandaClient;
+
+use Xabbuh\PandaClient\Model\Cloud;
+use Xabbuh\PandaClient\Model\Encoding;
+use Xabbuh\PandaClient\Model\Notifications;
+use Xabbuh\PandaClient\Model\Profile;
+use Xabbuh\PandaClient\Model\Video;
 
 /**
  * Interface definition for Panda API implementations.
@@ -21,31 +27,32 @@ interface ApiInterface
     /**
      * Returns the Panda REST client.
      *
-     * @return \Xabbuh\PandaClient\RestClientInterface The Panda REST client
+     * @return RestClientInterface The Panda REST client
      */
     public function getRestClient();
 
     /**
      * Retrieve a collection of videos from the server.
      *
-     * @return string The server response
+     * @return Video[] The videos
      */
     public function getVideos();
 
     /**
      * Retrieve a part of all videos for pagination.
      *
-     * This method returns a JSON encoded object with four properties:
+     * This method returns a PHP object with four properties:
      * <ul>
-     * <li>videos: a JSON encoded array of video objects</li>
+     * <li>videos: the videos</li>
      * <li>page: the current page</li>
      * <li>per_page: number of videos per page (as requested)</li>
      * <li>total: total number of videos</li>
      * </ul>
      *
-     * @param int $page The current page
+     * @param int $page     The current page
      * @param int $per_page Number of videos per page
-     * @return string The JSON encoded result object
+     *
+     * @return \stdClass The result object
      */
     public function getVideosForPagination($page = 1, $per_page = 100);
 
@@ -53,7 +60,8 @@ interface ApiInterface
      * Fetch data of a video.
      *
      * @param string $videoId The video id
-     * @return string The server response
+     *
+     * @return Video The video
      */
     public function getVideo($videoId);
 
@@ -61,7 +69,8 @@ interface ApiInterface
      * Fetch metadata of a video.
      *
      * @param string $videoId The video id
-     * @return string The server response
+     *
+     * @return array The video metadata
      */
     public function getVideoMetadata($videoId);
 
@@ -69,6 +78,7 @@ interface ApiInterface
      * Delete a video from the server.
      *
      * @param string $videoId The id of the video being removed
+     *
      * @return string The server response
      */
     public function deleteVideo($videoId);
@@ -78,7 +88,8 @@ interface ApiInterface
      * can be found under a particular url.
      *
      * @param string $url The url where the encoding service can fetch the video
-     * @return string The server response
+     *
+     * @return Video The encoded video
      */
     public function encodeVideoByUrl($url);
 
@@ -86,23 +97,22 @@ interface ApiInterface
      * Upload a video file to the Panda encoding service.
      *
      * @param string $localPath The path to the local video file
-     * @return string The server response
+     *
+     * @return Video The encoded video
      */
     public function encodeVideoFile($localPath);
 
     /**
      * Register an upload session for a specific file.
      *
-     * @param string $filename The name of the file to transfer
-     * @param string $filesize The size of the file in bytes
-     * @param array $profiles Array of profile names for which encodings will
-     * be created (by default no encodings will be created)
-     * @param bool $useAllProfiles If true create encodings for all profiles
-     * (is only taken in account if the list of profile names is null)
-     * @return string A JSON encoded object containing the id of the video
-     * after uploading and a URL to which the file needs to be pushed.
+     * @param string  $filename       The name of the file to transfer
+     * @param string  $fileSize       The size of the file in bytes
+     * @param array   $profiles       Array of profile names for which encodings will be created (by default no encodings will be created)
+     * @param boolean $useAllProfiles If true create encodings for all profiles (is only taken in account if the list of profile names is null)
+     *
+     * @return \stdClass An object containing the id of the video after uploading and a URL to which the file needs to be pushed.
      */
-    public function registerUpload($filename, $filesize, array $profiles = null, $useAllProfiles = false);
+    public function registerUpload($filename, $fileSize, array $profiles = null, $useAllProfiles = false);
 
     /**
      * Receive encodings from the server.
@@ -116,7 +126,8 @@ interface ApiInterface
      * </ul>
      *
      * @param array $filter Optional set of filters
-     * @return string The server response
+     *
+     * @return Encoding[] The encodings
      */
     public function getEncodings(array $filter = null);
 
@@ -124,11 +135,11 @@ interface ApiInterface
      * Receive encodings filtered by status from the server.
      *
      * @see PandaApi::getEncodings()
+     *
      * @param string $status Status to filter by (one of 'success', 'fail' or 'processing')
-     * @param array $filter Additional optional filters (see
-     *     {@link PandaApi::getEncodings() PandaApi::getEncodings()} for a description
-     *     of the filters which can be used)
-     * @return string The server response
+     * @param array  $filter Additional optional filters (see {@link PandaApi::getEncodings() PandaApi::getEncodings()} for a description of the filters which can be used)
+     *
+     * @return Encoding[] The encodings
      */
     public function getEncodingsWithStatus($status, array $filter = null);
 
@@ -136,11 +147,11 @@ interface ApiInterface
      * Receive encodings filtered by a profile id from the server.
      *
      * @see PandaApi::getEncodings()
+     *
      * @param string $profileId Id of the profile to filter by
-     * @param array $filter Additional optional filters (see
-     *     {@link PandaApi::getEncodings() PandaApi::getEncodings()} for a description
-     *     of the filters which can be used)
-     * @return string The server response
+     * @param array  $filter    Additional optional filters (see {@link PandaApi::getEncodings() PandaApi::getEncodings()} for a description of the filters which can be used)
+     *
+     * @return Encoding[] The encodings
      */
     public function getEncodingsForProfile($profileId, array $filter = null);
 
@@ -148,11 +159,11 @@ interface ApiInterface
      * Receive encodings filtered by profile name from the server.
      *
      * @see PandaApi::getEncodings()
+     *
      * @param string $profileName Name of the profile to filter by
-     * @param array $filter Additional optional filters (see
-     *     {@link PandaApi::getEncodings() PandaApi::getEncodings()} for a description
-     *     of the filters which can be used)
-     * @return string The server response
+     * @param array  $filter      Additional optional filters (see {@link PandaApi::getEncodings() PandaApi::getEncodings()} for a description of the filters which can be used)
+
+     * @return Encoding[] The encodings
      */
     public function getEncodingsForProfileByName($profileName, array $filter = null);
 
@@ -160,37 +171,40 @@ interface ApiInterface
      * Receive encodings filtered by video from the server.
      *
      * @see PandaApi::getEncodings()
+     *
      * @param string $videoId Id of the video to filter by
-     * @param array $filter Additional optional filters (see
-     *     {@link PandaApi::getEncodings() PandaApi::getEncodings()} for a description
-     *     of the filters which can be used)
-     * @return string The server response
+     * @param array  $filter  Additional optional filters (see {@link PandaApi::getEncodings() PandaApi::getEncodings()} for a description of the filters which can be used)
+     *
+     * @return Encoding[] The encodings
      */
     public function getEncodingsForVideo($videoId, array $filter = null);
 
     /**
-     * Get an encoding's data.
+     * Gets an encoding.
      *
      * @param string $encodingId Id of the encoding
-     * @return string The server response
+     *
+     * @return Encoding The encoding
      */
     public function getEncoding($encodingId);
 
     /**
-     * Create an encoding based on a profile.
+     * Creates an encoding based on a profile.
      *
-     * @param string $videoId Id of the video being encoded
+     * @param string $videoId   Id of the video being encoded
      * @param string $profileId Id of the profile used to encode the video
-     * @return string The server response
+     *
+     * @return Encoding The new encoding
      */
     public function createEncoding($videoId, $profileId);
 
     /**
      * Create an encoding for the profile with the given name.
      *
-     * @param string $videoId Id of the video being encoded
+     * @param string $videoId     Id of the video being encoded
      * @param string $profileName Name of the profile used to encode the video
-     * @return string The server response
+     *
+     * @return Encoding The encoding
      */
     public function createEncodingWithProfileName($videoId, $profileName);
 
@@ -198,6 +212,7 @@ interface ApiInterface
      * Cancel an encoding.
      *
      * @param string $encodingId The id of the encoding being canceled
+     *
      * @return string The server response
      */
     public function cancelEncoding($encodingId);
@@ -206,6 +221,7 @@ interface ApiInterface
      * Retry a failed encoding.
      *
      * @param string $encodingId The id of the failed encoding
+     *
      * @return string The server response
      */
     public function retryEncoding($encodingId);
@@ -214,6 +230,7 @@ interface ApiInterface
      * Delete an encoding.
      *
      * @param string $encodingId The id of the encoding being deleted
+     *
      * @return string The server response
      */
     public function deleteEncoding($encodingId);
@@ -221,80 +238,87 @@ interface ApiInterface
     /**
      * Retrieve all profiles.
      *
-     * @return string The server response
+     * @return Profile[] The profiles
      */
     public function getProfiles();
 
     /**
-     * Retrieve informations for a profile.
+     * Retrieve information for a profile.
      *
      * @param string $profileId The id of the profile being fetched
-     * @return string The server response
+     *
+     * @return Profile The profile
      */
     public function getProfile($profileId);
+
+    /**
+     * Adds a profile with the given data.
+     *
+     * @param array $data The new profile's data
+     *
+     * @return Profile The added profile
+     */
+    public function addProfile(array $data);
+
+    /**
+     * Creates a profile based on a given preset.
+     *
+     * @param string $presetName Name of the preset to use
+     *
+     * @return Profile The added profile
+     */
+    public function addProfileFromPreset($presetName);
+
+    /**
+     * Changes the data of a profile.
+     *
+     * @param Profile $profile The profile's new data
+     *
+     * @return Profile The modified profile
+     */
+    public function setProfile(Profile $profile);
+
+    /**
+     * Delete a profile.
+     *
+     * @param Profile $profileId The profile being removed
+     *
+     * @return string The server response
+     */
+    public function deleteProfile(Profile $profileId);
 
     /**
      * Retrieve a cloud's details
      *
      * @param string $cloudId The id of the cloud being fetched
-     * @return string The server response
+     *
+     * @return Cloud The cloud
      */
     public function getCloud($cloudId);
 
     /**
-     * Add a profile with the given data.
-     *
-     * @param array $data The new profile's data
-     * @return string The server response
-     */
-    public function addProfile(array $data);
-
-    /**
-     * Create a profile based on a given preset.
-     *
-     * @param string $presetName Name of the preset to use
-     * @return string The server response
-     */
-    public function addProfileFromPreset($presetName);
-
-    /**
-     * Change the data of a profile.
-     *
-     * @param string $profileId Id of the profile being modified
-     * @param array $data The profile's new data
-     * @return string The server response
-     */
-    public function setProfile($profileId, array $data);
-
-    /**
-     * Delete a profile.
-     *
-     * @param string $profileId The profile being removed
-     * @return string The server response
-     */
-    public function deleteProfile($profileId);
-
-    /**
-     * Change cloud data.
+     * Changes the cloud data.
      *
      * @param string $cloudId The id of the cloud being modified
-     * @param array $data The cloud's new data
-     * @return string The server response
+     * @param array  $data    The cloud's new data
+     *
+     * @return Cloud The new cloud
      */
     public function setCloud($cloudId, array $data);
 
     /**
-     * Retrieve the cloud's notifications configuration.
+     * Retrieves the cloud's notifications configuration.
      *
-     * @return string The server response
+     * @return Notifications The notifications configuration
      */
     public function getNotifications();
 
     /**
-     * Change the notifications configuration.
+     * Changes the notifications configuration.
      *
      * @param array $notifications The new configuration
-     * @return string The server response
+     *
+     * @return Notifications The modified notifications
      */
     public function setNotifications(array $notifications);
 }

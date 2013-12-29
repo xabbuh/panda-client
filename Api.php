@@ -1,15 +1,18 @@
 <?php
 
 /*
-* This file is part of the XabbuhPandaClient package.
-*
-* (c) Christian Flothmann <christian.flothmann@xabbuh.de>
-*
-* For the full copyright and license information, please view the LICENSE
-* file that was distributed with this source code.
-*/
+ * This file is part of the XabbuhPandaClient package.
+ *
+ * (c) Christian Flothmann <christian.flothmann@xabbuh.de>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Xabbuh\PandaClient;
+
+use Xabbuh\PandaClient\Model\Profile;
+use Xabbuh\PandaClient\Transformer\TransformerFactory;
 
 /**
  * Intuitive PHP interface for the Panda video encoding service API.
@@ -25,19 +28,27 @@ class Api implements ApiInterface
     /**
      * The client which is used to perform the requests to the REST api
      * 
-     * @var \Xabbuh\PandaClient\RestClientInterface
+     * @var RestClientInterface
      */
     private $restClient;
-    
+
+    /**
+     * @var TransformerFactory
+     */
+    private $transformerFactory;
     
     /**
      * Constructs the Panda API instance on a given REST client.
      * 
-     * @param \Xabbuh\PandaClient\RestClientInterface $restClient The client for REST requests
+     * @param RestClientInterface $restClient         The client for REST requests
+     * @param TransformerFactory  $transformerFactory
      */
-    public function __construct(RestClientInterface $restClient)
-    {
+    public function __construct(
+        RestClientInterface $restClient,
+        TransformerFactory $transformerFactory
+    ) {
         $this->restClient = $restClient;
+        $this->transformerFactory = $transformerFactory;
     }
     
     /**
@@ -53,7 +64,9 @@ class Api implements ApiInterface
      */
     public function getVideos()
     {
-        return $this->restClient->get("/videos.json");
+        $response = $this->restClient->get('/videos.json');
+        $transformer = $this->transformerFactory->get('Video');
+        return $transformer->fromJSONCollection($response);
     }
 
     /**
@@ -61,14 +74,20 @@ class Api implements ApiInterface
      */
     public function getVideosForPagination($page = 1, $per_page = 100)
     {
-        return $this->restClient->get(
-            "/videos.json",
+        $response = $this->restClient->get(
+            '/videos.json',
             array(
-                "include_root" => true,
-                "page" => $page,
-                "per_page" => $per_page
+                'include_root' => true,
+                'page' => $page,
+                'per_page' => $per_page
             )
         );
+        $transformer = $this->transformerFactory->get('Video');
+        $result = json_decode($response);
+        foreach ($result->videos as $index => $video) {
+            $result->videos[$index] = $transformer->fromObject($video);
+        }
+        return $result;
     }
 
     /**
@@ -76,7 +95,9 @@ class Api implements ApiInterface
      */
     public function getVideo($videoId)
     {
-        return $this->restClient->get("/videos/$videoId.json");
+        $response = $this->restClient->get('/videos/'.$videoId.'.json');
+        $transformer = $this->transformerFactory->get('Video');
+        return $transformer->fromJSON($response);
     }
 
     /**
@@ -84,7 +105,8 @@ class Api implements ApiInterface
      */
     public function getVideoMetadata($videoId)
     {
-        return $this->restClient->get("/videos/$videoId/metadata.json");
+        $response = $this->restClient->get('/videos/'.$videoId.'/metadata.json');
+        return get_object_vars(json_decode($response));
     }
 
     /**
@@ -92,7 +114,7 @@ class Api implements ApiInterface
      */
     public function deleteVideo($videoId)
     {
-        return $this->restClient->delete("/videos/$videoId.json");
+        return $this->restClient->delete('/videos/'.$videoId.'.json');
     }
 
     /**
@@ -100,7 +122,9 @@ class Api implements ApiInterface
      */
     public function encodeVideoByUrl($url)
     {
-        return $this->restClient->post("/videos.json", array("source_url" => $url));
+        $response = $this->restClient->post('/videos.json', array('source_url' => $url));
+        $transformer = $this->transformerFactory->get('Video');
+        return $transformer->fromJSON($response);
     }
 
     /**
@@ -108,28 +132,34 @@ class Api implements ApiInterface
      */
     public function encodeVideoFile($localPath)
     {
-        return $this->restClient->post("/videos.json", array("file" => "@$localPath"));
+        $response = $this->restClient->post('/videos.json', array('file' => '@'.$localPath));
+        $transformer = $this->transformerFactory->get('Video');
+        return $transformer->fromJSON($response);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function registerUpload($filename, $filesize, array $profiles = null, $useAllProfiles = false)
-    {
+    public function registerUpload(
+        $filename,
+        $fileSize,
+        array $profiles = null,
+        $useAllProfiles = false
+    ) {
         if (!is_null($profiles)) {
             $options = array(
-                "file_name" => $filename,
-                "file_size" => $filesize,
-                "profiles" => implode(",", $profiles)
+                'file_name' => $filename,
+                'file_size' => $fileSize,
+                'profiles' => implode(',', $profiles)
             );
         } else {
             $options = array(
-                "file_name" => $filename,
-                "file_size" => $filesize,
-                "use_all_profiles" => $useAllProfiles
+                'file_name' => $filename,
+                'file_size' => $fileSize,
+                'use_all_profiles' => $useAllProfiles
             );
         }
-        return $this->restClient->post("/videos/upload.json", $options);
+        return json_decode($this->restClient->post('/videos/upload.json', $options));
     }
 
     /**
@@ -137,7 +167,9 @@ class Api implements ApiInterface
      */
     public function getEncodings(array $filter = array())
     {
-        return $this->restClient->get("/encodings.json", $filter);
+        $response = $this->restClient->get('/encodings.json', $filter);
+        $transformer = $this->transformerFactory->get('Encoding');
+        return $transformer->fromJSONCollection($response);
     }
 
     /**
@@ -145,7 +177,7 @@ class Api implements ApiInterface
      */
     public function getEncodingsWithStatus($status, array $filter = array())
     {
-        $filter["status"] = $status;
+        $filter['status'] = $status;
         return $this->getEncodings($filter);
     }
 
@@ -154,7 +186,7 @@ class Api implements ApiInterface
      */
     public function getEncodingsForProfile($profileId, array $filter = array())
     {
-        $filter["profile_id"] = $profileId;
+        $filter['profile_id'] = $profileId;
         return $this->getEncodings($filter);
     }
 
@@ -163,7 +195,7 @@ class Api implements ApiInterface
      */
     public function getEncodingsForProfileByName($profileName, array $filter = array())
     {
-        $filter["profile_name"] = $profileName;
+        $filter['profile_name'] = $profileName;
         return $this->getEncodings($filter);
     }
 
@@ -172,7 +204,7 @@ class Api implements ApiInterface
      */
     public function getEncodingsForVideo($videoId, array $filter = array())
     {
-        $filter["video_id"] = $videoId;
+        $filter['video_id'] = $videoId;
         return $this->getEncodings($filter);
     }
 
@@ -181,7 +213,9 @@ class Api implements ApiInterface
      */
     public function getEncoding($encodingId)
     {
-        return $this->restClient->get("/encodings/$encodingId.json");
+        $response = $this->restClient->get('/encodings/'.$encodingId.'.json');
+        $transformer = $this->transformerFactory->get('Encoding');
+        return $transformer->fromJSON($response);
     }
 
     /**
@@ -189,10 +223,12 @@ class Api implements ApiInterface
      */
     public function createEncoding($videoId, $profileId)
     {
-        return $this->restClient->post(
-            "/encodings.json",
-            array("video_id" => $videoId, "profile_id" => $profileId,)
+        $response = $this->restClient->post(
+            '/encodings.json',
+            array('video_id' => $videoId, 'profile_id' => $profileId,)
         );
+        $transformer = $this->transformerFactory->get('Encoding');
+        return $transformer->fromJSON($response);
     }
 
     /**
@@ -200,10 +236,12 @@ class Api implements ApiInterface
      */
     public function createEncodingWithProfileName($videoId, $profileName)
     {
-        return $this->restClient->post(
-            "/encodings.json",
-            array("video_id" => $videoId, "profile_name" => $profileName,)
+        $response = $this->restClient->post(
+            '/encodings.json',
+            array('video_id' => $videoId, 'profile_name' => $profileName,)
         );
+        $transformer = $this->transformerFactory->get('Encoding');
+        return $transformer->fromJSON($response);
     }
 
     /**
@@ -211,7 +249,7 @@ class Api implements ApiInterface
      */
     public function cancelEncoding($encodingId)
     {
-        return $this->restClient->post("/encodings/$encodingId/cancel.json");
+        return $this->restClient->post('/encodings/'.$encodingId.'/cancel.json');
     }
 
     /**
@@ -219,7 +257,7 @@ class Api implements ApiInterface
      */
     public function retryEncoding($encodingId)
     {
-        return $this->restClient->post("/encodings/$encodingId/retry.json");
+        return $this->restClient->post('/encodings/'.$encodingId.'/retry.json');
     }
 
     /**
@@ -227,7 +265,7 @@ class Api implements ApiInterface
      */
     public function deleteEncoding($encodingId)
     {
-        return $this->restClient->delete("/encodings/$encodingId.json");
+        return $this->restClient->delete('/encodings/'.$encodingId.'.json');
     }
 
     /**
@@ -235,7 +273,9 @@ class Api implements ApiInterface
      */
     public function getProfiles()
     {
-        return $this->restClient->get("/profiles.json");
+        $response = $this->restClient->get('/profiles.json');
+        $transformer = $this->transformerFactory->get('Profile');
+        return $transformer->fromJSONCollection($response);
     }
 
     /**
@@ -243,7 +283,9 @@ class Api implements ApiInterface
      */
     public function getProfile($profileId)
     {
-        return $this->restClient->get("/profiles/$profileId.json");
+        $response = $this->restClient->get('/profiles/'.$profileId.'.json');
+        $transformer = $this->transformerFactory->get('Profile');
+        return $transformer->fromJSON($response);
     }
 
     /**
@@ -251,7 +293,9 @@ class Api implements ApiInterface
      */
     public function addProfile(array $data)
     {
-        return $this->restClient->post("/profiles.json", $data);
+        $response = $this->restClient->post('/profiles.json', $data);
+        $transformer = $this->transformerFactory->get('Profile');
+        return $transformer->fromJSON($response);
     }
 
     /**
@@ -259,26 +303,33 @@ class Api implements ApiInterface
      */
     public function addProfileFromPreset($presetName)
     {
-        return $this->restClient->post(
-            "/profiles.json",
-            array("preset_name" => $presetName)
+        $response = $this->restClient->post(
+            '/profiles.json',
+            array('preset_name' => $presetName)
         );
+        $transformer = $this->transformerFactory->get('Profile');
+        return $transformer->fromJSON($response);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setProfile($profileId, array $data)
+    public function setProfile(Profile $profile)
     {
-        return $this->restClient->put("/profiles/$profileId.json", $data);
+        $transformer = $this->transformerFactory->get('Profile');
+        $response = $this->restClient->put(
+            '/profiles/'.$profile->getId().'.json',
+            $transformer->toRequestParams($profile)->all()
+        );
+        return $transformer->fromJSON($response);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function deleteProfile($profileId)
+    public function deleteProfile(Profile $profile)
     {
-        return $this->restClient->delete("/profiles/$profileId.json");
+        return $this->restClient->delete('/profiles/'.$profile->getId().'.json');
     }
 
     /**
@@ -286,7 +337,9 @@ class Api implements ApiInterface
      */
     public function getCloud($cloudId)
     {
-        return $this->restClient->get("/clouds/$cloudId.json");
+        $response = $this->restClient->get('/clouds/'.$cloudId.'.json');
+        $transformer = $this->transformerFactory->get('Cloud');
+        return $transformer->fromJSON($response);
     }
 
     /**
@@ -294,7 +347,9 @@ class Api implements ApiInterface
      */
     public function setCloud($cloudId, array $data)
     {
-        return $this->restClient->put("/clouds/$cloudId.json", $data);
+        $response = $this->restClient->put('/clouds/'.$cloudId.'.json', $data);
+        $transformer = $this->transformerFactory->get('Cloud');
+        return $transformer->fromJSON($response);
     }
 
     /**
@@ -302,7 +357,9 @@ class Api implements ApiInterface
      */
     public function getNotifications()
     {
-        return $this->restClient->get("/notifications.json");
+        $response = $this->restClient->get('/notifications.json');
+        $transformer = $this->transformerFactory->get('Notifications');
+        return $transformer->fromJSON($response);
     }
 
     /**
@@ -310,6 +367,8 @@ class Api implements ApiInterface
      */
     public function setNotifications(array $notifications)
     {
-        return $this->restClient->put("/notifications.json", $notifications);
+        $response = $this->restClient->put('/notifications.json', $notifications);
+        $transformer = $this->transformerFactory->get('Notifications');
+        return $transformer->fromJSON($response);
     }
 }
