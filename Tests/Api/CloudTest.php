@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Xabbuh\PandaClient\Tests;
+namespace Xabbuh\PandaClient\Tests\Api;
 
-use Xabbuh\PandaClient\Api;
+use Xabbuh\PandaClient\Api\Cloud;
+use Xabbuh\PandaClient\Api\RestClientInterface;
 use Xabbuh\PandaClient\Model\NotificationEvent;
 use Xabbuh\PandaClient\Model\Notifications;
 use Xabbuh\PandaClient\Model\Profile;
 use Xabbuh\PandaClient\Model\Video;
-use Xabbuh\PandaClient\RestClientInterface;
 use Xabbuh\PandaClient\Transformer\CloudTransformer;
 use Xabbuh\PandaClient\Transformer\EncodingTransformer;
 use Xabbuh\PandaClient\Transformer\NotificationsTransformer;
@@ -42,7 +42,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     private $transformerFactory;
 
     /**
-     * @var Api
+     * @var Cloud
      */
     private $api;
 
@@ -50,7 +50,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     {
         $this->createRestClient();
         $this->createTransformerFactory();
-        $this->api = new Api($this->restClient, $this->transformerFactory);
+        $this->api = new Cloud($this->restClient, $this->transformerFactory);
     }
 
     public function testGetRestClient()
@@ -757,7 +757,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
 
     private function createRestClient()
     {
-        $this->restClient = $this->getMock('Xabbuh\PandaClient\RestClientInterface');
+        $this->restClient = $this->getMock('Xabbuh\PandaClient\Api\RestClientInterface');
     }
 
     private function createTransformerFactory()

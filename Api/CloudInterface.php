@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Xabbuh\PandaClient;
+namespace Xabbuh\PandaClient\Api;
 
-use Xabbuh\PandaClient\Model\Cloud;
+use Xabbuh\PandaClient\Model\Cloud as CloudModel;
 use Xabbuh\PandaClient\Model\Encoding;
 use Xabbuh\PandaClient\Model\Notifications;
 use Xabbuh\PandaClient\Model\Profile;
@@ -22,7 +22,7 @@ use Xabbuh\PandaClient\Model\Video;
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-interface ApiInterface
+interface CloudInterface
 {
     /**
      * Returns the Panda REST client.
@@ -292,7 +292,7 @@ interface ApiInterface
      *
      * @param string $cloudId The id of the cloud being fetched
      *
-     * @return Cloud The cloud
+     * @return CloudModel The cloud
      */
     public function getCloud($cloudId);
 
@@ -302,7 +302,7 @@ interface ApiInterface
      * @param string $cloudId The id of the cloud being modified
      * @param array  $data    The cloud's new data
      *
-     * @return Cloud The new cloud
+     * @return CloudModel The new cloud
      */
     public function setCloud($cloudId, array $data);
 

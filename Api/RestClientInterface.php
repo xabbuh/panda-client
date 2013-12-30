@@ -9,7 +9,8 @@
  * file that was distributed with this source code.
  */
 
-namespace Xabbuh\PandaClient;
+namespace Xabbuh\PandaClient\Api;
+
 /**
  * Interface definition for Panda REST client implementations.
  *

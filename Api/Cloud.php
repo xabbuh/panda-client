@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Xabbuh\PandaClient;
+namespace Xabbuh\PandaClient\Api;
 
 use Xabbuh\PandaClient\Model\Profile;
 use Xabbuh\PandaClient\Transformer\TransformerFactory;
 
 /**
- * Intuitive PHP interface for the Panda video encoding service API.
+ * Object-oriented interface to easily access a Panda cloud.
  * 
  * The implementation provides methodes for accessing all endpoints of the Panda
  * encoding REST webservice. Each method is mapped to a corresponding HTTP
@@ -23,7 +23,7 @@ use Xabbuh\PandaClient\Transformer\TransformerFactory;
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-class Api implements ApiInterface
+class Cloud implements CloudInterface
 {
     /**
      * The client which is used to perform the requests to the REST api
