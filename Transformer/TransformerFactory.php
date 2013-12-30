@@ -51,7 +51,7 @@ class TransformerFactory
     public function get($model)
     {
         if (!isset($this->transformers[$model])) {
-            throw new \InvalidArgumentException('No transformer for class $model registered');
+            throw new \InvalidArgumentException('No transformer for class '.$model.' registered');
         }
         return $this->transformers[$model];
     }
