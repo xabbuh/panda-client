@@ -335,8 +335,12 @@ class Cloud implements CloudInterface
     /**
      * {@inheritDoc}
      */
-    public function getCloud($cloudId)
+    public function getCloud($cloudId = null)
     {
+        if (null === $cloudId) {
+            $cloudId = $this->restClient->getCloudId();
+        }
+
         $response = $this->restClient->get('/clouds/'.$cloudId.'.json');
         $transformer = $this->transformerFactory->get('Cloud');
         return $transformer->fromJSON($response);
@@ -345,8 +349,12 @@ class Cloud implements CloudInterface
     /**
      * {@inheritDoc}
      */
-    public function setCloud($cloudId, array $data)
+    public function setCloud(array $data, $cloudId = null)
     {
+        if (null === $cloudId) {
+            $cloudId = $this->restClient->getCloudId();
+        }
+
         $response = $this->restClient->put('/clouds/'.$cloudId.'.json', $data);
         $transformer = $this->transformerFactory->get('Cloud');
         return $transformer->fromJSON($response);

@@ -13,6 +13,7 @@ namespace Xabbuh\PandaClient\Tests\Api;
 
 use Xabbuh\PandaClient\Api\Cloud;
 use Xabbuh\PandaClient\Api\RestClientInterface;
+use Xabbuh\PandaClient\Model\Cloud as CloudModel;
 use Xabbuh\PandaClient\Model\NotificationEvent;
 use Xabbuh\PandaClient\Model\Notifications;
 use Xabbuh\PandaClient\Model\Profile;
@@ -656,24 +657,20 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     public function testGetCloud()
     {
         $id = md5(uniqid());
-        $response = '{
-          "id": "e122090f4e506ae9ee266c3eb78a8b67",
-          "name": "my_first_cloud",
-          "s3_videos_bucket": "my-example-bucket",
-          "s3_private_access":false,
-          "url": "http://my-example-bucket.s3.amazonaws.com/",
-          "created_at": "2010/03/18 12:56:04 +0000",
-          "updated_at": "2010/03/18 12:59:06 +0000"
-        }';
-        $this->request('get', '/clouds/'.$id.'.json', $response);
+        $this->request('get', '/clouds/'.$id.'.json', $this->createCloudResponse());
         $cloud = $this->api->getCloud($id);
-        $this->assertEquals('e122090f4e506ae9ee266c3eb78a8b67', $cloud->getId());
-        $this->assertEquals('my_first_cloud', $cloud->getName());
-        $this->assertEquals('my-example-bucket', $cloud->getS3VideosBucket());
-        $this->assertEquals(false, $cloud->isS3AccessPrivate());
-        $this->assertEquals('http://my-example-bucket.s3.amazonaws.com/', $cloud->getUrl());
-        $this->assertEquals('2010/03/18 12:56:04 +0000', $cloud->getCreatedAt());
-        $this->assertEquals('2010/03/18 12:59:06 +0000', $cloud->getUpdatedAt());
+        $this->validateCloud($cloud);
+    }
+
+    public function testGetCloudWithoutId()
+    {
+        $this->request(
+            'get',
+            '/clouds/'.$this->restClient->getCloudId().'.json',
+            $this->createCloudResponse()
+        );
+        $cloud = $this->api->getCloud();
+        $this->validateCloud($cloud);
     }
 
     public function testSetCloud()
@@ -685,25 +682,27 @@ class ApiTest extends \PHPUnit_Framework_TestCase
             'aws_access_key' => 'XQwEwFR',
             'aws_secret_key' => 'XoSV2f'
         );
-        $response = '{
-          "id": "e122090f4e506ae9ee266c3eb78a8b67",
-          "name": "my_first_cloud",
-          "s3_videos_bucket": "my-example-bucket",
-          "s3_private_access":false,
-          "url": "http://my-example-bucket.s3.amazonaws.com/",
-          "created_at": "2010/03/18 12:56:04 +0000",
-          "updated_at": "2010/03/18 12:59:06 +0000"
-        }';
-        $this->request('put', '/clouds/'.$id.'.json', $response, $data);
-        $cloud = $this->api->setCloud($id, $data);
-        $this->assertInstanceOf('Xabbuh\PandaClient\Model\Cloud', $cloud);
-        $this->assertEquals('e122090f4e506ae9ee266c3eb78a8b67', $cloud->getId());
-        $this->assertEquals('my_first_cloud', $cloud->getName());
-        $this->assertEquals('my-example-bucket', $cloud->getS3VideosBucket());
-        $this->assertEquals(false, $cloud->isS3AccessPrivate());
-        $this->assertEquals('http://my-example-bucket.s3.amazonaws.com/', $cloud->getUrl());
-        $this->assertEquals('2010/03/18 12:56:04 +0000', $cloud->getCreatedAt());
-        $this->assertEquals('2010/03/18 12:59:06 +0000', $cloud->getUpdatedAt());
+        $this->request('put', '/clouds/'.$id.'.json', $this->createCloudResponse(), $data);
+        $cloud = $this->api->setCloud($data, $id);
+        $this->validateCloud($cloud);
+    }
+
+    public function testSetCloudWithoutId()
+    {
+        $data = array(
+            'name' => 'my_first_cloud',
+            's3_videos_bucket' => 'my_own_bucket',
+            'aws_access_key' => 'XQwEwFR',
+            'aws_secret_key' => 'XoSV2f'
+        );
+        $this->request(
+            'put',
+            '/clouds/'.$this->restClient->getCloudId().'.json',
+            $this->createCloudResponse(),
+            $data
+        );
+        $cloud = $this->api->setCloud($data);
+        $this->validateCloud($cloud);
     }
 
     public function testGetNotifications()
@@ -757,7 +756,14 @@ class ApiTest extends \PHPUnit_Framework_TestCase
 
     private function createRestClient()
     {
-        $this->restClient = $this->getMock('Xabbuh\PandaClient\Api\RestClientInterface');
+        $this->restClient = $this->getMock(
+            'Xabbuh\PandaClient\Api\RestClientInterface'
+        );
+        $this->restClient
+            ->expects($this->any())
+            ->method('getCloudId')
+            ->will($this->returnValue(md5(uniqid())))
+        ;
     }
 
     private function createTransformerFactory()
@@ -941,6 +947,19 @@ class ApiTest extends \PHPUnit_Framework_TestCase
         }';
     }
 
+    private function createCloudResponse()
+    {
+        return '{
+          "id": "e122090f4e506ae9ee266c3eb78a8b67",
+          "name": "my_first_cloud",
+          "s3_videos_bucket": "my-example-bucket",
+          "s3_private_access":false,
+          "url": "http://my-example-bucket.s3.amazonaws.com/",
+          "created_at": "2010/03/18 12:56:04 +0000",
+          "updated_at": "2010/03/18 12:59:06 +0000"
+        }';
+    }
+
     private function createNotificationsResponse(
         $url,
         $videoCreatedEventActive,
@@ -1043,6 +1062,21 @@ class ApiTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($perPage, $result->per_page);
         $this->assertEquals(17, $result->total);
         $this->validateCollection($result->videos, 'Xabbuh\PandaClient\Model\Video', 2);
+    }
+
+    /**
+     * @param CloudModel $cloud
+     */
+    private function validateCloud($cloud)
+    {
+        $this->assertInstanceOf('Xabbuh\PandaClient\Model\Cloud', $cloud);
+        $this->assertEquals('e122090f4e506ae9ee266c3eb78a8b67', $cloud->getId());
+        $this->assertEquals('my_first_cloud', $cloud->getName());
+        $this->assertEquals('my-example-bucket', $cloud->getS3VideosBucket());
+        $this->assertEquals(false, $cloud->isS3AccessPrivate());
+        $this->assertEquals('http://my-example-bucket.s3.amazonaws.com/', $cloud->getUrl());
+        $this->assertEquals('2010/03/18 12:56:04 +0000', $cloud->getCreatedAt());
+        $this->assertEquals('2010/03/18 12:59:06 +0000', $cloud->getUpdatedAt());
     }
 
     /**

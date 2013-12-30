@@ -299,12 +299,12 @@ interface CloudInterface
     /**
      * Changes the cloud data.
      *
-     * @param string $cloudId The id of the cloud being modified
      * @param array  $data    The cloud's new data
+     * @param string $cloudId The id of the cloud being modified
      *
      * @return CloudModel The new cloud
      */
-    public function setCloud($cloudId, array $data);
+    public function setCloud(array $data, $cloudId = null);
 
     /**
      * Retrieves the cloud's notifications configuration.
