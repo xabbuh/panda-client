@@ -12,12 +12,13 @@
 namespace Xabbuh\PandaClient\Api;
 
 use Xabbuh\PandaClient\Model\Profile;
-use Xabbuh\PandaClient\Transformer\TransformerFactory;
+use Xabbuh\PandaClient\Transformer\TransformerRegistry;
+use Xabbuh\PandaClient\Transformer\TransformerRegistryInterface;
 
 /**
  * Object-oriented interface to easily access a Panda cloud.
  * 
- * The implementation provides methodes for accessing all endpoints of the Panda
+ * The implementation provides methods for accessing all endpoints of the Panda
  * encoding REST webservice. Each method is mapped to a corresponding HTTP
  * request.
  *
@@ -33,22 +34,22 @@ class Cloud implements CloudInterface
     private $restClient;
 
     /**
-     * @var TransformerFactory
+     * @var TransformerRegistryInterface
      */
-    private $transformerFactory;
+    private $transformers;
     
     /**
      * Constructs the Panda API instance on a given REST client.
      * 
-     * @param RestClientInterface $restClient         The client for REST requests
-     * @param TransformerFactory  $transformerFactory
+     * @param RestClientInterface          $restClient   The client for REST requests
+     * @param TransformerRegistryInterface $transformers
      */
     public function __construct(
         RestClientInterface $restClient,
-        TransformerFactory $transformerFactory
+        TransformerRegistryInterface $transformers
     ) {
         $this->restClient = $restClient;
-        $this->transformerFactory = $transformerFactory;
+        $this->transformers = $transformers;
     }
     
     /**
@@ -65,7 +66,7 @@ class Cloud implements CloudInterface
     public function getVideos()
     {
         $response = $this->restClient->get('/videos.json');
-        $transformer = $this->transformerFactory->get('Video');
+        $transformer = $this->transformers->getVideoTransformer();
         return $transformer->fromJSONCollection($response);
     }
 
@@ -82,7 +83,7 @@ class Cloud implements CloudInterface
                 'per_page' => $per_page
             )
         );
-        $transformer = $this->transformerFactory->get('Video');
+        $transformer = $this->transformers->getVideoTransformer();
         $result = json_decode($response);
         foreach ($result->videos as $index => $video) {
             $result->videos[$index] = $transformer->fromObject($video);
@@ -96,7 +97,7 @@ class Cloud implements CloudInterface
     public function getVideo($videoId)
     {
         $response = $this->restClient->get('/videos/'.$videoId.'.json');
-        $transformer = $this->transformerFactory->get('Video');
+        $transformer = $this->transformers->getVideoTransformer();
         return $transformer->fromJSON($response);
     }
 
@@ -123,7 +124,7 @@ class Cloud implements CloudInterface
     public function encodeVideoByUrl($url)
     {
         $response = $this->restClient->post('/videos.json', array('source_url' => $url));
-        $transformer = $this->transformerFactory->get('Video');
+        $transformer = $this->transformers->getVideoTransformer();
         return $transformer->fromJSON($response);
     }
 
@@ -133,7 +134,7 @@ class Cloud implements CloudInterface
     public function encodeVideoFile($localPath)
     {
         $response = $this->restClient->post('/videos.json', array('file' => '@'.$localPath));
-        $transformer = $this->transformerFactory->get('Video');
+        $transformer = $this->transformers->getVideoTransformer();
         return $transformer->fromJSON($response);
     }
 
@@ -168,7 +169,7 @@ class Cloud implements CloudInterface
     public function getEncodings(array $filter = array())
     {
         $response = $this->restClient->get('/encodings.json', $filter);
-        $transformer = $this->transformerFactory->get('Encoding');
+        $transformer = $this->transformers->getEncodingTransformer();
         return $transformer->fromJSONCollection($response);
     }
 
@@ -214,7 +215,7 @@ class Cloud implements CloudInterface
     public function getEncoding($encodingId)
     {
         $response = $this->restClient->get('/encodings/'.$encodingId.'.json');
-        $transformer = $this->transformerFactory->get('Encoding');
+        $transformer = $this->transformers->getEncodingTransformer();
         return $transformer->fromJSON($response);
     }
 
@@ -227,7 +228,7 @@ class Cloud implements CloudInterface
             '/encodings.json',
             array('video_id' => $videoId, 'profile_id' => $profileId,)
         );
-        $transformer = $this->transformerFactory->get('Encoding');
+        $transformer = $this->transformers->getEncodingTransformer();
         return $transformer->fromJSON($response);
     }
 
@@ -240,7 +241,7 @@ class Cloud implements CloudInterface
             '/encodings.json',
             array('video_id' => $videoId, 'profile_name' => $profileName,)
         );
-        $transformer = $this->transformerFactory->get('Encoding');
+        $transformer = $this->transformers->getEncodingTransformer();
         return $transformer->fromJSON($response);
     }
 
@@ -274,7 +275,7 @@ class Cloud implements CloudInterface
     public function getProfiles()
     {
         $response = $this->restClient->get('/profiles.json');
-        $transformer = $this->transformerFactory->get('Profile');
+        $transformer = $this->transformers->getProfileTransformer();
         return $transformer->fromJSONCollection($response);
     }
 
@@ -284,7 +285,7 @@ class Cloud implements CloudInterface
     public function getProfile($profileId)
     {
         $response = $this->restClient->get('/profiles/'.$profileId.'.json');
-        $transformer = $this->transformerFactory->get('Profile');
+        $transformer = $this->transformers->getProfileTransformer();
         return $transformer->fromJSON($response);
     }
 
@@ -294,7 +295,7 @@ class Cloud implements CloudInterface
     public function addProfile(array $data)
     {
         $response = $this->restClient->post('/profiles.json', $data);
-        $transformer = $this->transformerFactory->get('Profile');
+        $transformer = $this->transformers->getProfileTransformer();
         return $transformer->fromJSON($response);
     }
 
@@ -307,7 +308,7 @@ class Cloud implements CloudInterface
             '/profiles.json',
             array('preset_name' => $presetName)
         );
-        $transformer = $this->transformerFactory->get('Profile');
+        $transformer = $this->transformers->getProfileTransformer();
         return $transformer->fromJSON($response);
     }
 
@@ -316,7 +317,7 @@ class Cloud implements CloudInterface
      */
     public function setProfile(Profile $profile)
     {
-        $transformer = $this->transformerFactory->get('Profile');
+        $transformer = $this->transformers->getProfileTransformer();
         $response = $this->restClient->put(
             '/profiles/'.$profile->getId().'.json',
             $transformer->toRequestParams($profile)->all()
@@ -342,7 +343,7 @@ class Cloud implements CloudInterface
         }
 
         $response = $this->restClient->get('/clouds/'.$cloudId.'.json');
-        $transformer = $this->transformerFactory->get('Cloud');
+        $transformer = $this->transformers->getCloudTransformer();
         return $transformer->fromJSON($response);
     }
 
@@ -356,7 +357,7 @@ class Cloud implements CloudInterface
         }
 
         $response = $this->restClient->put('/clouds/'.$cloudId.'.json', $data);
-        $transformer = $this->transformerFactory->get('Cloud');
+        $transformer = $this->transformers->getCloudTransformer();
         return $transformer->fromJSON($response);
     }
 
@@ -366,7 +367,7 @@ class Cloud implements CloudInterface
     public function getNotifications()
     {
         $response = $this->restClient->get('/notifications.json');
-        $transformer = $this->transformerFactory->get('Notifications');
+        $transformer = $this->transformers->getNotificationsTransformer();
         return $transformer->fromJSON($response);
     }
 
@@ -376,7 +377,7 @@ class Cloud implements CloudInterface
     public function setNotifications(array $notifications)
     {
         $response = $this->restClient->put('/notifications.json', $notifications);
-        $transformer = $this->transformerFactory->get('Notifications');
+        $transformer = $this->transformers->getNotificationsTransformer();
         return $transformer->fromJSON($response);
     }
 }

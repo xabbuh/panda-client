@@ -44,14 +44,10 @@ use Xabbuh\PandaClient\Model\Video;
  * 
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-class VideoTransformer extends BaseTransformer
+class VideoTransformer extends BaseTransformer implements VideoTransformerInterface
 {
     /**
-     * Transform the JSON representation of a video into a Video model object.
-     * 
-     * @param string $jsonString JSON representation of a video
-     *
-     * @return Video The generated model object
+     * {@inheritDoc}
      */
     public function fromJSON($jsonString)
     {
@@ -59,12 +55,7 @@ class VideoTransformer extends BaseTransformer
     }
 
     /**
-     * Transform a JSON representation of a collection of videos into an array
-     * of Video objects.
-     *
-     * @param string $jsonString The JSON string being transformed
-     *
-     * @return Video[] The transformed Videos
+     * {@inheritDoc}
      */
     public function fromJSONCollection($jsonString)
     {
@@ -77,11 +68,7 @@ class VideoTransformer extends BaseTransformer
     }
 
     /**
-     * Transform a standard PHP object into a Video instance.
-     *
-     * @param \stdClass $object The object being transformed
-     *
-     * @return Video The transformed Video
+     * {@inheritDoc}
      */
     public function fromObject(\stdClass $object)
     {

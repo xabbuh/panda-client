@@ -20,7 +20,8 @@ use Xabbuh\PandaClient\Transformer\CloudTransformer;
 use Xabbuh\PandaClient\Transformer\EncodingTransformer;
 use Xabbuh\PandaClient\Transformer\NotificationsTransformer;
 use Xabbuh\PandaClient\Transformer\ProfileTransformer;
-use Xabbuh\PandaClient\Transformer\TransformerFactory;
+use Xabbuh\PandaClient\Transformer\TransformerRegistry;
+use Xabbuh\PandaClient\Transformer\TransformerRegistryInterface;
 use Xabbuh\PandaClient\Transformer\VideoTransformer;
 
 /**
@@ -65,9 +66,9 @@ use Xabbuh\PandaClient\Transformer\VideoTransformer;
 class Api
 {
     /**
-     * @var TransformerFactory
+     * @var TransformerRegistryInterface
      */
-    private $transformerFactory;
+    private $transformers;
 
     /**
      * @var AccountManager
@@ -80,22 +81,22 @@ class Api
     private $cloudManager;
 
     /**
-     * @param TransformerFactory $transformerFactory
+     * @param TransformerRegistryInterface $transformers
      *
      * @return Api
      */
-    public function setTransformerFactory(TransformerFactory $transformerFactory)
+    public function setTransformers(TransformerRegistryInterface $transformers)
     {
-        $this->transformerFactory = $transformerFactory;
+        $this->transformers = $transformers;
         return $this;
     }
 
     /**
-     * @return TransformerFactory
+     * @return TransformerRegistryInterface
      */
-    public function getTransformerFactory()
+    public function getTransformers()
     {
-        return $this->transformerFactory;
+        return $this->transformers;
     }
 
     /**
@@ -146,12 +147,12 @@ class Api
     public static function getInstance(array $config)
     {
         // register model transformers
-        $transformerFactory = new TransformerFactory();
-        $transformerFactory->registerTransformer('Cloud', new CloudTransformer());
-        $transformerFactory->registerTransformer('Encoding', new EncodingTransformer());
-        $transformerFactory->registerTransformer('Notifications', new NotificationsTransformer());
-        $transformerFactory->registerTransformer('Profile', new ProfileTransformer());
-        $transformerFactory->registerTransformer('Video', new VideoTransformer());
+        $transformers = new TransformerRegistry();
+        $transformers->setCloudTransformer(new CloudTransformer());
+        $transformers->setEncodingTransformer(new EncodingTransformer());
+        $transformers->setNotificationsTransformer(new NotificationsTransformer());
+        $transformers->setProfileTransformer(new ProfileTransformer());
+        $transformers->setVideoTransformer(new VideoTransformer());
 
         // register the accounts
         $accountManager = new AccountManager(
@@ -210,12 +211,12 @@ class Api
             $restClient = new RestClient($cloudConfig['id'], $account);
             $cloudManager->registerCloud(
                 $name,
-                new Cloud($restClient, $transformerFactory)
+                new Cloud($restClient, $transformers)
             );
         }
 
         $api = new Api();
-        $api->setTransformerFactory($transformerFactory)
+        $api->setTransformers($transformers)
             ->setAccountManager($accountManager)
             ->setCloudManager($cloudManager)
         ;

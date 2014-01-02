@@ -18,14 +18,10 @@ use Xabbuh\PandaClient\Model\Profile;
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-class ProfileTransformer extends BaseTransformer
+class ProfileTransformer extends BaseTransformer implements ProfileTransformerInterface
 {
     /**
-     * Transform a JSON representation of a profile into a Profile object.
-     *
-     * @param string $jsonString The JSON string being transformed
-     *
-     * @return Profile The transformed Profile
+     * {@inheritDoc}
      */
     public function fromJSON($jsonString)
     {
@@ -33,12 +29,7 @@ class ProfileTransformer extends BaseTransformer
     }
 
     /**
-     * Transform a JSON representation of a collection of profiles into an
-     * array of Profile objects.
-     *
-     * @param string $jsonString The JSON string being transformed
-     *
-     * @return Profile[] The transformed Profiles
+     * {@inheritDoc}
      */
     public function fromJSONCollection($jsonString)
     {

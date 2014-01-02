@@ -18,27 +18,18 @@ use Xabbuh\PandaClient\Model\Encoding;
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-class EncodingTransformer extends BaseTransformer
+class EncodingTransformer extends BaseTransformer implements EncodingTransformerInterface
 {
     /**
-     * Convert a JSON encoded string into an Encoding object.
-     *
-     * @param string $jsonString The JSON string being transformed
-     *
-     * @return Encoding The transformed Encoding
+     * {@inheritDoc}
      */
     public function fromJSON($jsonString)
     {
         return $this->fromObject(json_decode($jsonString));
     }
-    
+
     /**
-     * Convert a JSON encoded collection of encodings into an array of Encoding
-     * objects.
-     *
-     * @param string $jsonString The JSON string being transformed
-     *
-     * @return Encoding[] The transformed Encodings
+     * {@inheritDoc}
      */
     public function fromJSONCollection($jsonString)
     {
@@ -49,13 +40,9 @@ class EncodingTransformer extends BaseTransformer
         }
         return $encodings;
     }
-    
+
     /**
-     * Transform a standard php object into an Encoding instance
-     *
-     * @param \stdClass $object The object being transformed
-     *
-     * @return Encoding The transformed encoding
+     * {@inheritDoc}
      */
     private function fromObject(\stdClass $object)
     {

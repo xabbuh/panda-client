@@ -18,14 +18,10 @@ use Xabbuh\PandaClient\Model\Cloud;
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-class CloudTransformer extends BaseTransformer
+class CloudTransformer extends BaseTransformer implements CloudTransformerInterface
 {
     /**
-     * Transform a JSON encoded string into a Cloud model object.
-     *
-     * @param string $jsonString The JSON encoded string being
-     *
-     * @return Cloud The generated Cloud
+     * {@inheritDoc}
      */
     public function fromJSON($jsonString)
     {

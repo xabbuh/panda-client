@@ -22,7 +22,7 @@ use Xabbuh\PandaClient\Transformer\CloudTransformer;
 use Xabbuh\PandaClient\Transformer\EncodingTransformer;
 use Xabbuh\PandaClient\Transformer\NotificationsTransformer;
 use Xabbuh\PandaClient\Transformer\ProfileTransformer;
-use Xabbuh\PandaClient\Transformer\TransformerFactory;
+use Xabbuh\PandaClient\Transformer\TransformerRegistry;
 use Xabbuh\PandaClient\Transformer\VideoTransformer;
 
 /**
@@ -38,9 +38,9 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     private $restClient;
 
     /**
-     * @var TransformerFactory
+     * @var TransformerRegistryInterface
      */
-    private $transformerFactory;
+    private $transformers;
 
     /**
      * @var Cloud
@@ -50,8 +50,8 @@ class ApiTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->createRestClient();
-        $this->createTransformerFactory();
-        $this->api = new Cloud($this->restClient, $this->transformerFactory);
+        $this->createTransformers();
+        $this->api = new Cloud($this->restClient, $this->transformers);
     }
 
     public function testGetRestClient()
@@ -766,29 +766,14 @@ class ApiTest extends \PHPUnit_Framework_TestCase
         ;
     }
 
-    private function createTransformerFactory()
+    private function createTransformers()
     {
-        $this->transformerFactory = new TransformerFactory();
-        $this->transformerFactory->registerTransformer(
-            'Cloud',
-            new CloudTransformer()
-        );
-        $this->transformerFactory->registerTransformer(
-            'Encoding',
-            new EncodingTransformer()
-        );
-        $this->transformerFactory->registerTransformer(
-            'Notifications',
-            new NotificationsTransformer()
-        );
-        $this->transformerFactory->registerTransformer(
-            'Profile',
-            new ProfileTransformer()
-        );
-        $this->transformerFactory->registerTransformer(
-            'Video',
-            new VideoTransformer()
-        );
+        $this->transformers = new TransformerRegistry();
+        $this->transformers->setCloudTransformer(new CloudTransformer());
+        $this->transformers->setEncodingTransformer(new EncodingTransformer());
+        $this->transformers->setNotificationsTransformer(new NotificationsTransformer());
+        $this->transformers->setProfileTransformer(new ProfileTransformer());
+        $this->transformers->setVideoTransformer(new VideoTransformer());
     }
 
     private function createVideoResponse()

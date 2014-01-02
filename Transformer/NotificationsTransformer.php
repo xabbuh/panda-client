@@ -22,15 +22,10 @@ use Xabbuh\PandaClient\Model\Notifications;
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de> 
  */
-class NotificationsTransformer extends BaseTransformer
+class NotificationsTransformer extends BaseTransformer implements NotificationsTransformerInterface
 {
     /**
-     * Transform the JSON representation of notifications into a Notifications
-     * model object.
-     * 
-     * @param string $jsonString The string in json format being transformed
-     *
-     * @return Notifications The notifications
+     * {@inheritDoc}
      */
     public function fromJSON($jsonString)
     {
@@ -62,13 +57,9 @@ class NotificationsTransformer extends BaseTransformer
 
         return $notifications;
     }
-    
+
     /**
-     * Transform a Notifications object into a ParameterBag of request parameters.
-     * 
-     * @param ModelInterface $notifications The notifications to transform
-     *
-     * @return ParameterBag The request parameters
+     * {@inheritDoc}
      */
     public function toRequestParams(ModelInterface $notifications)
     {
