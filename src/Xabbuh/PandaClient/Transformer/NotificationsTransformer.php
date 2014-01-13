@@ -20,7 +20,7 @@ use Xabbuh\PandaClient\Model\Notifications;
  * Transformation from various data representation formats into Notifications
  * model objects and vice versa.
  *
- * @author Christian Flothmann <christian.flothmann@xabbuh.de> 
+ * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
 class NotificationsTransformer extends BaseTransformer implements NotificationsTransformerInterface
 {
@@ -35,6 +35,7 @@ class NotificationsTransformer extends BaseTransformer implements NotificationsT
         if (isset($json->url)) {
             $notifications->setUrl($json->url);
         }
+
         if (isset($json->events->video_created)) {
             $notifications->addNotificationEvent(
                 new NotificationEvent('video_created', $json->events->video_created));
@@ -66,7 +67,7 @@ class NotificationsTransformer extends BaseTransformer implements NotificationsT
         $params = new ParameterBag();
 
         if ($notifications instanceof Notifications) {
-            if ($notifications->getUrl() != null) {
+            if (null !== $notifications->getUrl()) {
                 $params->set('url', $notifications->getUrl());
             }
 

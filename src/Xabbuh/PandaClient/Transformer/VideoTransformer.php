@@ -16,7 +16,7 @@ use Xabbuh\PandaClient\Model\Video;
 /**
  * Transformation from various data representation formats into Video models and
  * vice versa.
- * 
+ *
  * A JSON object returned by the Panda api service may contain the following
  * properties:
  * <ul>
@@ -41,7 +41,7 @@ use Xabbuh\PandaClient\Model\Video;
  *   <li>mime_type</li>
  *   <li>path</li>
  * </ul>
- * 
+ *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
 class VideoTransformer extends BaseTransformer implements VideoTransformerInterface
@@ -51,7 +51,7 @@ class VideoTransformer extends BaseTransformer implements VideoTransformerInterf
      */
     public function fromJSON($jsonString)
     {
-        return $this->fromObject(json_decode($jsonString));
+        return $this->serializer->deserialize($jsonString, 'Video');
     }
 
     /**
@@ -59,21 +59,6 @@ class VideoTransformer extends BaseTransformer implements VideoTransformerInterf
      */
     public function fromJSONCollection($jsonString)
     {
-        $json = json_decode($jsonString);
-        $videos = array();
-        foreach ($json as $object) {
-            $videos[] = $this->fromObject($object);
-        }
-        return $videos;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function fromObject(\stdClass $object)
-    {
-        $video = new Video();
-        $this->setModelProperties($video, $object);
-        return $video;
+        return $this->serializer->deserialize($jsonString, 'Video');
     }
 }

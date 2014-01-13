@@ -13,6 +13,7 @@ namespace Xabbuh\PandaClient\Transformer;
 
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Xabbuh\PandaClient\Model\ModelInterface;
+use Xabbuh\PandaClient\Serializer\SerializerInterface;
 
 /**
  * Common functions for all transformer classes.
@@ -22,45 +23,16 @@ use Xabbuh\PandaClient\Model\ModelInterface;
 abstract class BaseTransformer
 {
     /**
-     * Get the getter or setter method name for a particular property.
-     *
-     * @param string $propertyName The property name in underscore style
-     *
-     * @return string The generated method name in camel case style
+     * @var SerializerInterface
      */
-    protected function getMethodName($propertyName)
-    {
-        $methodName = 'set';
-
-        while (($pos = strpos($propertyName, '_')) !== false) {
-            $tmp = substr($propertyName, 0, $pos);
-            $tmp .= ucfirst(substr($propertyName, $pos + 1));
-            $propertyName = $tmp;
-        }
-        return $methodName . ucfirst($propertyName);
-    }
+    protected $serializer;
 
     /**
-     * Read the properties from one object and set the properties of the
-     * model respectively.
-     *
-     * @param ModelInterface $model  The model which properties are being set
-     * @param \stdClass      $object The object from where the property values are being read
-     *
-     * @throws \InvalidArgumentException if a property of $object doesn't exist in $model
+     * {@inheritDoc}
      */
-    protected function setModelProperties(ModelInterface $model, \stdClass $object)
+    public function setSerializer(SerializerInterface $serializer)
     {
-        foreach ($object as $name => $value) {
-            $methodName = $this->getMethodName($name);
-            if (method_exists($model, $methodName)) {
-                $model->$methodName($value);
-            } else {
-                throw new \InvalidArgumentException(
-                    'Transformation error: Unknown property '.$name.' in model'
-                );
-            }
-        }
+        $this->serializer = $serializer;
     }
 
     /**
@@ -83,6 +55,7 @@ abstract class BaseTransformer
                 $params->set($property, $object->$method());
             }
         }
+
         return $params;
     }
 }

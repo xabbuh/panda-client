@@ -13,6 +13,8 @@ namespace Xabbuh\PandaClient\Transformer;
 
 use Xabbuh\PandaClient\Model\Cloud;
 
+use Xabbuh\PandaClient\Serializer\SerializerInterface;
+
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */

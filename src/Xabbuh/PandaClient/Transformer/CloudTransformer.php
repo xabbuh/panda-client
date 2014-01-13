@@ -11,8 +11,6 @@
 
 namespace Xabbuh\PandaClient\Transformer;
 
-use Xabbuh\PandaClient\Model\Cloud;
-
 /**
  * Transform a cloud from and to different data formats.
  *
@@ -25,16 +23,6 @@ class CloudTransformer extends BaseTransformer implements CloudTransformerInterf
      */
     public function fromJSON($jsonString)
     {
-        $json = json_decode($jsonString);
-
-        $cloud = new Cloud();
-        $cloud->setId($json->id);
-        $cloud->setName($json->name);
-        $cloud->setS3VideosBucket($json->s3_videos_bucket);
-        $cloud->setS3PrivateAccess($json->s3_private_access);
-        $cloud->setUrl($json->url);
-        $cloud->setCreatedAt($json->created_at);
-        $cloud->setUpdatedAt($json->updated_at);
-        return $cloud;
+        return $this->serializer->deserialize($jsonString, 'Cloud');
     }
 }

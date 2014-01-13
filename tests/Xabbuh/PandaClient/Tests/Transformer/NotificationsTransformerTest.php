@@ -24,15 +24,11 @@ class NotificationsTransformerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var NotificationsTransformer
      */
-    private static $transformer;
+    private $transformer;
 
-
-    /**
-     * {@inheritDoc}
-     */
-    public static function setUpBeforeClass()
+    protected function setUp()
     {
-        self::$transformer = new NotificationsTransformer();
+        $this->transformer = new NotificationsTransformer();
     }
 
     /**
@@ -48,7 +44,7 @@ class NotificationsTransformerTest extends \PHPUnit_Framework_TestCase
             "encoding_completed": false
           }
         }';
-        $notifications = self::$transformer->fromJSON($jsonString);
+        $notifications = $this->transformer->fromJSON($jsonString);
         $this->assertEquals(
             'Xabbuh\PandaClient\Model\Notifications',
             get_class($notifications)
@@ -87,7 +83,7 @@ class NotificationsTransformerTest extends \PHPUnit_Framework_TestCase
             "encoding_completed": false
           }
         }';
-        $notifications = self::$transformer->fromJSON($jsonString);
+        $notifications = $this->transformer->fromJSON($jsonString);
         $this->assertEquals(
             'Xabbuh\PandaClient\Model\Notifications',
             get_class($notifications)
@@ -129,7 +125,7 @@ class NotificationsTransformerTest extends \PHPUnit_Framework_TestCase
      */
     public function testToRequestParams(Notifications $notifications)
     {
-        $params = self::$transformer->toRequestParams($notifications);
+        $params = $this->transformer->toRequestParams($notifications);
         $this->assertEquals(
             'Symfony\Component\HttpFoundation\ParameterBag',
             get_class($params)
@@ -149,7 +145,7 @@ class NotificationsTransformerTest extends \PHPUnit_Framework_TestCase
      */
     public function testToRequestParamsWithoutUrl(Notifications $notifications)
     {
-        $params = self::$transformer->toRequestParams($notifications);
+        $params = $this->transformer->toRequestParams($notifications);
         $this->assertEquals(
             'Symfony\Component\HttpFoundation\ParameterBag',
             get_class($params)

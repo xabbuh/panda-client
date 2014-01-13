@@ -19,49 +19,48 @@ namespace Xabbuh\PandaClient\Model;
 class Video implements ModelInterface
 {
     private $id;
-    
+
     private $createdAt;
-    
+
     private $updatedAt;
-    
+
     private $originalFilename;
-    
+
     private $extname;
-    
+
     private $sourceUrl;
-    
+
     private $duration;
-    
+
     private $width;
-    
+
     private $height;
-    
+
     private $fileSize;
-    
+
     private $videoBitrate;
-    
+
     private $audioBitrate;
-    
+
     private $audioCodec;
-    
+
     private $videoCodec;
-    
+
     private $fps;
-    
+
     private $audioChannels;
-    
+
     private $audioSampleRate;
-    
+
     private $status;
-    
+
     private $mimeType;
-    
+
     private $path;
 
     private $errorMessage;
 
     private $errorClass;
-    
 
     public function getId() {
         return $this->id;

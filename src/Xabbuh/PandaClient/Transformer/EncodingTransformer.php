@@ -25,7 +25,7 @@ class EncodingTransformer extends BaseTransformer implements EncodingTransformer
      */
     public function fromJSON($jsonString)
     {
-        return $this->fromObject(json_decode($jsonString));
+        return $this->serializer->deserialize($jsonString, 'Encoding');
     }
 
     /**
@@ -33,21 +33,6 @@ class EncodingTransformer extends BaseTransformer implements EncodingTransformer
      */
     public function fromJSONCollection($jsonString)
     {
-        $json = json_decode($jsonString);
-        $encodings = array();
-        foreach ($json as $object) {
-            $encodings[] = $this->fromObject($object);
-        }
-        return $encodings;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    private function fromObject(\stdClass $object)
-    {
-        $encoding = new Encoding();
-        $this->setModelProperties($encoding, $object);
-        return $encoding;
+        return $this->serializer->deserialize($jsonString, 'Encoding');
     }
 }

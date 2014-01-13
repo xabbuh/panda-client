@@ -64,7 +64,6 @@ class Profile implements ModelInterface
 
     private $updatedAt;
 
-
     public function getId()
     {
         return $this->id;

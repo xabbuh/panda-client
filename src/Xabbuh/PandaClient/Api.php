@@ -11,6 +11,9 @@
 
 namespace Xabbuh\PandaClient;
 
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Symfony\Component\Serializer\Serializer;
 use Xabbuh\PandaClient\Api\Account;
 use Xabbuh\PandaClient\Api\AccountManager;
 use Xabbuh\PandaClient\Api\Cloud;
@@ -147,8 +150,12 @@ class Api
     public static function getInstance(array $config)
     {
         // register model transformers
+        $serializer = new Serializer(
+            array(new GetSetMethodNormalizer()),
+            array(new JsonEncoder())
+        );
         $transformers = new TransformerRegistry();
-        $transformers->setCloudTransformer(new CloudTransformer());
+        $transformers->setCloudTransformer(new CloudTransformer($serializer));
         $transformers->setEncodingTransformer(new EncodingTransformer());
         $transformers->setNotificationsTransformer(new NotificationsTransformer());
         $transformers->setProfileTransformer(new ProfileTransformer());

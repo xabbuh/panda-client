@@ -17,7 +17,7 @@ use Xabbuh\PandaClient\Transformer\TransformerRegistryInterface;
 
 /**
  * Object-oriented interface to easily access a Panda cloud.
- * 
+ *
  * The implementation provides methods for accessing all endpoints of the Panda
  * encoding REST webservice. Each method is mapped to a corresponding HTTP
  * request.
@@ -28,7 +28,7 @@ class Cloud implements CloudInterface
 {
     /**
      * The client which is used to perform the requests to the REST api
-     * 
+     *
      * @var RestClientInterface
      */
     private $restClient;
@@ -37,10 +37,10 @@ class Cloud implements CloudInterface
      * @var TransformerRegistryInterface
      */
     private $transformers;
-    
+
     /**
      * Constructs the Panda API instance on a given REST client.
-     * 
+     *
      * @param RestClientInterface          $restClient   The client for REST requests
      * @param TransformerRegistryInterface $transformers
      */
@@ -51,7 +51,7 @@ class Cloud implements CloudInterface
         $this->restClient = $restClient;
         $this->transformers = $transformers;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -85,9 +85,8 @@ class Cloud implements CloudInterface
         );
         $transformer = $this->transformers->getVideoTransformer();
         $result = json_decode($response);
-        foreach ($result->videos as $index => $video) {
-            $result->videos[$index] = $transformer->fromObject($video);
-        }
+        $result->videos = $transformer->fromJSONCollection(json_encode($result->videos));
+
         return $result;
     }
 

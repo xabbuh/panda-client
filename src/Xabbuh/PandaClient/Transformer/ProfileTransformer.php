@@ -25,7 +25,7 @@ class ProfileTransformer extends BaseTransformer implements ProfileTransformerIn
      */
     public function fromJSON($jsonString)
     {
-        return $this->fromObject(json_decode($jsonString));
+        return $this->serializer->deserialize($jsonString, 'Profile');
     }
 
     /**
@@ -33,25 +33,6 @@ class ProfileTransformer extends BaseTransformer implements ProfileTransformerIn
      */
     public function fromJSONCollection($jsonString)
     {
-        $json = json_decode($jsonString);
-        $profiles = array();
-        foreach ($json as $object) {
-            $profiles[] = $this->fromObject($object);
-        }
-        return $profiles;
-    }
-
-    /**
-     * Transform a standard php object into a Profile instance
-     *
-     * @param \stdClass $object The object being transformed
-     *
-     * @return Profile The transformed profile
-     */
-    private function fromObject(\stdClass $object)
-    {
-        $profile = new Profile();
-        $this->setModelProperties($profile, $object);
-        return $profile;
+        return $this->serializer->deserialize($jsonString, 'Profile');
     }
 }

@@ -9,7 +9,8 @@
         <whitelist>
             <directory>.</directory>
             <exclude>
-                <directory>./Tests</directory>
+                <directory>./src/Xabbuh/PandaClient/Model</directory>
+                <directory>./tests</directory>
                 <directory>./vendor</directory>
             </exclude>
         </whitelist>

@@ -15,23 +15,14 @@ use Xabbuh\PandaClient\Api\Account;
 use Xabbuh\PandaClient\Api\AccountManager;
 
 /**
- * Test the AccountManager class.
- *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
 class AccountManagerTest extends \PHPUnit_Framework_TestCase
 {
     public function testRegisterAccount()
     {
-        $mockBuilder = $this->getMockBuilder('Xabbuh\PandaClient\Api\Account');
-        $mockBuilder->disableOriginalConstructor();
-
-        /** @var Account $account */
-        $account = $mockBuilder->getMock();
-
-        /** @var Account $defaultAccount */
-        $defaultAccount = $mockBuilder->getMock();
-
+        $account = new Account('', '', '');
+        $defaultAccount = new Account('', '', '');
         $accountManager = new AccountManager('default-key');
         $accountManager->registerAccount('the-key', $account);
         $accountManager->registerAccount('default-key', $defaultAccount);
@@ -41,36 +32,32 @@ class AccountManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($defaultAccount, $accountManager->getDefaultAccount());
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
     public function testGetNonExistingDefaultAccount()
     {
-        $mockBuilder = $this->getMockBuilder('Xabbuh\PandaClient\Api\Account');
-        $mockBuilder->disableOriginalConstructor();
-
-        /** @var Account $account */
-        $account = $mockBuilder->getMock();
-
-        $this->setExpectedException('InvalidArgumentException');
+        $account = new Account('', '', '');
         $accountManager = new AccountManager('default-key');
         $accountManager->registerAccount('the-key', $account);
         $accountManager->getDefaultAccount();
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
     public function testGetNonExistingDefaultAccountWithEmptyAccountManager()
     {
-        $this->setExpectedException('InvalidArgumentException');
         $accountManager = new AccountManager('default-key');
         $accountManager->getDefaultAccount();
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
     public function testGetNonExistingAccount()
     {
-        $mockBuilder = $this->getMockBuilder('Xabbuh\PandaClient\Api\Account');
-        $mockBuilder->disableOriginalConstructor();
-
-        /** @var Account $account */
-        $account = $mockBuilder->getMock();
-
-        $this->setExpectedException('InvalidArgumentException');
+        $account = new Account('', '', '');
         $accountManager = new AccountManager('default-key');
         $accountManager->registerAccount('the-key', $account);
         $accountManager->getAccount('another-key');

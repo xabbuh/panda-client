@@ -74,7 +74,6 @@ class Encoding implements ModelInterface
 
     private $updatedAt;
 
-
     public function __construct()
     {
         $this->files = new ArrayCollection();

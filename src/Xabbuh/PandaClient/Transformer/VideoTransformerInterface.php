@@ -36,14 +36,4 @@ interface VideoTransformerInterface
      * @return Video[] The transformed Videos
      */
     public function fromJSONCollection($jsonString);
-
-    /**
-     * Transform a standard PHP object into a Video instance.
-     *
-     * @param \stdClass $object The object being transformed
-     *
-     * @return Video The transformed Video
-     */
-    public function fromObject(\stdClass $object);
 }
- 
