@@ -3,7 +3,7 @@
     "type": "library",
     "description": "PHP client for the Panda encoding REST-API",
     "keywords": ["Panda", "video encoding", "REST", "client"],
-    "homepage": "https://github.com/xabbuh/PandaClient",
+    "homepage": "https://github.com/xabbuh/panda-client",
     "license": "MIT",
     "authors": [
         {
