@@ -27,13 +27,11 @@ class Serializer implements SerializerInterface
      */
     private $serializer;
 
-    public function __construct(array $camelizedAttributes = array())
+    public function __construct()
     {
-        $normalizer = new Normalizer();
-        $normalizer->setCamelizedAttributes($camelizedAttributes);
-        $encoder = new JsonEncoder();
-
-        $this->serializer = new SymfonySerializer(array($normalizer), array($encoder));
+        $this->serializer = new SymfonySerializer(
+            array(new Normalizer()), array(new JsonEncoder())
+        );
     }
 
     /**
@@ -59,12 +57,7 @@ class Serializer implements SerializerInterface
      */
     public static function getCloudSerializer()
     {
-        return new Serializer(array(
-            's3_videos_bucket',
-            's3_private_access',
-            'created_at',
-            'updated_at',
-        ));
+        return new Serializer();
     }
 
     /**
@@ -72,16 +65,7 @@ class Serializer implements SerializerInterface
      */
     public static function getEncodingSerializer()
     {
-        return new Serializer(array(
-            'video_id',
-            'profile_id',
-            'profile_name',
-            'encoding_progress',
-            'started_encoding_at',
-            'encoding_time',
-            'created_at',
-            'updated_at',
-        ));
+        return new Serializer();
     }
 
     /**
@@ -89,13 +73,7 @@ class Serializer implements SerializerInterface
      */
     public static function getProfileSerializer()
     {
-        return new Serializer(array(
-            'aspect_mode',
-            'video_bitrate',
-            'audio_bitrate',
-            'created_at',
-            'updated_at',
-        ));
+        return new Serializer();
     }
 
     /**
@@ -103,14 +81,6 @@ class Serializer implements SerializerInterface
      */
     public static function getVideoSerializer()
     {
-        return new Serializer(array(
-            'original_filename',
-            'source_url',
-            'video_codec',
-            'audio_codec',
-            'file_size',
-            'created_at',
-            'updated_at',
-        ));
+        return new Serializer();
     }
 }

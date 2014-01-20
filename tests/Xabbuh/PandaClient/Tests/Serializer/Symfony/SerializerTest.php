@@ -45,38 +45,10 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->cloudSerializer = new Serializer(array(
-            's3_videos_bucket',
-            's3_private_access',
-            'created_at',
-            'updated_at'
-        ));
-        $this->encodingSerializer = new Serializer(array(
-            'video_id',
-            'profile_id',
-            'profile_name',
-            'encoding_progress',
-            'started_encoding_at',
-            'encoding_time',
-            'created_at',
-            'updated_at',
-        ));
-        $this->profileSerializer = new Serializer(array(
-            'aspect_mode',
-            'video_bitrate',
-            'audio_bitrate',
-            'created_at',
-            'updated_at',
-        ));
-        $this->videoSerializer = new Serializer(array(
-            'original_filename',
-            'source_url',
-            'video_codec',
-            'audio_codec',
-            'file_size',
-            'created_at',
-            'updated_at',
-        ));
+        $this->cloudSerializer = new Serializer();
+        $this->encodingSerializer = new Serializer();
+        $this->profileSerializer = new Serializer();
+        $this->videoSerializer = new Serializer();
     }
 
     public function testCloud()

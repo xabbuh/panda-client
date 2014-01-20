@@ -63,4 +63,16 @@ class Normalizer extends GetSetMethodNormalizer
 
         return $object;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function formatAttribute($attributeName)
+    {
+        return preg_replace_callback(
+            '/(^|_|\.)+(.)/', function ($match) {
+                return ('.' === $match[1] ? '_' : '').strtoupper($match[2]);
+            }, $attributeName
+        );
+    }
 }
