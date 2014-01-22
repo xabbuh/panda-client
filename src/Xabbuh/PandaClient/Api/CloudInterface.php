@@ -25,11 +25,11 @@ use Xabbuh\PandaClient\Model\Video;
 interface CloudInterface
 {
     /**
-     * Returns the Panda REST client.
+     * Returns the Panda HTTP client.
      *
-     * @return RestClientInterface The Panda REST client
+     * @return HttpClientInterface The Panda HTTP client
      */
-    public function getRestClient();
+    public function getHttpClient();
 
     /**
      * Retrieve a collection of videos from the server.

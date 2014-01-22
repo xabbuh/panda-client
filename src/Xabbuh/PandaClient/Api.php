@@ -18,7 +18,7 @@ use Xabbuh\PandaClient\Api\Account;
 use Xabbuh\PandaClient\Api\AccountManager;
 use Xabbuh\PandaClient\Api\Cloud;
 use Xabbuh\PandaClient\Api\CloudManager;
-use Xabbuh\PandaClient\Api\RestClient;
+use Xabbuh\PandaClient\Api\HttpClient;
 use Xabbuh\PandaClient\Transformer\CloudTransformer;
 use Xabbuh\PandaClient\Transformer\EncodingTransformer;
 use Xabbuh\PandaClient\Transformer\NotificationsTransformer;
@@ -215,10 +215,10 @@ class Api
                 );
             }
 
-            $restClient = new RestClient($cloudConfig['id'], $account);
+            $httpClient = new HttpClient($cloudConfig['id'], $account);
             $cloudManager->registerCloud(
                 $name,
-                new Cloud($restClient, $transformers)
+                new Cloud($httpClient, $transformers)
             );
         }
 
@@ -241,4 +241,3 @@ class Api
         return $this->cloudManager->getCloud($name);
     }
 }
- 

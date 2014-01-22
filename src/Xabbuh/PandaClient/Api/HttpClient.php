@@ -16,46 +16,46 @@ use Xabbuh\PandaClient\Exception\HttpException;
 
 /**
  * Panda REST client implementation using the PHP cURL extension.
- * 
+ *
  * Send signed requests (GET, POST, PUT or DELETE) to the Panda encoding
  * webservice.
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-class RestClient implements RestClientInterface
+class HttpClient implements HttpClientInterface
 {
     /**
      * Panda cloud id
-     * 
+     *
      * @var string
      */
     private $cloudId;
-    
+
     /**
      * API access key
-     * 
+     *
      * @var string
      */
     private $accessKey;
-    
+
     /**
      * API secret key
-     * 
+     *
      * @var string
      */
     private $secretKey;
-    
+
     /**
      * API host
-     * 
+     *
      * @var string
      */
     private $apiHost;
-    
-    
+
+
     /**
      * Constructs the Panda REST client.
-     * 
+     *
      * @param string  $cloudId Panda cloud id
      * @param Account $account The account used to authorise requests
      */
@@ -130,10 +130,10 @@ class RestClient implements RestClientInterface
     {
         return $this->request('DELETE', $path, $params);
     }
-    
+
     /**
      * Send signed HTTP requests to the API server.
-     * 
+     *
      * @param string $method HTTP method (GET, POST, PUT or DELETE)
      * @param string $path   Request path
      * @param array  $params Additional request parameters
@@ -147,22 +147,22 @@ class RestClient implements RestClientInterface
     {
         // sign the request parameters
         $params = $this->signParams($method, $path, $params);
-        
+
         // build url, append url parameters if the request method is GET or DELETE
         $url = 'https://'.$this->apiHost.'/v2'.$path;
         if ($method == 'GET' || $method == 'DELETE') {
             $url .= '?' . http_build_query($params);
         }
-            
+
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        
+
         // include parameters in the request body for POST and PUT requests
         if ($method == 'POST' || $method == 'PUT') {
             curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         }
-        
+
         $response = curl_exec($ch);
 
         // throw exception if the http request failed
@@ -180,7 +180,7 @@ class RestClient implements RestClientInterface
         }
 
         curl_close($ch);
-        
+
         return $response;
     }
 
@@ -202,10 +202,10 @@ class RestClient implements RestClientInterface
             $params['timestamp'] = date('c');
             date_default_timezone_set($oldTz);
         }
-        
+
         // generate the signature
         $params['signature'] = $this->signature($method, $path, $params);
-        
+
         return $params;
     }
 

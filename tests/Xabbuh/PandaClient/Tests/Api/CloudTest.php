@@ -12,7 +12,7 @@
 namespace Xabbuh\PandaClient\Tests\Api;
 
 use Xabbuh\PandaClient\Api\Cloud;
-use Xabbuh\PandaClient\Api\RestClientInterface;
+use Xabbuh\PandaClient\Api\HttpClientInterface;
 use Xabbuh\PandaClient\Model\Profile;
 use Xabbuh\PandaClient\Transformer\TransformerRegistryInterface;
 
@@ -24,9 +24,9 @@ use Xabbuh\PandaClient\Transformer\TransformerRegistryInterface;
 class CloudTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|RestClientInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|HttpClientInterface
      */
-    private $restClient;
+    private $httpClient;
 
     /**
      * @var TransformerRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -45,14 +45,14 @@ class CloudTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->createRestClient();
+        $this->createHttpClient();
         $this->createTransformers();
-        $this->cloud = new Cloud($this->restClient, $this->transformerRegistry);
+        $this->cloud = new Cloud($this->httpClient, $this->transformerRegistry);
     }
 
-    public function testGetRestClient()
+    public function testGetHttpClient()
     {
-        $this->assertEquals($this->restClient, $this->cloud->getRestClient());
+        $this->assertEquals($this->httpClient, $this->cloud->getHttpClient());
     }
 
     public function testGetVideos()
@@ -455,7 +455,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCloudWithoutId()
     {
-        $this->validateRequest('get', '/clouds/'.$this->restClient->getCloudId().'.json');
+        $this->validateRequest('get', '/clouds/'.$this->httpClient->getCloudId().'.json');
         $this->validateTransformer('Cloud', 'fromJSON');
 
         $this->cloud->getCloud();
@@ -486,7 +486,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
         );
         $this->validateRequest(
             'put',
-            '/clouds/'.$this->restClient->getCloudId().'.json',
+            '/clouds/'.$this->httpClient->getCloudId().'.json',
             $data
         );
         $this->validateTransformer('Cloud', 'fromJSON');
@@ -517,12 +517,12 @@ class CloudTest extends \PHPUnit_Framework_TestCase
         $this->cloud->setNotifications($data);
     }
 
-    private function createRestClient()
+    private function createHttpClient()
     {
-        $this->restClient = $this->getMock(
-            'Xabbuh\PandaClient\Api\RestClientInterface'
+        $this->httpClient = $this->getMock(
+            'Xabbuh\PandaClient\Api\HttpClientInterface'
         );
-        $this->restClient
+        $this->httpClient
             ->expects($this->any())
             ->method('getCloudId')
             ->will($this->returnValue(md5(uniqid())))
@@ -584,7 +584,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
     private function validateRequest($method, $resource, $params = null, $response = null)
     {
         if (null !== $params) {
-            $client = $this->restClient
+            $client = $this->httpClient
                 ->expects($this->once())
                 ->method($method)
                 ->with(
@@ -592,7 +592,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
                     is_array($params) ? $this->equalTo($params) : $params
                 );
         } else {
-            $client = $this->restClient
+            $client = $this->httpClient
                 ->expects($this->once())
                 ->method($method)
                 ->with($this->equalTo($resource));

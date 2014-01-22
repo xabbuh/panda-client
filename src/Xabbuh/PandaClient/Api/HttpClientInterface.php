@@ -16,7 +16,7 @@ namespace Xabbuh\PandaClient\Api;
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-interface RestClientInterface
+interface HttpClientInterface
 {
     /**
      * Get the cloud id.
