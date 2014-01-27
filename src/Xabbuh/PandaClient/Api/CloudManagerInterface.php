@@ -21,26 +21,44 @@ interface CloudManagerInterface
     /**
      * Register a cloud on this manager.
      *
-     * @param string $key   Assign the cloud to this key
-     * @param Cloud  $cloud Cloud to register
+     * @param string         $key   Assign the cloud to this key
+     * @param CloudInterface $cloud Cloud to register
      */
-    public function registerCloud($key, Cloud $cloud);
+    public function registerCloud($key, CloudInterface $cloud);
+
+    /**
+     * Tests whether a Cloud is registered.
+     *
+     * @param string $key The key to check for
+     *
+     * @return boolean True if a Cloud is registered with the given key,
+     *                 false otherwise
+     */
+    public function hasCloud($key);
 
     /**
      * Get the cloud for a key.
      *
-     * @param string $key The internal key
+     * @param string $key The internal key, returns the default Cloud if
+     *                    null is given
      *
-     * @return Cloud
+     * @return CloudInterface The requested cloud
      *
      * @throws \InvalidArgumentException if no cloud for the given key exists
      */
-    public function getCloud($key);
+    public function getCloud($key = null);
 
     /**
-     * Returns the default cloud.
+     * Changes the key for the default Cloud.
      *
-     * @return Cloud
+     * @param string $key The new default key
+     */
+    public function setDefaultCloud($key);
+
+    /**
+     * Returns the default Cloud.
+     *
+     * @return CloudInterface The default Cloud
      */
     public function getDefaultCloud();
 
@@ -50,7 +68,7 @@ interface CloudManagerInterface
      * An associative array is returned where the internal keys is associated
      * the configured cloud.
      *
-     * @return array
+     * @return CloudInterface[]
      */
     public function getClouds();
 }

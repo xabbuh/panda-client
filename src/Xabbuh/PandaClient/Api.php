@@ -11,14 +11,12 @@
 
 namespace Xabbuh\PandaClient;
 
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
-use Symfony\Component\Serializer\Serializer;
 use Xabbuh\PandaClient\Api\Account;
 use Xabbuh\PandaClient\Api\AccountManager;
 use Xabbuh\PandaClient\Api\Cloud;
 use Xabbuh\PandaClient\Api\CloudManager;
 use Xabbuh\PandaClient\Api\HttpClient;
+use Xabbuh\PandaClient\Serializer\Symfony\Serializer;
 use Xabbuh\PandaClient\Transformer\CloudTransformer;
 use Xabbuh\PandaClient\Transformer\EncodingTransformer;
 use Xabbuh\PandaClient\Transformer\NotificationsTransformer;
@@ -150,21 +148,24 @@ class Api
     public static function getInstance(array $config)
     {
         // register model transformers
-        $serializer = new Serializer(
-            array(new GetSetMethodNormalizer()),
-            array(new JsonEncoder())
-        );
         $transformers = new TransformerRegistry();
-        $transformers->setCloudTransformer(new CloudTransformer($serializer));
-        $transformers->setEncodingTransformer(new EncodingTransformer());
+        $cloudTransformer = new CloudTransformer();
+        $cloudTransformer->setSerializer(Serializer::getCloudSerializer());
+        $transformers->setCloudTransformer($cloudTransformer);
+        $encodingTransformer = new EncodingTransformer();
+        $encodingTransformer->setSerializer(Serializer::getCloudSerializer());
+        $transformers->setEncodingTransformer($encodingTransformer);
         $transformers->setNotificationsTransformer(new NotificationsTransformer());
-        $transformers->setProfileTransformer(new ProfileTransformer());
-        $transformers->setVideoTransformer(new VideoTransformer());
+        $profileTransformer = new ProfileTransformer();
+        $profileTransformer->setSerializer(Serializer::getCloudSerializer());
+        $transformers->setProfileTransformer($profileTransformer);
+        $videoTransformer = new VideoTransformer();
+        $videoTransformer->setSerializer(Serializer::getCloudSerializer());
+        $transformers->setVideoTransformer($videoTransformer);
 
         // register the accounts
-        $accountManager = new AccountManager(
-            isset($config['default_account']) ? $config['default_account'] : 'default'
-        );
+        $accountManager = new AccountManager();
+        $accountManager->setDefaultAccount(isset($config['default_account']) ? $config['default_account'] : 'default');
 
         if (!isset($config['accounts']) || !is_array($config['accounts'])) {
             throw new \InvalidArgumentException('No account configuration given.');
@@ -190,9 +191,8 @@ class Api
         }
 
         // register the clouds
-        $cloudManager = new CloudManager(
-            isset($config['default_cloud']) ? $config['default_cloud'] : 'default'
-        );
+        $cloudManager = new CloudManager();
+        $cloudManager->setDefaultCloud(isset($config['default_cloud']) ? $config['default_cloud'] : 'default');
 
         if (!isset($config['clouds']) || !is_array($config['clouds'])) {
             throw new \InvalidArgumentException('No cloud configuration given.');
@@ -215,11 +215,17 @@ class Api
                 );
             }
 
-            $httpClient = new HttpClient($cloudConfig['id'], $account);
-            $cloudManager->registerCloud(
-                $name,
-                new Cloud($httpClient, $transformers)
-            );
+            $httpClient = new HttpClient();
+            $httpClient->setCloudId($cloudConfig['id']);
+            $httpClient->setAccessKey($account->getAccessKey());
+            $httpClient->setSecretKey($account->getSecretKey());
+            $httpClient->setApiHost($account->getApiHost());
+
+            $cloud = new Cloud();
+            $cloud->setHttpClient($httpClient);
+            $cloud->setTransformers($transformers);
+
+            $cloudManager->registerCloud($name, $cloud);
         }
 
         $api = new Api();

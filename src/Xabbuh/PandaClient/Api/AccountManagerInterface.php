@@ -27,20 +27,38 @@ interface AccountManagerInterface
     public function registerAccount($key, Account $account);
 
     /**
+     * Tests whether an Account is registered.
+     *
+     * @param string $key The key to check for
+     *
+     * @return boolean True if an Account is registered with the given key,
+     *                 false otherwise
+     */
+    public function hasAccount($key);
+
+    /**
      * Returns the Account for a key.
      *
-     * @param string $key The internal key
+     * @param string $key The internal key, returns the default Account if
+     *                    null is given
      *
      * @return Account The requested Account
      *
      * @throws \InvalidArgumentException if no account for the given key exists
      */
-    public function getAccount($key);
+    public function getAccount($key = null);
+
+    /**
+     * Changes the key for the default account.
+     *
+     * @param string $key The new default key
+     */
+    public function setDefaultAccount($key);
 
     /**
      * Returns the application's default account.
      *
-     * @return Account
+     * @return Account The default account
      */
     public function getDefaultAccount();
 }

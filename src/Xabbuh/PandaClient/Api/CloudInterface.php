@@ -16,6 +16,7 @@ use Xabbuh\PandaClient\Model\Encoding;
 use Xabbuh\PandaClient\Model\Notifications;
 use Xabbuh\PandaClient\Model\Profile;
 use Xabbuh\PandaClient\Model\Video;
+use Xabbuh\PandaClient\Transformer\TransformerRegistryInterface;
 
 /**
  * Interface definition for Panda API implementations.
@@ -25,11 +26,26 @@ use Xabbuh\PandaClient\Model\Video;
 interface CloudInterface
 {
     /**
+     * Changes the HTTP client used to perform API requests.
+     *
+     * @param HttpClientInterface $httpClient The HTTP client
+     */
+    public function setHttpClient(HttpClientInterface $httpClient);
+
+    /**
      * Returns the Panda HTTP client.
      *
      * @return HttpClientInterface The Panda HTTP client
      */
     public function getHttpClient();
+
+    /**
+     * Sets the registry that manages the serialization and deserialization
+     * of API objects.
+     *
+     * @param TransformerRegistryInterface $transformers The transformers
+     */
+    public function setTransformers(TransformerRegistryInterface $transformers);
 
     /**
      * Retrieve a collection of videos from the server.
@@ -294,7 +310,7 @@ interface CloudInterface
      *
      * @return CloudModel The cloud
      */
-    public function getCloud($cloudId);
+    public function getCloud($cloudId = null);
 
     /**
      * Changes the cloud data.

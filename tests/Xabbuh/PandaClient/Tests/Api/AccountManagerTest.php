@@ -23,7 +23,8 @@ class AccountManagerTest extends \PHPUnit_Framework_TestCase
     {
         $account = new Account('', '', '');
         $defaultAccount = new Account('', '', '');
-        $accountManager = new AccountManager('default-key');
+        $accountManager = new AccountManager();
+        $accountManager->setDefaultAccount('default-key');
         $accountManager->registerAccount('the-key', $account);
         $accountManager->registerAccount('default-key', $defaultAccount);
 

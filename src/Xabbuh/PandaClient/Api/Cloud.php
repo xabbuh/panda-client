@@ -12,7 +12,6 @@
 namespace Xabbuh\PandaClient\Api;
 
 use Xabbuh\PandaClient\Model\Profile;
-use Xabbuh\PandaClient\Transformer\TransformerRegistry;
 use Xabbuh\PandaClient\Transformer\TransformerRegistryInterface;
 
 /**
@@ -39,17 +38,11 @@ class Cloud implements CloudInterface
     private $transformers;
 
     /**
-     * Constructs the Panda API instance on a given REST client.
-     *
-     * @param HttpClientInterface          $httpClient   The client for REST requests
-     * @param TransformerRegistryInterface $transformers
+     * {@inheritDoc}
      */
-    public function __construct(
-        HttpClientInterface $httpClient,
-        TransformerRegistryInterface $transformers
-    ) {
+    public function setHttpClient(HttpClientInterface $httpClient)
+    {
         $this->httpClient = $httpClient;
-        $this->transformers = $transformers;
     }
 
     /**
@@ -58,6 +51,14 @@ class Cloud implements CloudInterface
     public function getHttpClient()
     {
         return $this->httpClient;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTransformers(TransformerRegistryInterface $transformers)
+    {
+        $this->transformers = $transformers;
     }
 
     /**

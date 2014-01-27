@@ -40,7 +40,8 @@ class CloudManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->cloud1 = $mockBuilder->getMock();
         $this->cloud2 = $mockBuilder->getMock();
-        $this->cloudManager = new CloudManager('default-key');
+        $this->cloudManager = new CloudManager();
+        $this->cloudManager->setDefaultCloud('default-key');
     }
 
     public function testRegisterCloud()

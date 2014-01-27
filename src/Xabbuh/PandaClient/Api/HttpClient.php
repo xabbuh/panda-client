@@ -52,19 +52,12 @@ class HttpClient implements HttpClientInterface
      */
     private $apiHost;
 
-
     /**
-     * Constructs the Panda REST client.
-     *
-     * @param string  $cloudId Panda cloud id
-     * @param Account $account The account used to authorise requests
+     * {@inheritDoc}
      */
-    public function __construct($cloudId, Account $account)
+    public function setCloudId($cloudId)
     {
         $this->cloudId = $cloudId;
-        $this->accessKey = $account->getAccessKey();
-        $this->secretKey = $account->getSecretKey();
-        $this->apiHost = $account->getApiHost();
     }
 
     /**
@@ -74,6 +67,13 @@ class HttpClient implements HttpClientInterface
     {
         return $this->cloudId;
     }
+    /**
+     * {@inheritDoc}
+     */
+    public function setAccessKey($accessKey)
+    {
+        $this->accessKey = $accessKey;
+    }
 
     /**
      * {@inheritDoc}
@@ -82,6 +82,13 @@ class HttpClient implements HttpClientInterface
     {
         return $this->accessKey;
     }
+    /**
+     * {@inheritDoc}
+     */
+    public function setSecretKey($secretKey)
+    {
+        $this->secretKey = $secretKey;
+    }
 
     /**
      * {@inheritDoc}
@@ -89,6 +96,13 @@ class HttpClient implements HttpClientInterface
     public function getSecretKey()
     {
         return $this->secretKey;
+    }
+    /**
+     * {@inheritDoc}
+     */
+    public function setApiHost($apiHost)
+    {
+        $this->apiHost = $apiHost;
     }
 
     /**

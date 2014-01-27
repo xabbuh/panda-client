@@ -19,28 +19,56 @@ namespace Xabbuh\PandaClient\Api;
 interface HttpClientInterface
 {
     /**
-     * Get the cloud id.
+     * Sets the cloud id.
+     *
+     * @param string $cloudId
+     */
+    public function setCloudId($cloudId);
+
+    /**
+     * Returns the cloud id.
      *
      * @return string
      */
     public function getCloudId();
 
     /**
-     * Get the cloud's access key.
+     * Sets the cloud's access key.
+     *
+     * @param string $accessKey
+     */
+    public function setAccessKey($accessKey);
+
+    /**
+     * Returns the cloud's access key.
      *
      * @return string
      */
     public function getAccessKey();
 
     /**
-     * Get the cloud's secret key.
+     * Sets the cloud's secret key.
+     *
+     * @param string $secretKey
+     */
+    public function setSecretKey($secretKey);
+
+    /**
+     * Returns the cloud's secret key.
      *
      * @return string
      */
     public function getSecretKey();
 
     /**
-     * Get the api host.
+     * Sets the api host.
+     *
+     * @param string $apiHost
+     */
+    public function setApiHost($apiHost);
+
+    /**
+     * Returns the api host.
      *
      * @return string
      */

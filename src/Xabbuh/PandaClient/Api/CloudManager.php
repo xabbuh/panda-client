@@ -26,24 +26,14 @@ class CloudManager implements CloudManagerInterface
 
     /**
      * The Clouds being managed by this CloudManager
-     * @var array
+     * @var CloudInterface[]
      */
     private $clouds = array();
 
     /**
-     * Constructs the CloudManager.
-     *
-     * @param string $defaultCloudName Internal key mapped to the default Cloud
-     */
-    public function __construct($defaultCloudName)
-    {
-        $this->defaultCloudKey = $defaultCloudName;
-    }
-
-    /**
      * {@inheritDoc}
      */
-    public function registerCloud($key, Cloud $cloud)
+    public function registerCloud($key, CloudInterface $cloud)
     {
         $this->clouds[$key] = $cloud;
     }
@@ -51,13 +41,33 @@ class CloudManager implements CloudManagerInterface
     /**
      * {@inheritDoc}
      */
-    public function getCloud($key)
+    public function hasCloud($key)
     {
-        if (!isset($this->clouds[$key])) {
+        return isset($this->clouds[$key]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCloud($key = null)
+    {
+        if (null === $key) {
+            $key = $this->defaultCloudKey;
+        }
+
+        if (!$this->hasCloud($key)) {
             throw new \InvalidArgumentException('No cloud for key '.$key.' configured.');
         }
 
         return $this->clouds[$key];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setDefaultCloud($key)
+    {
+        $this->defaultCloudKey = $key;
     }
 
     /**

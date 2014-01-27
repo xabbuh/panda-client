@@ -47,7 +47,9 @@ class CloudTest extends \PHPUnit_Framework_TestCase
     {
         $this->createHttpClient();
         $this->createTransformers();
-        $this->cloud = new Cloud($this->httpClient, $this->transformerRegistry);
+        $this->cloud = new Cloud();
+        $this->cloud->setHttpClient($this->httpClient);
+        $this->cloud->setTransformers($this->transformerRegistry);
     }
 
     public function testGetHttpClient()

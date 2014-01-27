@@ -31,16 +31,6 @@ class AccountManager implements AccountManagerInterface
     private $accounts = array();
 
     /**
-     * Constructor.
-     *
-     * @param string $defaultAccountKey Default account's configuration key
-     */
-    public function __construct($defaultAccountKey)
-    {
-        $this->defaultAccountKey = $defaultAccountKey;
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function registerAccount($key, Account $account)
@@ -51,13 +41,33 @@ class AccountManager implements AccountManagerInterface
     /**
      * {@inheritDoc}
      */
-    public function getAccount($key)
+    public function hasAccount($key)
     {
-        if (!isset($this->accounts[$key])) {
+        return isset($this->accounts[$key]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAccount($key = null)
+    {
+        if (null === $key) {
+            $key = $this->defaultAccountKey;
+        }
+
+        if (!$this->hasAccount($key)) {
             throw new \InvalidArgumentException('No account for key '.$key.' configured.');
         }
 
         return $this->accounts[$key];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setDefaultAccount($key)
+    {
+        $this->defaultAccountKey = $key;
     }
 
     /**
