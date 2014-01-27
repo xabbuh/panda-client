@@ -11,6 +11,7 @@
 
 namespace Xabbuh\PandaClient\Api;
 
+use Guzzle\Http\Client;
 use Xabbuh\PandaClient\Exception\ApiException;
 use Xabbuh\PandaClient\Exception\HttpException;
 use Xabbuh\PandaClient\Util\Signing;
@@ -25,6 +26,11 @@ use Xabbuh\PandaClient\Util\Signing;
  */
 class HttpClient implements HttpClientInterface
 {
+    /**
+     * @var Client
+     */
+    private $guzzleClient;
+
     /**
      * Panda cloud id
      *
@@ -71,6 +77,16 @@ class HttpClient implements HttpClientInterface
         return $this->account;
     }
 
+    public function setGuzzleClient(Client $guzzleClient)
+    {
+        $this->guzzleClient = $guzzleClient;
+    }
+
+    public function getGuzzleClient()
+    {
+        return $this->guzzleClient;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -112,7 +128,7 @@ class HttpClient implements HttpClientInterface
      *
      * @return string The API server's response
      *
-     * @throws ApiException if an API error occurs
+     * @throws ApiException  if an API error occurs
      * @throws HttpException if the request fails
      */
     private function request($method, $path, array $params)
@@ -121,40 +137,48 @@ class HttpClient implements HttpClientInterface
         $signing = Signing::getInstance($this->cloudId, $this->account);
         $params = $signing->signParams($method, $path, $params);
 
-        // build url, append url parameters if the request method is GET or DELETE
-        $url = 'https://'.$this->account->getApiHost().'/v2'.$path;
-
-        if ($method == 'GET' || $method == 'DELETE') {
-            $url .= '?' . http_build_query($params);
+        // ensure to use relative paths
+        if (0 === strpos($path, '/')) {
+            $path = substr($path, 1);
         }
 
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        // include parameters in the request body for POST and PUT requests
-        if ($method == 'POST' || $method == 'PUT') {
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+        // append request parameters to the URL
+        if ('GET' === $method || 'DELETE' === $method) {
+            $path .= '?'.http_build_query($params);
         }
 
-        $response = curl_exec($ch);
-
-        // throw exception if the http request failed
-        if (curl_errno($ch) > 0) {
-            throw new HttpException(curl_error($ch), curl_errno($ch));
+        // prepare the request
+        switch ($method) {
+            case 'GET':
+                $request = $this->guzzleClient->get($path);
+                break;
+            case 'DELETE':
+                $request = $this->guzzleClient->delete($path);
+                break;
+            case 'PUT':
+                $request = $this->guzzleClient->put($path, null, $params);
+                break;
+            case 'POST':
+                $request = $this->guzzleClient->post($path, null, $params);
+                break;
         }
 
-        // check for positive api answers
-        $httpStatusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        if ($httpStatusCode < 200 || $httpStatusCode > 207) {
-            // throw api exception otherwise
-            $decodedResponse = json_decode($response);
-            $message = "{$decodedResponse->error}: {$decodedResponse->message}";
-            throw new ApiException($message, $httpStatusCode);
+        // and execute it
+        try {
+            $response = $request->send();
+        } catch (\Exception $e) {
+            // throw an exception if the http request failed
+            throw new HttpException($e->getMessage(), $e->getCode());
         }
 
-        curl_close($ch);
+        // throw an API exception if the API response is not valid
+        if ($response->getStatusCode() < 200 || $response->getStatusCode() > 207) {
+            $decodedResponse = json_decode($response->getBody(true));
+            $message = $decodedResponse->error.': '.$decodedResponse->message;
 
-        return $response;
+            throw new ApiException($message, $response->getStatusCode());
+        }
+
+        return $response->getBody(true);
     }
 }

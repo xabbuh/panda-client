@@ -159,9 +159,7 @@ abstract class AbstractApi
                 );
             }
 
-            $httpClient = $this->createHttpClient();
-            $httpClient->setCloudId($cloudConfig['id']);
-            $httpClient->setAccount($account);
+            $httpClient = $this->createHttpClient($account, $cloudConfig['id']);
             $cloud = $this->createCloud();
             $cloud->setHttpClient($httpClient);
             $cloud->setTransformers($this->transformers);
@@ -201,9 +199,12 @@ abstract class AbstractApi
      * Creates the {@link HttpClientInterface HttpClient} that performs the HTTP
      * requests.
      *
+     * @param Account $account Account authentication data
+     * @param string  $cloudId Id of the cloud to access
+     *
      * @return \Xabbuh\PandaClient\Api\HttpClientInterface
      */
-    protected abstract function createHttpClient();
+    protected abstract function createHttpClient(Account $account, $cloudId);
 
     /**
      * Creates a {@link Cloud} instances that maps Panda API REST endpoints to

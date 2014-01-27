@@ -11,6 +11,8 @@
 
 namespace Xabbuh\PandaClient;
 
+use Guzzle\Http\Client;
+use Xabbuh\PandaClient\Api\Account;
 use Xabbuh\PandaClient\Api\AccountManager;
 use Xabbuh\PandaClient\Api\Cloud;
 use Xabbuh\PandaClient\Api\CloudManager;
@@ -50,9 +52,15 @@ class Api extends AbstractApi
     /**
      * {@inheritDoc}
      */
-    protected function createHttpClient()
+    protected function createHttpClient(Account $account, $cloudId)
     {
-        return new HttpClient();
+        $guzzleClient = new Client('https://'.$account->getApiHost().'/v2');
+        $httpClient = new HttpClient();
+        $httpClient->setAccount($account);
+        $httpClient->setCloudId($cloudId);
+        $httpClient->setGuzzleClient($guzzleClient);
+
+        return $httpClient;
     }
 
     /**
