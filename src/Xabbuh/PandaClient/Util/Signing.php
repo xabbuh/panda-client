@@ -90,6 +90,14 @@ class Signing
      */
     public function signParams($method, $path, array $params = array())
     {
+        if (!isset($params['cloud_id'])) {
+            $params['cloud_id'] = $this->cloudId;
+        }
+
+        if (!isset($params['access_key'])) {
+            $params['access_key'] = $this->account->getAccessKey();
+        }
+
         if (!isset($params['timestamp'])) {
             $oldTz = date_default_timezone_get();
             date_default_timezone_set('UTC');

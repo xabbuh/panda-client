@@ -55,12 +55,16 @@ class SigningTest extends \PHPUnit_Framework_TestCase
             'kVnZs/NX13ldKPdhFYoVnoclr8075DwiZF0TGgIbMsc=',
             $params['signature']
         );
+        $this->assertTrue(isset($params['cloud_id']));
+        $this->assertTrue(isset($params['access_key']));
     }
 
     public function testSignParamsWithoutTimestamp()
     {
         $params = $this->signing->signParams('GET', '/videos.json');
 
+        $this->assertTrue(isset($params['cloud_id']));
+        $this->assertTrue(isset($params['access_key']));
         $this->assertTrue(isset($params['timestamp']));
     }
 
