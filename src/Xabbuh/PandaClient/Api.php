@@ -217,9 +217,7 @@ class Api
 
             $httpClient = new HttpClient();
             $httpClient->setCloudId($cloudConfig['id']);
-            $httpClient->setAccessKey($account->getAccessKey());
-            $httpClient->setSecretKey($account->getSecretKey());
-            $httpClient->setApiHost($account->getApiHost());
+            $httpClient->setAccount($account);
 
             $cloud = new Cloud();
             $cloud->setHttpClient($httpClient);

@@ -11,8 +11,10 @@
 
 namespace Xabbuh\PandaClient\Api;
 
+use Xabbuh\PandaClient\Util\Signing;
+
 /**
- * Interface definition for Panda REST client implementations.
+ * Interface definition for Panda HTTP client implementations.
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
@@ -33,46 +35,18 @@ interface HttpClientInterface
     public function getCloudId();
 
     /**
-     * Sets the cloud's access key.
+     * Sets the Account that contains the authorization information.
      *
-     * @param string $accessKey
+     * @param Account $account
      */
-    public function setAccessKey($accessKey);
+    public function setAccount(Account $account);
 
     /**
-     * Returns the cloud's access key.
+     * Returns the Account used for generating signatures.
      *
-     * @return string
+     * @return Account
      */
-    public function getAccessKey();
-
-    /**
-     * Sets the cloud's secret key.
-     *
-     * @param string $secretKey
-     */
-    public function setSecretKey($secretKey);
-
-    /**
-     * Returns the cloud's secret key.
-     *
-     * @return string
-     */
-    public function getSecretKey();
-
-    /**
-     * Sets the api host.
-     *
-     * @param string $apiHost
-     */
-    public function setApiHost($apiHost);
-
-    /**
-     * Returns the api host.
-     *
-     * @return string
-     */
-    public function getApiHost();
+    public function getAccount();
 
     /**
      * Helper method to send GET requests to the Panda API.
@@ -113,27 +87,4 @@ interface HttpClientInterface
      * @return string The server response
      */
     public function delete($path, array $params = array());
-
-    /**
-     * Generate signature for a given set of request parameters and add the
-     * signature to the parameters.
-     *
-     * @param string $method The HTTP method
-     * @param string $path   The request path
-     * @param array  $params Request parameters
-     *
-     * @return array The signed parameters
-     */
-    public function signParams($method, $path, array $params);
-
-    /**
-     * Generates the signature for an API requests based on its parameters.
-     *
-     * @param string $method The HTTP method
-     * @param string $path   The request path
-     * @param array  $params Request parameters
-     *
-     * @return string The generated signature
-     */
-    public function signature($method, $path, array $params);
 }

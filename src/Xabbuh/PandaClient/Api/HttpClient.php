@@ -13,6 +13,7 @@ namespace Xabbuh\PandaClient\Api;
 
 use Xabbuh\PandaClient\Exception\ApiException;
 use Xabbuh\PandaClient\Exception\HttpException;
+use Xabbuh\PandaClient\Util\Signing;
 
 /**
  * Panda REST client implementation using the PHP cURL extension.
@@ -32,25 +33,11 @@ class HttpClient implements HttpClientInterface
     private $cloudId;
 
     /**
-     * API access key
+     * Panda Account
      *
-     * @var string
+     * @var Account
      */
-    private $accessKey;
-
-    /**
-     * API secret key
-     *
-     * @var string
-     */
-    private $secretKey;
-
-    /**
-     * API host
-     *
-     * @var string
-     */
-    private $apiHost;
+    private $account;
 
     /**
      * {@inheritDoc}
@@ -67,50 +54,21 @@ class HttpClient implements HttpClientInterface
     {
         return $this->cloudId;
     }
+
     /**
      * {@inheritDoc}
      */
-    public function setAccessKey($accessKey)
+    public function setAccount(Account $account)
     {
-        $this->accessKey = $accessKey;
+        $this->account = $account;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getAccessKey()
+    public function getAccount()
     {
-        return $this->accessKey;
-    }
-    /**
-     * {@inheritDoc}
-     */
-    public function setSecretKey($secretKey)
-    {
-        $this->secretKey = $secretKey;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getSecretKey()
-    {
-        return $this->secretKey;
-    }
-    /**
-     * {@inheritDoc}
-     */
-    public function setApiHost($apiHost)
-    {
-        $this->apiHost = $apiHost;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getApiHost()
-    {
-        return $this->apiHost;
+        return $this->account;
     }
 
     /**
@@ -160,10 +118,12 @@ class HttpClient implements HttpClientInterface
     private function request($method, $path, array $params)
     {
         // sign the request parameters
-        $params = $this->signParams($method, $path, $params);
+        $signing = Signing::getInstance($this->cloudId, $this->account);
+        $params = $signing->signParams($method, $path, $params);
 
         // build url, append url parameters if the request method is GET or DELETE
-        $url = 'https://'.$this->apiHost.'/v2'.$path;
+        $url = 'https://'.$this->account->getApiHost().'/v2'.$path;
+
         if ($method == 'GET' || $method == 'DELETE') {
             $url .= '?' . http_build_query($params);
         }
@@ -196,49 +156,5 @@ class HttpClient implements HttpClientInterface
         curl_close($ch);
 
         return $response;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function signParams($method, $path, array $params)
-    {
-        // add authentication data to the request parameters if not set
-        if (!isset($params['cloud_id'])) {
-            $params['cloud_id'] = $this->cloudId;
-        }
-        if (!isset($params['access_key'])) {
-            $params['access_key'] = $this->accessKey;
-        }
-        if (!isset($params['timestamp'])) {
-            $oldTz = date_default_timezone_get();
-            date_default_timezone_set('UTC');
-            $params['timestamp'] = date('c');
-            date_default_timezone_set($oldTz);
-        }
-
-        // generate the signature
-        $params['signature'] = $this->signature($method, $path, $params);
-
-        return $params;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function signature($method, $path, array $params)
-    {
-        ksort($params);
-        if (isset($params['file'])) {
-            unset($params['file']);
-        }
-        $canonicalQueryString = str_replace(
-            array('+', '%5B', '%5D'),
-            array('%20', '[', ']'),
-            http_build_query($params)
-        );
-        $stringToSign = sprintf("%s\n%s\n%s\n%s", strtoupper($method), $this->apiHost, $path, $canonicalQueryString);
-        $hmac = hash_hmac('sha256', $stringToSign, $this->secretKey, true);
-        return base64_encode($hmac);
     }
 }
