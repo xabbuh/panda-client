@@ -11,7 +11,6 @@
 
 namespace Xabbuh\PandaClient;
 
-use Xabbuh\PandaClient\Api\Account;
 use Xabbuh\PandaClient\Api\AccountManager;
 use Xabbuh\PandaClient\Api\Cloud;
 use Xabbuh\PandaClient\Api\CloudManager;
@@ -22,226 +21,105 @@ use Xabbuh\PandaClient\Transformer\EncodingTransformer;
 use Xabbuh\PandaClient\Transformer\NotificationsTransformer;
 use Xabbuh\PandaClient\Transformer\ProfileTransformer;
 use Xabbuh\PandaClient\Transformer\TransformerRegistry;
-use Xabbuh\PandaClient\Transformer\TransformerRegistryInterface;
 use Xabbuh\PandaClient\Transformer\VideoTransformer;
 
 /**
- * Simple entry point to the Panda API client.
- *
- * Basically, you receive an API instance by passing your cloud configuration
- * to the static getInstance() method. Your configuration should look like
- * this:
- *
- * - accounts:
- *   - an identifier
- *     - access_key: your access key
- *     - secret_key: your secret key
- *     - api_host: the API host to use
- * - clouds:
- *   - an identifier
- *     - id: your cloud id
- *     - account: one of your account identifiers as configured above
- *
- * A sample config can look like this:
- *
- * <code>
- * $config = array(
- *     'accounts' => array(
- *         'default' => array(
- *             'access_key' => ...,
- *             'secret_key' => ...,
- *             'api_host'   => 'api.pandastream.com',
- *         ),
- *     ),
- *     'clouds' => array(
- *         'default' => array(
- *             'id'      => ...,
- *             'account' => 'default',
- *         ),
- *     ),
- * );
- * </code>
+ * Implementation of the algorithm described in {@link AbstractApi} to initialize
+ * an Api object to access the Panda Encoding API.
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-class Api
+class Api extends AbstractApi
 {
     /**
-     * @var TransformerRegistryInterface
+     * {@inheritDoc}
      */
-    private $transformers;
-
-    /**
-     * @var AccountManager
-     */
-    private $accountManager;
-
-    /**
-     * @var CloudManager
-     */
-    private $cloudManager;
-
-    /**
-     * @param TransformerRegistryInterface $transformers
-     *
-     * @return Api
-     */
-    public function setTransformers(TransformerRegistryInterface $transformers)
+    protected function createAccountManager()
     {
-        $this->transformers = $transformers;
-        return $this;
+        return new AccountManager();
     }
 
     /**
-     * @return TransformerRegistryInterface
+     * {@inheritDoc}
      */
-    public function getTransformers()
+    protected function createCloudManager()
     {
-        return $this->transformers;
+        return new CloudManager();
     }
 
     /**
-     * @param AccountManager $accountManager
-     *
-     * @return Api
+     * {@inheritDoc}
      */
-    public function setAccountManager(AccountManager $accountManager)
+    protected function createHttpClient()
     {
-        $this->accountManager = $accountManager;
-        return $this;
+        return new HttpClient();
     }
 
     /**
-     * @return AccountManager
+     * {@inheritDoc}
      */
-    public function getAccountManager()
+    protected function createCloud()
     {
-        return $this->accountManager;
+        return new Cloud();
     }
 
     /**
-     * @param CloudManager $cloudManager
-     *
-     * @return Api
+     * {@inheritDoc}
      */
-    public function setCloudManager(CloudManager $cloudManager)
+    protected function createTransformerRegistry()
     {
-        $this->cloudManager = $cloudManager;
-        return $this;
+        return new TransformerRegistry();
     }
 
     /**
-     * @return CloudManager
+     * {@inheritDoc}
      */
-    public function getCloudManager()
+    protected function createCloudTransformer()
     {
-        return $this->cloudManager;
+        $transformer = new CloudTransformer();
+        $transformer->setSerializer(Serializer::getCloudSerializer());
+
+        return $transformer;
     }
 
     /**
-     * @param array $config
-     *
-     * @return Api
-     *
-     * @throws \InvalidArgumentException if the given configuration is invalid
+     * {@inheritDoc}
      */
-    public static function getInstance(array $config)
+    protected function createEncodingTransformer()
     {
-        // register model transformers
-        $transformers = new TransformerRegistry();
-        $cloudTransformer = new CloudTransformer();
-        $cloudTransformer->setSerializer(Serializer::getCloudSerializer());
-        $transformers->setCloudTransformer($cloudTransformer);
-        $encodingTransformer = new EncodingTransformer();
-        $encodingTransformer->setSerializer(Serializer::getCloudSerializer());
-        $transformers->setEncodingTransformer($encodingTransformer);
-        $transformers->setNotificationsTransformer(new NotificationsTransformer());
-        $profileTransformer = new ProfileTransformer();
-        $profileTransformer->setSerializer(Serializer::getCloudSerializer());
-        $transformers->setProfileTransformer($profileTransformer);
-        $videoTransformer = new VideoTransformer();
-        $videoTransformer->setSerializer(Serializer::getCloudSerializer());
-        $transformers->setVideoTransformer($videoTransformer);
+        $transformer = new EncodingTransformer();
+        $transformer->setSerializer(Serializer::getEncodingSerializer());
 
-        // register the accounts
-        $accountManager = new AccountManager();
-        $accountManager->setDefaultAccount(isset($config['default_account']) ? $config['default_account'] : 'default');
-
-        if (!isset($config['accounts']) || !is_array($config['accounts'])) {
-            throw new \InvalidArgumentException('No account configuration given.');
-        }
-
-        foreach ($config['accounts'] as $name => $cloudConfig) {
-            foreach (array('access_key', 'secret_key', 'api_host') as $option) {
-                if (!isset($cloudConfig[$option])) {
-                    throw new \InvalidArgumentException(
-                        sprintf('Missing option %s for account %s', $option, $name)
-                    );
-                }
-            }
-
-            $accountManager->registerAccount(
-                $name,
-                new Account(
-                    $cloudConfig['access_key'],
-                    $cloudConfig['secret_key'],
-                    $cloudConfig['api_host']
-                )
-            );
-        }
-
-        // register the clouds
-        $cloudManager = new CloudManager();
-        $cloudManager->setDefaultCloud(isset($config['default_cloud']) ? $config['default_cloud'] : 'default');
-
-        if (!isset($config['clouds']) || !is_array($config['clouds'])) {
-            throw new \InvalidArgumentException('No cloud configuration given.');
-        }
-
-        foreach ($config['clouds'] as $name => $cloudConfig) {
-            foreach (array('id', 'account') as $option) {
-                if (!isset($cloudConfig[$option])) {
-                    throw new \InvalidArgumentException(
-                        sprintf('Missing option %s for cloud %s', $option, $name)
-                    );
-                }
-            }
-
-            try {
-                $account = $accountManager->getAccount($cloudConfig['account']);
-            } catch (\InvalidArgumentException $e) {
-                throw new \InvalidArgumentException(
-                    sprintf('Invalid account %s for cloud %s', $name, $cloudConfig['account'])
-                );
-            }
-
-            $httpClient = new HttpClient();
-            $httpClient->setCloudId($cloudConfig['id']);
-            $httpClient->setAccount($account);
-
-            $cloud = new Cloud();
-            $cloud->setHttpClient($httpClient);
-            $cloud->setTransformers($transformers);
-
-            $cloudManager->registerCloud($name, $cloud);
-        }
-
-        $api = new Api();
-        $api->setTransformers($transformers)
-            ->setAccountManager($accountManager)
-            ->setCloudManager($cloudManager)
-        ;
-
-        return $api;
+        return $transformer;
     }
 
     /**
-     * @param string $name
-     *
-     * @return Cloud
+     * {@inheritDoc}
      */
-    public function getCloud($name)
+    protected function createNotificationsTransformer()
     {
-        return $this->cloudManager->getCloud($name);
+        return new NotificationsTransformer();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function createProfileTransformer()
+    {
+        $transformer = new ProfileTransformer();
+        $transformer->setSerializer(Serializer::getProfileSerializer());
+
+        return $transformer;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function createVideoTransformer()
+    {
+        $transformer = new VideoTransformer();
+        $transformer->setSerializer(Serializer::getVideoSerializer());
+
+        return $transformer;
     }
 }

@@ -64,6 +64,14 @@ class Cloud implements CloudInterface
     /**
      * {@inheritDoc}
      */
+    public function getTransformers()
+    {
+        return $this->transformers;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getVideos()
     {
         $response = $this->httpClient->get('/videos.json');

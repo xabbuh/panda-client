@@ -48,6 +48,13 @@ interface CloudInterface
     public function setTransformers(TransformerRegistryInterface $transformers);
 
     /**
+     * Returns the Transformer registry.
+     *
+     * @return TransformerRegistryInterface
+     */
+    public function getTransformers();
+
+    /**
      * Retrieve a collection of videos from the server.
      *
      * @return Video[] The videos
