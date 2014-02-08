@@ -11,8 +11,6 @@
 
 namespace Xabbuh\PandaClient\Transformer;
 
-use Symfony\Component\HttpFoundation\ParameterBag;
-use Xabbuh\PandaClient\Model\ModelInterface;
 use Xabbuh\PandaClient\Model\Notifications;
 
 /**
@@ -33,10 +31,9 @@ interface NotificationsTransformerInterface
     /**
      * Transform a Notifications object into a ParameterBag of request parameters.
      *
-     * @param ModelInterface $notifications The notifications to transform
+     * @param Notifications $notifications The notifications to transform
      *
-     * @return ParameterBag The request parameters
+     * @return \Symfony\Component\HttpFoundation\ParameterBag The request parameters
      */
-    public function toRequestParams(ModelInterface $notifications);
+    public function toRequestParams(Notifications $notifications);
 }
- 

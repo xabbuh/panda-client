@@ -11,7 +11,10 @@
 
 namespace Xabbuh\PandaClient\Api;
 
+use Xabbuh\PandaClient\Model\Encoding;
+use Xabbuh\PandaClient\Model\Notifications;
 use Xabbuh\PandaClient\Model\Profile;
+use Xabbuh\PandaClient\Model\Video;
 use Xabbuh\PandaClient\Transformer\TransformerRegistryInterface;
 
 /**
@@ -76,6 +79,7 @@ class Cloud implements CloudInterface
     {
         $response = $this->httpClient->get('/videos.json');
         $transformer = $this->transformers->getVideoTransformer();
+
         return $transformer->fromJSONCollection($response);
     }
 
@@ -106,6 +110,7 @@ class Cloud implements CloudInterface
     {
         $response = $this->httpClient->get('/videos/'.$videoId.'.json');
         $transformer = $this->transformers->getVideoTransformer();
+
         return $transformer->fromJSON($response);
     }
 
@@ -115,15 +120,16 @@ class Cloud implements CloudInterface
     public function getVideoMetadata($videoId)
     {
         $response = $this->httpClient->get('/videos/'.$videoId.'/metadata.json');
+
         return get_object_vars(json_decode($response));
     }
 
     /**
      * {@inheritDoc}
      */
-    public function deleteVideo($videoId)
+    public function deleteVideo(Video $video)
     {
-        return $this->httpClient->delete('/videos/'.$videoId.'.json');
+        return $this->httpClient->delete('/videos/'.$video->getId().'.json');
     }
 
     /**
@@ -133,6 +139,7 @@ class Cloud implements CloudInterface
     {
         $response = $this->httpClient->post('/videos.json', array('source_url' => $url));
         $transformer = $this->transformers->getVideoTransformer();
+
         return $transformer->fromJSON($response);
     }
 
@@ -143,19 +150,15 @@ class Cloud implements CloudInterface
     {
         $response = $this->httpClient->post('/videos.json', array('file' => '@'.$localPath));
         $transformer = $this->transformers->getVideoTransformer();
+
         return $transformer->fromJSON($response);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function registerUpload(
-        $filename,
-        $fileSize,
-        array $profiles = null,
-        $useAllProfiles = false
-    ) {
-        if (!is_null($profiles)) {
+    public function registerUpload($filename, $fileSize, array $profiles = null, $useAllProfiles = false) {
+        if (null !== $profiles) {
             $options = array(
                 'file_name' => $filename,
                 'file_size' => $fileSize,
@@ -168,6 +171,7 @@ class Cloud implements CloudInterface
                 'use_all_profiles' => $useAllProfiles
             );
         }
+
         return json_decode($this->httpClient->post('/videos/upload.json', $options));
     }
 
@@ -178,6 +182,7 @@ class Cloud implements CloudInterface
     {
         $response = $this->httpClient->get('/encodings.json', $filter);
         $transformer = $this->transformers->getEncodingTransformer();
+
         return $transformer->fromJSONCollection($response);
     }
 
@@ -187,16 +192,26 @@ class Cloud implements CloudInterface
     public function getEncodingsWithStatus($status, array $filter = array())
     {
         $filter['status'] = $status;
+
         return $this->getEncodings($filter);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getEncodingsForProfile($profileId, array $filter = array())
+    public function getEncodingsForProfile(Profile $profile, array $filter = array())
     {
-        $filter['profile_id'] = $profileId;
+        $filter['profile_id'] = $profile->getId();
+
         return $this->getEncodings($filter);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getEncodingsForProfileById($profileId, array $filter = null)
+    {
+        // TODO: implement
     }
 
     /**
@@ -205,15 +220,17 @@ class Cloud implements CloudInterface
     public function getEncodingsForProfileByName($profileName, array $filter = array())
     {
         $filter['profile_name'] = $profileName;
+
         return $this->getEncodings($filter);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getEncodingsForVideo($videoId, array $filter = array())
+    public function getEncodingsForVideo(Video $video, array $filter = array())
     {
-        $filter['video_id'] = $videoId;
+        $filter['video_id'] = $video->getId();
+
         return $this->getEncodings($filter);
     }
 
@@ -224,57 +241,68 @@ class Cloud implements CloudInterface
     {
         $response = $this->httpClient->get('/encodings/'.$encodingId.'.json');
         $transformer = $this->transformers->getEncodingTransformer();
+
         return $transformer->fromJSON($response);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function createEncoding($videoId, $profileId)
+    public function createEncoding(Video $video, Profile $profile)
     {
         $response = $this->httpClient->post(
             '/encodings.json',
-            array('video_id' => $videoId, 'profile_id' => $profileId,)
+            array('video_id' => $video->getId(), 'profile_id' => $profile->getId())
         );
         $transformer = $this->transformers->getEncodingTransformer();
+
         return $transformer->fromJSON($response);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function createEncodingWithProfileName($videoId, $profileName)
+    public function createEncodingWithProfileId(Video $video, $profileId)
+    {
+        // TODO: implement
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function createEncodingWithProfileName(Video $video, $profileName)
     {
         $response = $this->httpClient->post(
             '/encodings.json',
-            array('video_id' => $videoId, 'profile_name' => $profileName,)
+            array('video_id' => $video->getId(), 'profile_name' => $profileName,)
         );
         $transformer = $this->transformers->getEncodingTransformer();
+
         return $transformer->fromJSON($response);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function cancelEncoding($encodingId)
+    public function cancelEncoding(Encoding $encoding)
     {
-        return $this->httpClient->post('/encodings/'.$encodingId.'/cancel.json');
+        return $this->httpClient->post('/encodings/'.$encoding->getId().'/cancel.json');
     }
 
     /**
      * {@inheritDoc}
      */
-    public function retryEncoding($encodingId)
+    public function retryEncoding(Encoding $encoding)
     {
-        return $this->httpClient->post('/encodings/'.$encodingId.'/retry.json');
+        return $this->httpClient->post('/encodings/'.$encoding->getId().'/retry.json');
     }
 
     /**
      * {@inheritDoc}
      */
-    public function deleteEncoding($encodingId)
+    public function deleteEncoding(Encoding $encoding)
     {
-        return $this->httpClient->delete('/encodings/'.$encodingId.'.json');
+        return $this->httpClient->delete('/encodings/'.$encoding->getId().'.json');
     }
 
     /**
@@ -284,6 +312,7 @@ class Cloud implements CloudInterface
     {
         $response = $this->httpClient->get('/profiles.json');
         $transformer = $this->transformers->getProfileTransformer();
+
         return $transformer->fromJSONCollection($response);
     }
 
@@ -294,16 +323,19 @@ class Cloud implements CloudInterface
     {
         $response = $this->httpClient->get('/profiles/'.$profileId.'.json');
         $transformer = $this->transformers->getProfileTransformer();
+
         return $transformer->fromJSON($response);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function addProfile(array $data)
+    public function addProfile(Profile $profile)
     {
-        $response = $this->httpClient->post('/profiles.json', $data);
         $transformer = $this->transformers->getProfileTransformer();
+        $requestParameters = $transformer->toRequestParams($profile);
+        $response = $this->httpClient->post('/profiles.json', $requestParameters->all());
+
         return $transformer->fromJSON($response);
     }
 
@@ -317,6 +349,7 @@ class Cloud implements CloudInterface
             array('preset_name' => $presetName)
         );
         $transformer = $this->transformers->getProfileTransformer();
+
         return $transformer->fromJSON($response);
     }
 
@@ -330,6 +363,7 @@ class Cloud implements CloudInterface
             '/profiles/'.$profile->getId().'.json',
             $transformer->toRequestParams($profile)->all()
         );
+
         return $transformer->fromJSON($response);
     }
 
@@ -352,6 +386,7 @@ class Cloud implements CloudInterface
 
         $response = $this->httpClient->get('/clouds/'.$cloudId.'.json');
         $transformer = $this->transformers->getCloudTransformer();
+
         return $transformer->fromJSON($response);
     }
 
@@ -366,6 +401,7 @@ class Cloud implements CloudInterface
 
         $response = $this->httpClient->put('/clouds/'.$cloudId.'.json', $data);
         $transformer = $this->transformers->getCloudTransformer();
+
         return $transformer->fromJSON($response);
     }
 
@@ -376,16 +412,19 @@ class Cloud implements CloudInterface
     {
         $response = $this->httpClient->get('/notifications.json');
         $transformer = $this->transformers->getNotificationsTransformer();
+
         return $transformer->fromJSON($response);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setNotifications(array $notifications)
+    public function setNotifications(Notifications $notifications)
     {
-        $response = $this->httpClient->put('/notifications.json', $notifications);
         $transformer = $this->transformers->getNotificationsTransformer();
+        $data = $transformer->toRequestParams($notifications)->all();
+        $response = $this->httpClient->put('/notifications.json', $data);
+
         return $transformer->fromJSON($response);
     }
 }

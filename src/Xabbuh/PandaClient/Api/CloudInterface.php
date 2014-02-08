@@ -93,18 +93,18 @@ interface CloudInterface
      *
      * @param string $videoId The video id
      *
-     * @return array The video metadata
+     * @return string[] The video metadata
      */
     public function getVideoMetadata($videoId);
 
     /**
      * Delete a video from the server.
      *
-     * @param string $videoId The id of the video being removed
+     * @param Video $video The video being removed
      *
      * @return string The server response
      */
-    public function deleteVideo($videoId);
+    public function deleteVideo(Video $video);
 
     /**
      * Send a request to the Panda encoding service to encode a video file that
@@ -128,10 +128,10 @@ interface CloudInterface
     /**
      * Register an upload session for a specific file.
      *
-     * @param string  $filename       The name of the file to transfer
-     * @param string  $fileSize       The size of the file in bytes
-     * @param array   $profiles       Array of profile names for which encodings will be created (by default no encodings will be created)
-     * @param boolean $useAllProfiles If true create encodings for all profiles (is only taken in account if the list of profile names is null)
+     * @param string   $filename       The name of the file to transfer
+     * @param string   $fileSize       The size of the file in bytes
+     * @param string[] $profiles       Array of profile names for which encodings will be created (by default no encodings will be created)
+     * @param boolean  $useAllProfiles If true create encodings for all profiles (is only taken in account if the list of profile names is null)
      *
      * @return \stdClass An object containing the id of the video after uploading and a URL to which the file needs to be pushed.
      */
@@ -148,7 +148,7 @@ interface CloudInterface
      *   <li>video_id: filter by video id
      * </ul>
      *
-     * @param array $filter Optional set of filters
+     * @param string[] $filter Optional set of filters
      *
      * @return Encoding[] The encodings
      */
@@ -159,32 +159,44 @@ interface CloudInterface
      *
      * @see PandaApi::getEncodings()
      *
-     * @param string $status Status to filter by (one of 'success', 'fail' or 'processing')
-     * @param array  $filter Additional optional filters (see {@link PandaApi::getEncodings() PandaApi::getEncodings()} for a description of the filters which can be used)
+     * @param string   $status Status to filter by (one of 'success', 'fail' or 'processing')
+     * @param string[] $filter Additional optional filters (see {@link PandaApi::getEncodings() PandaApi::getEncodings()} for a description of the filters which can be used)
      *
      * @return Encoding[] The encodings
      */
     public function getEncodingsWithStatus($status, array $filter = null);
 
     /**
+     * Receive encodings filtered by a profile from the server.
+     *
+     * @see PandaApi::getEncodings()
+     *
+     * @param Profile  $profile The profile to filter by
+     * @param string[] $filter  Additional optional filters (see {@link PandaApi::getEncodings() PandaApi::getEncodings()} for a description of the filters which can be used)
+     *
+     * @return Encoding[] The encodings
+     */
+    public function getEncodingsForProfile(Profile $profile, array $filter = null);
+
+    /**
      * Receive encodings filtered by a profile id from the server.
      *
      * @see PandaApi::getEncodings()
      *
-     * @param string $profileId Id of the profile to filter by
-     * @param array  $filter    Additional optional filters (see {@link PandaApi::getEncodings() PandaApi::getEncodings()} for a description of the filters which can be used)
+     * @param string   $profileId Id of the profile to filter by
+     * @param string[] $filter    Additional optional filters (see {@link PandaApi::getEncodings() PandaApi::getEncodings()} for a description of the filters which can be used)
      *
      * @return Encoding[] The encodings
      */
-    public function getEncodingsForProfile($profileId, array $filter = null);
+    public function getEncodingsForProfileById($profileId, array $filter = null);
 
     /**
      * Receive encodings filtered by profile name from the server.
      *
      * @see PandaApi::getEncodings()
      *
-     * @param string $profileName Name of the profile to filter by
-     * @param array  $filter      Additional optional filters (see {@link PandaApi::getEncodings() PandaApi::getEncodings()} for a description of the filters which can be used)
+     * @param string   $profileName Name of the profile to filter by
+     * @param string[] $filter      Additional optional filters (see {@link PandaApi::getEncodings() PandaApi::getEncodings()} for a description of the filters which can be used)
 
      * @return Encoding[] The encodings
      */
@@ -195,12 +207,12 @@ interface CloudInterface
      *
      * @see PandaApi::getEncodings()
      *
-     * @param string $videoId Id of the video to filter by
-     * @param array  $filter  Additional optional filters (see {@link PandaApi::getEncodings() PandaApi::getEncodings()} for a description of the filters which can be used)
+     * @param Video    $video   Id of the video to filter by
+     * @param string[] $filter  Additional optional filters (see {@link PandaApi::getEncodings() PandaApi::getEncodings()} for a description of the filters which can be used)
      *
      * @return Encoding[] The encodings
      */
-    public function getEncodingsForVideo($videoId, array $filter = null);
+    public function getEncodingsForVideo(Video $video, array $filter = null);
 
     /**
      * Gets an encoding.
@@ -214,49 +226,59 @@ interface CloudInterface
     /**
      * Creates an encoding based on a profile.
      *
-     * @param string $videoId   Id of the video being encoded
+     * @param Video   $video   The video being encoded
+     * @param Profile $profile The profile used to encode the video
+     *
+     * @return Encoding The new encoding
+     */
+    public function createEncoding(Video $video, Profile $profile);
+
+    /**
+     * Creates an encoding for the profile with the given id.
+     *
+     * @param Video  $video     The video being encoded
      * @param string $profileId Id of the profile used to encode the video
      *
      * @return Encoding The new encoding
      */
-    public function createEncoding($videoId, $profileId);
+    public function createEncodingWithProfileId(Video $video, $profileId);
 
     /**
-     * Create an encoding for the profile with the given name.
+     * Creates an encoding for the profile with the given name.
      *
-     * @param string $videoId     Id of the video being encoded
+     * @param Video  $video       The video being encoded
      * @param string $profileName Name of the profile used to encode the video
      *
-     * @return Encoding The encoding
+     * @return Encoding The new encoding
      */
-    public function createEncodingWithProfileName($videoId, $profileName);
+    public function createEncodingWithProfileName(Video $video, $profileName);
 
     /**
      * Cancel an encoding.
      *
-     * @param string $encodingId The id of the encoding being canceled
+     * @param Encoding $encoding The encoding being canceled
      *
      * @return string The server response
      */
-    public function cancelEncoding($encodingId);
+    public function cancelEncoding(Encoding $encoding);
 
     /**
      * Retry a failed encoding.
      *
-     * @param string $encodingId The id of the failed encoding
+     * @param Encoding $encoding The failed encoding
      *
      * @return string The server response
      */
-    public function retryEncoding($encodingId);
+    public function retryEncoding(Encoding $encoding);
 
     /**
      * Delete an encoding.
      *
-     * @param string $encodingId The id of the encoding being deleted
+     * @param Encoding $encoding The encoding being deleted
      *
      * @return string The server response
      */
-    public function deleteEncoding($encodingId);
+    public function deleteEncoding(Encoding $encoding);
 
     /**
      * Retrieve all profiles.
@@ -277,11 +299,11 @@ interface CloudInterface
     /**
      * Adds a profile with the given data.
      *
-     * @param array $data The new profile's data
+     * @param Profile $profile The profile being added
      *
      * @return Profile The added profile
      */
-    public function addProfile(array $data);
+    public function addProfile(Profile $profile);
 
     /**
      * Creates a profile based on a given preset.
@@ -304,11 +326,11 @@ interface CloudInterface
     /**
      * Delete a profile.
      *
-     * @param Profile $profileId The profile being removed
+     * @param Profile $profile The profile being removed
      *
      * @return string The server response
      */
-    public function deleteProfile(Profile $profileId);
+    public function deleteProfile(Profile $profile);
 
     /**
      * Retrieve a cloud's details
@@ -339,9 +361,9 @@ interface CloudInterface
     /**
      * Changes the notifications configuration.
      *
-     * @param array $notifications The new configuration
+     * @param Notifications $notifications The new configuration
      *
      * @return Notifications The modified notifications
      */
-    public function setNotifications(array $notifications);
+    public function setNotifications(Notifications $notifications);
 }

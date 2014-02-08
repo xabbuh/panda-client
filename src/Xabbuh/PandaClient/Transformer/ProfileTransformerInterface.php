@@ -38,5 +38,13 @@ interface ProfileTransformerInterface
      * @return Profile[] The transformed Profiles
      */
     public function fromJSONCollection($jsonString);
+
+    /**
+     * Transform a Notifications object into a ParameterBag of request parameters.
+     *
+     * @param Profile $notifications The notifications to transform
+     *
+     * @return \Symfony\Component\HttpFoundation\ParameterBag The request parameters
+     */
+    public function toRequestParams(Profile $notifications);
 }
- 

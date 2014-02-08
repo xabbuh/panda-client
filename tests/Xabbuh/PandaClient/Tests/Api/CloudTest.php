@@ -11,9 +11,13 @@
 
 namespace Xabbuh\PandaClient\Tests\Api;
 
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Xabbuh\PandaClient\Api\Cloud;
 use Xabbuh\PandaClient\Api\HttpClientInterface;
+use Xabbuh\PandaClient\Model\Encoding;
+use Xabbuh\PandaClient\Model\Notifications;
 use Xabbuh\PandaClient\Model\Profile;
+use Xabbuh\PandaClient\Model\Video;
 use Xabbuh\PandaClient\Transformer\TransformerRegistryInterface;
 
 /**
@@ -152,8 +156,10 @@ class CloudTest extends \PHPUnit_Framework_TestCase
     public function testDeleteVideo()
     {
         $videoId = md5(uniqid());
+        $video = new Video();
+        $video->setId($videoId);
         $this->validateRequest('delete', '/videos/'.$videoId.'.json');
-        $this->cloud->deleteVideo($videoId);
+        $this->cloud->deleteVideo($video);
     }
 
     public function testEncodeVideoByUrl()
@@ -269,15 +275,19 @@ class CloudTest extends \PHPUnit_Framework_TestCase
     public function testGetEncodingsForProfile()
     {
         $profileId = md5(uniqid());
+        $profile = new Profile();
+        $profile->setId($profileId);
         $this->validateRequest('get', '/encodings.json', array('profile_id' => $profileId));
         $this->validateTransformer('Encoding', 'fromJSONCollection');
 
-        $this->cloud->getEncodingsForProfile($profileId);
+        $this->cloud->getEncodingsForProfile($profile);
     }
 
     public function testGetEncodingsForProfileWithFilter()
     {
         $profileId = md5(uniqid());
+        $profile = new Profile();
+        $profile->setId($profileId);
         $this->validateRequest(
             'get',
             '/encodings.json',
@@ -285,7 +295,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
         );
         $this->validateTransformer('Encoding', 'fromJSONCollection');
 
-        $this->cloud->getEncodingsForProfile($profileId, array('status' => 'success'));
+        $this->cloud->getEncodingsForProfile($profile, array('status' => 'success'));
     }
 
     public function testGetEncodingsForProfileByName()
@@ -311,15 +321,19 @@ class CloudTest extends \PHPUnit_Framework_TestCase
     public function testGetEncodingsForVideo()
     {
         $videoId = md5(uniqid());
+        $video = new Video();
+        $video->setId($videoId);
         $this->validateRequest('get', '/encodings.json', array('video_id' => $videoId));
         $this->validateTransformer('Encoding', 'fromJSONCollection');
 
-        $this->cloud->getEncodingsForVideo($videoId);
+        $this->cloud->getEncodingsForVideo($video);
     }
 
     public function testGetEncodingsForVideoWithFilter()
     {
         $videoId = md5(uniqid());
+        $video = new Video();
+        $video->setId($videoId);
         $this->validateRequest(
             'get',
             '/encodings.json',
@@ -327,7 +341,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
         );
         $this->validateTransformer('Encoding', 'fromJSONCollection');
 
-        $this->cloud->getEncodingsForVideo($videoId, array('status' => 'success'));
+        $this->cloud->getEncodingsForVideo($video, array('status' => 'success'));
     }
 
     public function testGetEncoding()
@@ -342,7 +356,11 @@ class CloudTest extends \PHPUnit_Framework_TestCase
     public function testCreateEncoding()
     {
         $videoId = md5(uniqid());
+        $video = new Video();
+        $video->setId($videoId);
         $profileId = md5(uniqid());
+        $profile = new Profile();
+        $profile->setId($profileId);
         $this->validateRequest(
             'post',
             '/encodings.json',
@@ -350,12 +368,14 @@ class CloudTest extends \PHPUnit_Framework_TestCase
         );
         $this->validateTransformer('Encoding', 'fromJSON');
 
-        $this->cloud->createEncoding($videoId, $profileId);
+        $this->cloud->createEncoding($video, $profile);
     }
 
     public function testCreateEncodingWithProfileName()
     {
         $videoId = md5(uniqid());
+        $video = new Video();
+        $video->setId($videoId);
         $profileName = 'h264';
         $this->validateRequest(
             'post',
@@ -364,28 +384,34 @@ class CloudTest extends \PHPUnit_Framework_TestCase
         );
         $this->validateTransformer('Encoding', 'fromJSON');
 
-        $this->cloud->createEncodingWithProfileName($videoId, $profileName);
+        $this->cloud->createEncodingWithProfileName($video, $profileName);
     }
 
     public function testCancelEncoding()
     {
         $encodingId = md5(uniqid());
+        $encoding = new Encoding();
+        $encoding->setId($encodingId);
         $this->validateRequest('post', '/encodings/'.$encodingId.'/cancel.json');
-        $this->cloud->cancelEncoding($encodingId);
+        $this->cloud->cancelEncoding($encoding);
     }
 
     public function testRetryEncoding()
     {
         $encodingId = md5(uniqid());
+        $encoding = new Encoding();
+        $encoding->setId($encodingId);
         $this->validateRequest('post', '/encodings/'.$encodingId.'/retry.json');
-        $this->cloud->retryEncoding($encodingId);
+        $this->cloud->retryEncoding($encoding);
     }
 
     public function testDeleteEncoding()
     {
         $encodingId = md5(uniqid());
+        $encoding = new Encoding();
+        $encoding->setId($encodingId);
         $this->validateRequest('delete', '/encodings/'.$encodingId.'.json');
-        $this->cloud->deleteEncoding($encodingId);
+        $this->cloud->deleteEncoding($encoding);
     }
 
     public function testGetProfiles()
@@ -408,9 +434,10 @@ class CloudTest extends \PHPUnit_Framework_TestCase
     public function testAddProfile()
     {
         $this->validateRequest('post', '/profiles.json');
+        $this->validateTransformer('Profile', 'toRequestParams', new ParameterBag());
         $this->validateTransformer('Profile', 'fromJSON');
 
-        $this->cloud->addProfile(array());
+        $this->cloud->addProfile(new Profile());
     }
 
     public function testAddProfileFromPreset()
@@ -513,10 +540,19 @@ class CloudTest extends \PHPUnit_Framework_TestCase
             'events[encoding_progress]' => 'false',
             'events[encoding_completed]' => 'false'
         );
+        $parameterBag = new ParameterBag();
+        $parameterBag->set('url', 'http://example.com/panda_notification');
+        $parameterBag->set('events[video_created]', 'false');
+        $parameterBag->set('events[video_encoded]', 'true');
+        $parameterBag->set('events[encoding_progress]', 'false');
+        $parameterBag->set('events[encoding_completed]', 'false');
+        $notifications = new Notifications();
+        $notifications->setUrl('http://example.com/panda_notification');
         $this->validateRequest('put', '/notifications.json', $data);
+        $this->validateTransformer('Notifications', 'toRequestParams', $parameterBag);
         $this->validateTransformer('Notifications', 'fromJSON');
 
-        $this->cloud->setNotifications($data);
+        $this->cloud->setNotifications($notifications);
     }
 
     private function createHttpClient()

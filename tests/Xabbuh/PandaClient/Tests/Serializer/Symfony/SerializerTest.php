@@ -51,7 +51,7 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
         $this->videoSerializer = new Serializer();
     }
 
-    public function testCloud()
+    public function testDeserializeCloud()
     {
         $data = '{
           "id": "e122090f4e506ae9ee266c3eb78a8b67",
@@ -74,7 +74,7 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('2010/03/18 12:59:06 +0000', $cloud->getUpdatedAt());
     }
 
-    public function testEncoding()
+    public function testDeserializeEncoding()
     {
         $encodingId = md5(uniqid());
         $videoId = md5(uniqid());
@@ -106,7 +106,7 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
      * @expectedException        \InvalidArgumentException
      * @expectedExceptionMessage Denormalization error: Unknown attribute videosid in model
      */
-    public function testEncodingWithUnknownProperty()
+    public function testDeserializeEncodingWithUnknownProperty()
     {
         $data = '{
           "id":"d891d9a45c698d587831466f236c6c6c",
@@ -115,7 +115,7 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
         $this->encodingSerializer->deserialize($data, 'Encoding');
     }
 
-    public function testEncodings()
+    public function testDeserializeEncodings()
     {
         $data = '[{
           "id":"2f8760b7e0d4c7dbe609b5872be9bc3b",
@@ -159,7 +159,7 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testEncodingsWithEmptyCollection()
+    public function testDeserializeEncodingsWithEmptyCollection()
     {
         $data = '[]';
         $collection = $this->encodingSerializer->deserialize($data, 'Video');
@@ -167,7 +167,7 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
         $this->validateCollection($collection, 'Encoding', 0);
     }
 
-    public function testProfile()
+    public function testDeserializeProfile()
     {
         $data = '{
            "id":"40d9f8711d64aaa74f88462e9274f39a",
@@ -215,7 +215,7 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
      * @expectedException        \InvalidArgumentException
      * @expectedExceptionMessage Denormalization error: Unknown attribute profile_name in model
      */
-    public function testProfileWithUnknownProperty()
+    public function testDeserializeProfileWithUnknownProperty()
     {
         $data = '{
           "id":"40d9f8711d64aaa74f88462e9274f39a",
@@ -224,7 +224,7 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
         $this->profileSerializer->deserialize($data, 'Profile');
     }
 
-    public function testProfiles()
+    public function testDeserializeProfiles()
     {
         $data = '[{
            "id":"40d9f8711d64aaa74f88462e9274f39a",
@@ -263,7 +263,7 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testProfilesWithEmptyCollection()
+    public function testDeserializeProfilesWithEmptyCollection()
     {
         $data = '[]';
         $collection = $this->profileSerializer->deserialize($data, 'Profile');
@@ -271,7 +271,7 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
         $this->validateCollection($collection, 'Profile', 0);
     }
 
-    public function testVideo()
+    public function testDeserializeVideo()
     {
         $data = '{
           "id":"d891d9a45c698d587831466f236c6c6c",
@@ -305,7 +305,7 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('2009/10/13 19:11:26 +0100', $video->getUpdatedAt());
     }
 
-    public function testVideoWithSourceUrl()
+    public function testDeserializeVideoWithSourceUrl()
     {
         $data = '{
           "id":"130466751aaaac1f88eb7e31c93ce40c",
@@ -333,7 +333,7 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
      * @expectedException        \InvalidArgumentException
      * @expectedExceptionMessage Denormalization error: Unknown attribute source_file in model
      */
-    public function testVideoWithUnknownProperty()
+    public function testDeserializeVideoWithUnknownProperty()
     {
         $data = '{
           "id":"d891d9a45c698d587831466f236c6c6c",
@@ -342,7 +342,7 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
         $this->videoSerializer->deserialize($data, 'Video');
     }
 
-    public function testVideos()
+    public function testDeserializeVideos()
     {
         $data = '[{
           "id":"d891d9a45c698d587831466f236c6c6c",
@@ -374,7 +374,7 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
         $this->validateCollection($collection, 'Video', 2);
     }
 
-    public function testVideosWithEmptyCollection()
+    public function testDeserializeVideosWithEmptyCollection()
     {
         $data = '[]';
         $collection = $this->videoSerializer->deserialize($data, 'Video');

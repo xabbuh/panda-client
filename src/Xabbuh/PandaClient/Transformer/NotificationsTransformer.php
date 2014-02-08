@@ -62,7 +62,7 @@ class NotificationsTransformer extends BaseTransformer implements NotificationsT
     /**
      * {@inheritDoc}
      */
-    public function toRequestParams(ModelInterface $notifications)
+    public function toRequestParams(Notifications $notifications)
     {
         $params = new ParameterBag();
 
