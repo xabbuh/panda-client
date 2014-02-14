@@ -11,8 +11,6 @@
 
 namespace Xabbuh\PandaClient\Transformer;
 
-use Xabbuh\PandaClient\Model\Encoding;
-
 /**
  * Transform Encodings from and to various data representation formats.
  *

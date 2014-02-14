@@ -11,8 +11,6 @@
 
 namespace Xabbuh\PandaClient\Api;
 
-use Xabbuh\PandaClient\Util\Signing;
-
 /**
  * Interface definition for Panda HTTP client implementations.
  *

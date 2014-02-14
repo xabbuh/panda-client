@@ -11,8 +11,6 @@
 
 namespace Xabbuh\PandaClient\Transformer;
 
-use Xabbuh\PandaClient\Model\Video;
-
 /**
  * Transformation from various data representation formats into Video models and
  * vice versa.

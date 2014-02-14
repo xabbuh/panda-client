@@ -12,7 +12,6 @@
 namespace Xabbuh\PandaClient\Transformer;
 
 use Symfony\Component\HttpFoundation\ParameterBag;
-use Xabbuh\PandaClient\Model\ModelInterface;
 use Xabbuh\PandaClient\Model\NotificationEvent;
 use Xabbuh\PandaClient\Model\Notifications;
 

@@ -12,7 +12,6 @@
 namespace Xabbuh\PandaClient\Transformer;
 
 use Xabbuh\PandaClient\Model\Encoding;
-use Xabbuh\PandaClient\Serializer\SerializerInterface;
 
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
@@ -38,4 +37,3 @@ interface EncodingTransformerInterface
      */
     public function fromJSONCollection($jsonString);
 }
- 
