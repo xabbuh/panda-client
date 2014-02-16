@@ -298,6 +298,28 @@ class CloudTest extends \PHPUnit_Framework_TestCase
         $this->cloud->getEncodingsForProfile($profile, array('status' => 'success'));
     }
 
+    public function testGetEncodingsForProfileById()
+    {
+        $encodingId = md5(uniqid());
+        $this->validateRequest('get', '/encodings.json', array('profile_id' => $encodingId));
+        $this->validateTransformer('Encoding', 'stringToEncodingCollection');
+
+        $this->cloud->getEncodingsForProfileById($encodingId);
+    }
+
+    public function testGetEncodingsForProfileByIdWithFilter()
+    {
+        $encodingId = md5(uniqid());
+        $this->validateRequest(
+            'get',
+            '/encodings.json',
+            array('profile_id' => $encodingId, 'status' => 'success')
+        );
+        $this->validateTransformer('Encoding', 'stringToEncodingCollection');
+
+        $this->cloud->getEncodingsForProfileById($encodingId, array('status' => 'success'));
+    }
+
     public function testGetEncodingsForProfileByName()
     {
         $this->validateRequest('get', '/encodings.json', array('profile_name' => 'h264'));
@@ -369,6 +391,22 @@ class CloudTest extends \PHPUnit_Framework_TestCase
         $this->validateTransformer('Encoding', 'stringToEncoding');
 
         $this->cloud->createEncoding($video, $profile);
+    }
+
+    public function testCreateEncodingWithProfileId()
+    {
+        $videoId = md5(uniqid());
+        $video = new Video();
+        $video->setId($videoId);
+        $profileId = md5(uniqid());
+        $this->validateRequest(
+            'post',
+            '/encodings.json',
+            array( 'video_id' => $videoId, 'profile_id' => $profileId)
+        );
+        $this->validateTransformer('Encoding', 'stringToEncoding');
+
+        $this->cloud->createEncodingWithProfileId($video, $profileId);
     }
 
     public function testCreateEncodingWithProfileName()

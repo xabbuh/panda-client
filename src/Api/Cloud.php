@@ -211,7 +211,9 @@ class Cloud implements CloudInterface
      */
     public function getEncodingsForProfileById($profileId, array $filter = null)
     {
-        // TODO: implement
+        $filter['profile_id'] = $profileId;
+
+        return $this->getEncodings($filter);
     }
 
     /**
@@ -250,13 +252,7 @@ class Cloud implements CloudInterface
      */
     public function createEncoding(Video $video, Profile $profile)
     {
-        $response = $this->httpClient->post(
-            '/encodings.json',
-            array('video_id' => $video->getId(), 'profile_id' => $profile->getId())
-        );
-        $transformer = $this->transformers->getEncodingTransformer();
-
-        return $transformer->stringToEncoding($response);
+        return $this->createEncodingWithProfileId($video, $profile->getId());
     }
 
     /**
@@ -264,7 +260,13 @@ class Cloud implements CloudInterface
      */
     public function createEncodingWithProfileId(Video $video, $profileId)
     {
-        // TODO: implement
+        $response = $this->httpClient->post(
+            '/encodings.json',
+            array('video_id' => $video->getId(), 'profile_id' => $profileId)
+        );
+        $transformer = $this->transformers->getEncodingTransformer();
+
+        return $transformer->stringToEncoding($response);
     }
 
     /**
