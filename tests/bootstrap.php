@@ -4,4 +4,4 @@ if (!file_exists($autoloadFile = __DIR__.'/../vendor/autoload.php')) {
 }
 
 $loader = require $autoloadFile;
-$loader->add('Xabbuh\PandaClient\Tests', __DIR__);
+$loader->addPsr4('Xabbuh\PandaClient\Tests\\', __DIR__);
