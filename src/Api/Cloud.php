@@ -80,7 +80,7 @@ class Cloud implements CloudInterface
         $response = $this->httpClient->get('/videos.json');
         $transformer = $this->transformers->getVideoTransformer();
 
-        return $transformer->fromJSONCollection($response);
+        return $transformer->stringToVideoCollection($response);
     }
 
     /**
@@ -98,7 +98,7 @@ class Cloud implements CloudInterface
         );
         $transformer = $this->transformers->getVideoTransformer();
         $result = json_decode($response);
-        $result->videos = $transformer->fromJSONCollection(json_encode($result->videos));
+        $result->videos = $transformer->stringToVideoCollection(json_encode($result->videos));
 
         return $result;
     }
@@ -111,7 +111,7 @@ class Cloud implements CloudInterface
         $response = $this->httpClient->get('/videos/'.$videoId.'.json');
         $transformer = $this->transformers->getVideoTransformer();
 
-        return $transformer->fromJSON($response);
+        return $transformer->stringToVideo($response);
     }
 
     /**
@@ -140,7 +140,7 @@ class Cloud implements CloudInterface
         $response = $this->httpClient->post('/videos.json', array('source_url' => $url));
         $transformer = $this->transformers->getVideoTransformer();
 
-        return $transformer->fromJSON($response);
+        return $transformer->stringToVideo($response);
     }
 
     /**
@@ -151,7 +151,7 @@ class Cloud implements CloudInterface
         $response = $this->httpClient->post('/videos.json', array('file' => '@'.$localPath));
         $transformer = $this->transformers->getVideoTransformer();
 
-        return $transformer->fromJSON($response);
+        return $transformer->stringToVideo($response);
     }
 
     /**
@@ -183,7 +183,7 @@ class Cloud implements CloudInterface
         $response = $this->httpClient->get('/encodings.json', $filter);
         $transformer = $this->transformers->getEncodingTransformer();
 
-        return $transformer->fromJSONCollection($response);
+        return $transformer->stringToEncodingCollection($response);
     }
 
     /**
@@ -242,7 +242,7 @@ class Cloud implements CloudInterface
         $response = $this->httpClient->get('/encodings/'.$encodingId.'.json');
         $transformer = $this->transformers->getEncodingTransformer();
 
-        return $transformer->fromJSON($response);
+        return $transformer->stringToEncoding($response);
     }
 
     /**
@@ -256,7 +256,7 @@ class Cloud implements CloudInterface
         );
         $transformer = $this->transformers->getEncodingTransformer();
 
-        return $transformer->fromJSON($response);
+        return $transformer->stringToEncoding($response);
     }
 
     /**
@@ -278,7 +278,7 @@ class Cloud implements CloudInterface
         );
         $transformer = $this->transformers->getEncodingTransformer();
 
-        return $transformer->fromJSON($response);
+        return $transformer->stringToEncoding($response);
     }
 
     /**
@@ -313,7 +313,7 @@ class Cloud implements CloudInterface
         $response = $this->httpClient->get('/profiles.json');
         $transformer = $this->transformers->getProfileTransformer();
 
-        return $transformer->fromJSONCollection($response);
+        return $transformer->stringToProfileCollection($response);
     }
 
     /**
@@ -324,7 +324,7 @@ class Cloud implements CloudInterface
         $response = $this->httpClient->get('/profiles/'.$profileId.'.json');
         $transformer = $this->transformers->getProfileTransformer();
 
-        return $transformer->fromJSON($response);
+        return $transformer->stringToProfile($response);
     }
 
     /**
@@ -336,7 +336,7 @@ class Cloud implements CloudInterface
         $requestParameters = $transformer->toRequestParams($profile);
         $response = $this->httpClient->post('/profiles.json', $requestParameters->all());
 
-        return $transformer->fromJSON($response);
+        return $transformer->stringToProfile($response);
     }
 
     /**
@@ -350,7 +350,7 @@ class Cloud implements CloudInterface
         );
         $transformer = $this->transformers->getProfileTransformer();
 
-        return $transformer->fromJSON($response);
+        return $transformer->stringToProfile($response);
     }
 
     /**
@@ -364,7 +364,7 @@ class Cloud implements CloudInterface
             $transformer->toRequestParams($profile)->all()
         );
 
-        return $transformer->fromJSON($response);
+        return $transformer->stringToProfile($response);
     }
 
     /**
@@ -387,7 +387,7 @@ class Cloud implements CloudInterface
         $response = $this->httpClient->get('/clouds/'.$cloudId.'.json');
         $transformer = $this->transformers->getCloudTransformer();
 
-        return $transformer->fromJSON($response);
+        return $transformer->stringToCloud($response);
     }
 
     /**
@@ -402,7 +402,7 @@ class Cloud implements CloudInterface
         $response = $this->httpClient->put('/clouds/'.$cloudId.'.json', $data);
         $transformer = $this->transformers->getCloudTransformer();
 
-        return $transformer->fromJSON($response);
+        return $transformer->stringToCloud($response);
     }
 
     /**
@@ -413,7 +413,7 @@ class Cloud implements CloudInterface
         $response = $this->httpClient->get('/notifications.json');
         $transformer = $this->transformers->getNotificationsTransformer();
 
-        return $transformer->fromJSON($response);
+        return $transformer->stringToNotifications($response);
     }
 
     /**
@@ -425,6 +425,6 @@ class Cloud implements CloudInterface
         $data = $transformer->toRequestParams($notifications)->all();
         $response = $this->httpClient->put('/notifications.json', $data);
 
-        return $transformer->fromJSON($response);
+        return $transformer->stringToNotifications($response);
     }
 }

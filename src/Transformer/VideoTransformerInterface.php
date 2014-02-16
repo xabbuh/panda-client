@@ -19,21 +19,22 @@ use Xabbuh\PandaClient\Model\Video;
 interface VideoTransformerInterface
 {
     /**
-     * Transform the JSON representation of a video into a Video model object.
+     * Transforms the serialized representation of a video into a Video model
+     * object.
      *
      * @param string $jsonString JSON representation of a video
      *
      * @return Video The generated model object
      */
-    public function fromJSON($jsonString);
+    public function stringToVideo($jsonString);
 
     /**
-     * Transform a JSON representation of a collection of videos into an array
-     * of Video objects.
+     * Transforms the serialized representation of a collection of videos into
+     * an array of Video objects.
      *
      * @param string $jsonString The JSON string being transformed
      *
      * @return Video[] The transformed Videos
      */
-    public function fromJSONCollection($jsonString);
+    public function stringToVideoCollection($jsonString);
 }

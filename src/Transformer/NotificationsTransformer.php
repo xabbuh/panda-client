@@ -26,7 +26,7 @@ class NotificationsTransformer extends BaseTransformer implements NotificationsT
     /**
      * {@inheritDoc}
      */
-    public function fromJSON($jsonString)
+    public function stringToNotifications($jsonString)
     {
         $json = json_decode($jsonString);
         $notifications = new Notifications();

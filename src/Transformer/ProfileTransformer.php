@@ -24,7 +24,7 @@ class ProfileTransformer extends BaseTransformer implements ProfileTransformerIn
     /**
      * {@inheritDoc}
      */
-    public function fromJSON($jsonString)
+    public function stringToProfile($jsonString)
     {
         return $this->serializer->deserialize($jsonString, 'Profile');
     }
@@ -32,7 +32,7 @@ class ProfileTransformer extends BaseTransformer implements ProfileTransformerIn
     /**
      * {@inheritDoc}
      */
-    public function fromJSONCollection($jsonString)
+    public function stringToProfileCollection($jsonString)
     {
         return $this->serializer->deserialize($jsonString, 'Profile');
     }
@@ -40,18 +40,18 @@ class ProfileTransformer extends BaseTransformer implements ProfileTransformerIn
     /**
      * {@inheritDoc}
      */
-    public function toRequestParams(Profile $object)
+    public function toRequestParams(Profile $profile)
     {
         $params = new ParameterBag();
 
-        foreach (get_class_methods(get_class($object)) as $method) {
+        foreach (get_class_methods(get_class($profile)) as $method) {
             if ('get' === substr($method, 0, 3)) {
                 $property = strtolower(preg_replace(
                     '/([a-z])([A-Z])/',
                     '\$1_\$2',
                     substr($method, 3)
                 ));
-                $params->set($property, $object->$method());
+                $params->set($property, $profile->$method());
             }
         }
 

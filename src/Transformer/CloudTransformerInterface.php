@@ -19,11 +19,12 @@ use Xabbuh\PandaClient\Model\Cloud;
 interface CloudTransformerInterface
 {
     /**
-     * Transform a JSON encoded string into a Cloud model object.
+     * Transforms the serialized representation of a Cloud into a Cloud model
+     * object.
      *
      * @param string $jsonString The JSON encoded string being
      *
      * @return Cloud The generated Cloud
      */
-    public function fromJSON($jsonString);
+    public function stringToCloud($jsonString);
 }

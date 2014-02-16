@@ -33,7 +33,7 @@ class EncodingTransformerTest extends TransformerTest
             ->with('foo', 'Encoding')
             ->will($this->returnValue('bar'));
 
-        $this->assertEquals('bar', $this->transformer->fromJSON('foo'));
+        $this->assertEquals('bar', $this->transformer->stringToEncoding('foo'));
     }
 
     public function testFromJSONCollection()
@@ -44,6 +44,6 @@ class EncodingTransformerTest extends TransformerTest
             ->with('foo', 'Encoding')
             ->will($this->returnValue('bar'));
 
-        $this->assertEquals('bar', $this->transformer->fromJSONCollection('foo'));
+        $this->assertEquals('bar', $this->transformer->stringToEncodingCollection('foo'));
     }
 }

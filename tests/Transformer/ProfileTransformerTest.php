@@ -33,7 +33,7 @@ class ProfileTransformerTest extends TransformerTest
             ->with('foo', 'Profile')
             ->will($this->returnValue('bar'));
 
-        $this->assertEquals('bar', $this->transformer->fromJSON('foo'));
+        $this->assertEquals('bar', $this->transformer->stringToProfile('foo'));
     }
 
     public function testFromJSONCollection()
@@ -44,6 +44,6 @@ class ProfileTransformerTest extends TransformerTest
             ->with('foo', 'Profile')
             ->will($this->returnValue('bar'));
 
-        $this->assertEquals('bar', $this->transformer->fromJSONCollection('foo'));
+        $this->assertEquals('bar', $this->transformer->stringToProfileCollection('foo'));
     }
 }

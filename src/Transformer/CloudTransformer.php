@@ -21,7 +21,7 @@ class CloudTransformer extends BaseTransformer implements CloudTransformerInterf
     /**
      * {@inheritDoc}
      */
-    public function fromJSON($jsonString)
+    public function stringToCloud($jsonString)
     {
         return $this->serializer->deserialize($jsonString, 'Cloud');
     }

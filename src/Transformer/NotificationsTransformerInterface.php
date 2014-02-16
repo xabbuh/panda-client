@@ -19,14 +19,14 @@ use Xabbuh\PandaClient\Model\Notifications;
 interface NotificationsTransformerInterface
 {
     /**
-     * Transform the JSON representation of notifications into a Notifications
+     * Transforms serialized representation of notifications into a Notifications
      * model object.
      *
      * @param string $jsonString The string in json format being transformed
      *
      * @return Notifications The notifications
      */
-    public function fromJSON($jsonString);
+    public function stringToNotifications($jsonString);
 
     /**
      * Transform a Notifications object into a ParameterBag of request parameters.

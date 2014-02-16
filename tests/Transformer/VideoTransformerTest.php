@@ -33,7 +33,7 @@ class VideoTransformerTest extends TransformerTest
             ->with('foo', 'Video')
             ->will($this->returnValue('bar'));
 
-        $this->assertEquals('bar', $this->transformer->fromJSON('foo'));
+        $this->assertEquals('bar', $this->transformer->stringToVideo('foo'));
     }
 
     public function testFromJSONCollection()
@@ -44,6 +44,6 @@ class VideoTransformerTest extends TransformerTest
             ->with('foo', 'Video')
             ->will($this->returnValue('bar'));
 
-        $this->assertEquals('bar', $this->transformer->fromJSONCollection('foo'));
+        $this->assertEquals('bar', $this->transformer->stringToVideoCollection('foo'));
     }
 }

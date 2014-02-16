@@ -21,7 +21,7 @@ class EncodingTransformer extends BaseTransformer implements EncodingTransformer
     /**
      * {@inheritDoc}
      */
-    public function fromJSON($jsonString)
+    public function stringToEncoding($jsonString)
     {
         return $this->serializer->deserialize($jsonString, 'Encoding');
     }
@@ -29,7 +29,7 @@ class EncodingTransformer extends BaseTransformer implements EncodingTransformer
     /**
      * {@inheritDoc}
      */
-    public function fromJSONCollection($jsonString)
+    public function stringToEncodingCollection($jsonString)
     {
         return $this->serializer->deserialize($jsonString, 'Encoding');
     }

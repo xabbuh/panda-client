@@ -33,6 +33,6 @@ class CloudTransformerTest extends TransformerTest
             ->with('foo', 'Cloud')
             ->will($this->returnValue('bar'));
 
-        $this->assertEquals('bar', $this->transformer->fromJSON('foo'));
+        $this->assertEquals('bar', $this->transformer->stringToCloud('foo'));
     }
 }

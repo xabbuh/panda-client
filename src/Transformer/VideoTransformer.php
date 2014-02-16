@@ -47,7 +47,7 @@ class VideoTransformer extends BaseTransformer implements VideoTransformerInterf
     /**
      * {@inheritDoc}
      */
-    public function fromJSON($jsonString)
+    public function stringToVideo($jsonString)
     {
         return $this->serializer->deserialize($jsonString, 'Video');
     }
@@ -55,7 +55,7 @@ class VideoTransformer extends BaseTransformer implements VideoTransformerInterf
     /**
      * {@inheritDoc}
      */
-    public function fromJSONCollection($jsonString)
+    public function stringToVideoCollection($jsonString)
     {
         return $this->serializer->deserialize($jsonString, 'Video');
     }

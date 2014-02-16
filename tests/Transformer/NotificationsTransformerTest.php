@@ -44,7 +44,7 @@ class NotificationsTransformerTest extends \PHPUnit_Framework_TestCase
             "encoding_completed": false
           }
         }';
-        $notifications = $this->transformer->fromJSON($jsonString);
+        $notifications = $this->transformer->stringToNotifications($jsonString);
         $this->assertEquals(
             'Xabbuh\PandaClient\Model\Notifications',
             get_class($notifications)
@@ -83,7 +83,7 @@ class NotificationsTransformerTest extends \PHPUnit_Framework_TestCase
             "encoding_completed": false
           }
         }';
-        $notifications = $this->transformer->fromJSON($jsonString);
+        $notifications = $this->transformer->stringToNotifications($jsonString);
         $this->assertEquals(
             'Xabbuh\PandaClient\Model\Notifications',
             get_class($notifications)

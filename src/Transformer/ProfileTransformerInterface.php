@@ -14,37 +14,35 @@ namespace Xabbuh\PandaClient\Transformer;
 use Xabbuh\PandaClient\Model\Profile;
 
 /**
- *
- *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
 interface ProfileTransformerInterface
 {
     /**
-     * Transform a JSON representation of a profile into a Profile object.
+     * Transforms the serialized representation of a profile into a Profile object.
      *
      * @param string $jsonString The JSON string being transformed
      *
      * @return Profile The transformed Profile
      */
-    public function fromJSON($jsonString);
+    public function stringToProfile($jsonString);
 
     /**
-     * Transform a JSON representation of a collection of profiles into an
-     * array of Profile objects.
+     * Transforms the serialized representation of a collection of profiles into
+     * an array of Profile objects.
      *
      * @param string $jsonString The JSON string being transformed
      *
      * @return Profile[] The transformed Profiles
      */
-    public function fromJSONCollection($jsonString);
+    public function stringToProfileCollection($jsonString);
 
     /**
-     * Transform a Notifications object into a ParameterBag of request parameters.
+     * Transforms a Profile object into a ParameterBag of request parameters.
      *
-     * @param Profile $notifications The notifications to transform
+     * @param Profile $profile The Profile instance to transform
      *
      * @return \Symfony\Component\HttpFoundation\ParameterBag The request parameters
      */
-    public function toRequestParams(Profile $notifications);
+    public function toRequestParams(Profile $profile);
 }

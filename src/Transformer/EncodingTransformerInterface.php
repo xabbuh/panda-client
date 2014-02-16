@@ -19,21 +19,22 @@ use Xabbuh\PandaClient\Model\Encoding;
 interface EncodingTransformerInterface
 {
     /**
-     * Convert a JSON encoded string into an Encoding object.
+     * Transforms the serialized representation of an Encoding into an Encoding
+     * object.
      *
      * @param string $jsonString The JSON string being transformed
      *
      * @return Encoding The transformed Encoding
      */
-    public function fromJSON($jsonString);
+    public function stringToEncoding($jsonString);
 
     /**
-     * Convert a JSON encoded collection of encodings into an array of Encoding
-     * objects.
+     * Transforms the serialized representation of an Encoding collection into
+     * an array of Encoding instances.
      *
      * @param string $jsonString The JSON string being transformed
      *
      * @return Encoding[] The transformed Encodings
      */
-    public function fromJSONCollection($jsonString);
+    public function stringToEncodingCollection($jsonString);
 }

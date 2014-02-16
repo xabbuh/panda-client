@@ -64,7 +64,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
     public function testGetVideos()
     {
         $this->validateRequest('get', '/videos.json');
-        $this->validateTransformer('Video', 'fromJSONCollection');
+        $this->validateTransformer('Video', 'stringToVideoCollection');
 
         $this->cloud->getVideos();
     }
@@ -77,7 +77,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
             array('include_root' => true, 'page' => 1, 'per_page' => 100),
             '{ "videos": [] }'
         );
-        $this->validateTransformer('Video', 'fromJSONCollection');
+        $this->validateTransformer('Video', 'stringToVideoCollection');
 
         $this->cloud->getVideosForPagination();
     }
@@ -90,7 +90,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
             array('include_root' => true, 'page' => 5, 'per_page' => 100),
             '{ "videos": [] }'
         );
-        $this->validateTransformer('Video', 'fromJSONCollection');
+        $this->validateTransformer('Video', 'stringToVideoCollection');
 
         $this->cloud->getVideosForPagination(5);
     }
@@ -103,7 +103,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
             array('include_root' => true, 'page' => 7, 'per_page' => 25),
             '{ "videos": [] }'
         );
-        $this->validateTransformer('Video', 'fromJSONCollection');
+        $this->validateTransformer('Video', 'stringToVideoCollection');
 
         $this->cloud->getVideosForPagination(7, 25);
     }
@@ -112,7 +112,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
     {
         $videoId = md5(uniqid());
         $this->validateRequest('get', '/videos/'.$videoId.'.json');
-        $this->validateTransformer('Video', 'fromJSON');
+        $this->validateTransformer('Video', 'stringToVideo');
 
         $this->cloud->getVideo($videoId);
     }
@@ -166,7 +166,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
     {
         $url = 'http://www.example.com/video.mp4';
         $this->validateRequest('post', '/videos.json', array('source_url' => $url));
-        $this->validateTransformer('Video', 'fromJSON');
+        $this->validateTransformer('Video', 'stringToVideo');
 
         $this->cloud->encodeVideoByUrl($url);
     }
@@ -175,7 +175,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
     {
         $filename = 'video.mp4';
         $this->validateRequest('post', '/videos.json', array('file' => '@'.$filename));
-        $this->validateTransformer('Video', 'fromJSON');
+        $this->validateTransformer('Video', 'stringToVideo');
 
         $this->cloud->encodeVideoFile($filename);
     }
@@ -238,7 +238,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
     public function testGetEncodings()
     {
         $this->validateRequest('get', '/encodings.json');
-        $this->validateTransformer('Encoding', 'fromJSONCollection');
+        $this->validateTransformer('Encoding', 'stringToEncodingCollection');
 
         $this->cloud->getEncodings();
     }
@@ -246,7 +246,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
     public function testGetEncodingsWithFilter()
     {
         $this->validateRequest('get', '/encodings.json', array('status' => 'success'));
-        $this->validateTransformer('Encoding', 'fromJSONCollection');
+        $this->validateTransformer('Encoding', 'stringToEncodingCollection');
 
         $this->cloud->getEncodings(array('status' => 'success'));
     }
@@ -254,7 +254,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
     public function testGetEncodingsWithStatus()
     {
         $this->validateRequest('get', '/encodings.json', array('status' => 'success'));
-        $this->validateTransformer('Encoding', 'fromJSONCollection');
+        $this->validateTransformer('Encoding', 'stringToEncodingCollection');
 
         $this->cloud->getEncodingsWithStatus('success');
     }
@@ -267,7 +267,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
             '/encodings.json',
             array('status' => 'success', 'video_id' => $videoId)
         );
-        $this->validateTransformer('Encoding', 'fromJSONCollection');
+        $this->validateTransformer('Encoding', 'stringToEncodingCollection');
 
         $this->cloud->getEncodingsWithStatus('success', array('video_id' => $videoId));
     }
@@ -278,7 +278,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
         $profile = new Profile();
         $profile->setId($profileId);
         $this->validateRequest('get', '/encodings.json', array('profile_id' => $profileId));
-        $this->validateTransformer('Encoding', 'fromJSONCollection');
+        $this->validateTransformer('Encoding', 'stringToEncodingCollection');
 
         $this->cloud->getEncodingsForProfile($profile);
     }
@@ -293,7 +293,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
             '/encodings.json',
             array('profile_id' => $profileId, 'status' => 'success')
         );
-        $this->validateTransformer('Encoding', 'fromJSONCollection');
+        $this->validateTransformer('Encoding', 'stringToEncodingCollection');
 
         $this->cloud->getEncodingsForProfile($profile, array('status' => 'success'));
     }
@@ -301,7 +301,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
     public function testGetEncodingsForProfileByName()
     {
         $this->validateRequest('get', '/encodings.json', array('profile_name' => 'h264'));
-        $this->validateTransformer('Encoding', 'fromJSONCollection');
+        $this->validateTransformer('Encoding', 'stringToEncodingCollection');
 
         $this->cloud->getEncodingsForProfileByName('h264');
     }
@@ -313,7 +313,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
             '/encodings.json',
             array('profile_name' => 'h264', 'status' => 'success')
         );
-        $this->validateTransformer('Encoding', 'fromJSONCollection');
+        $this->validateTransformer('Encoding', 'stringToEncodingCollection');
 
         $this->cloud->getEncodingsForProfileByName('h264', array('status' => 'success'));
     }
@@ -324,7 +324,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
         $video = new Video();
         $video->setId($videoId);
         $this->validateRequest('get', '/encodings.json', array('video_id' => $videoId));
-        $this->validateTransformer('Encoding', 'fromJSONCollection');
+        $this->validateTransformer('Encoding', 'stringToEncodingCollection');
 
         $this->cloud->getEncodingsForVideo($video);
     }
@@ -339,7 +339,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
             '/encodings.json',
             array('video_id' => $videoId, 'status' => 'success')
         );
-        $this->validateTransformer('Encoding', 'fromJSONCollection');
+        $this->validateTransformer('Encoding', 'stringToEncodingCollection');
 
         $this->cloud->getEncodingsForVideo($video, array('status' => 'success'));
     }
@@ -348,7 +348,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
     {
         $encodingId = md5(uniqid());
         $this->validateRequest('get', '/encodings/'.$encodingId.'.json');
-        $this->validateTransformer('Encoding', 'fromJSON');
+        $this->validateTransformer('Encoding', 'stringToEncoding');
 
         $this->cloud->getEncoding($encodingId);
     }
@@ -366,7 +366,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
             '/encodings.json',
             array( 'video_id' => $videoId, 'profile_id' => $profileId)
         );
-        $this->validateTransformer('Encoding', 'fromJSON');
+        $this->validateTransformer('Encoding', 'stringToEncoding');
 
         $this->cloud->createEncoding($video, $profile);
     }
@@ -382,7 +382,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
             '/encodings.json',
             array( 'video_id' => $videoId, 'profile_name' => $profileName)
         );
-        $this->validateTransformer('Encoding', 'fromJSON');
+        $this->validateTransformer('Encoding', 'stringToEncoding');
 
         $this->cloud->createEncodingWithProfileName($video, $profileName);
     }
@@ -417,7 +417,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
     public function testGetProfiles()
     {
         $this->validateRequest('get', '/profiles.json');
-        $this->validateTransformer('Profile', 'fromJSONCollection');
+        $this->validateTransformer('Profile', 'stringToProfileCollection');
 
         $this->cloud->getProfiles();
     }
@@ -426,7 +426,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
     {
         $profileId = md5(uniqid());
         $this->validateRequest('get', '/profiles/'.$profileId.'.json');
-        $this->validateTransformer('Profile', 'fromJSON');
+        $this->validateTransformer('Profile', 'stringToProfile');
 
         $this->cloud->getProfile($profileId);
     }
@@ -435,7 +435,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
     {
         $this->validateRequest('post', '/profiles.json');
         $this->validateTransformer('Profile', 'toRequestParams', new ParameterBag());
-        $this->validateTransformer('Profile', 'fromJSON');
+        $this->validateTransformer('Profile', 'stringToProfile');
 
         $this->cloud->addProfile(new Profile());
     }
@@ -443,7 +443,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
     public function testAddProfileFromPreset()
     {
         $this->validateRequest('post', '/profiles.json', array('preset_name' => 'h264'));
-        $this->validateTransformer('Profile', 'fromJSON');
+        $this->validateTransformer('Profile', 'stringToProfile');
 
         $this->cloud->addProfileFromPreset('h264');
     }
@@ -477,7 +477,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
     {
         $cloudId = md5(uniqid());
         $this->validateRequest('get', '/clouds/'.$cloudId.'.json');
-        $this->validateTransformer('Cloud', 'fromJSON');
+        $this->validateTransformer('Cloud', 'stringToCloud');
 
         $this->cloud->getCloud($cloudId);
     }
@@ -485,7 +485,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
     public function testGetCloudWithoutId()
     {
         $this->validateRequest('get', '/clouds/'.$this->httpClient->getCloudId().'.json');
-        $this->validateTransformer('Cloud', 'fromJSON');
+        $this->validateTransformer('Cloud', 'stringToCloud');
 
         $this->cloud->getCloud();
     }
@@ -500,7 +500,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
             'aws_secret_key' => 'XoSV2f'
         );
         $this->validateRequest('put', '/clouds/'.$cloudId.'.json', $data);
-        $this->validateTransformer('Cloud', 'fromJSON');
+        $this->validateTransformer('Cloud', 'stringToCloud');
 
         $this->cloud->setCloud($data, $cloudId);
     }
@@ -518,7 +518,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
             '/clouds/'.$this->httpClient->getCloudId().'.json',
             $data
         );
-        $this->validateTransformer('Cloud', 'fromJSON');
+        $this->validateTransformer('Cloud', 'stringToCloud');
 
         $this->cloud->setCloud($data);
     }
@@ -526,7 +526,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
     public function testGetNotifications()
     {
         $this->validateRequest('get', '/notifications.json');
-        $this->validateTransformer('Notifications', 'fromJSON');
+        $this->validateTransformer('Notifications', 'stringToNotifications');
 
         $this->cloud->getNotifications();
     }
@@ -550,7 +550,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
         $notifications->setUrl('http://example.com/panda_notification');
         $this->validateRequest('put', '/notifications.json', $data);
         $this->validateTransformer('Notifications', 'toRequestParams', $parameterBag);
-        $this->validateTransformer('Notifications', 'fromJSON');
+        $this->validateTransformer('Notifications', 'stringToNotifications');
 
         $this->cloud->setNotifications($notifications);
     }
