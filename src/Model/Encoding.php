@@ -11,8 +11,6 @@
 
 namespace Xabbuh\PandaClient\Model;
 
-use Doctrine\Common\Collections\ArrayCollection;
-
 /**
  * Representation of a Video after it was encoded by applying a Profile.
  *
@@ -73,11 +71,6 @@ class Encoding implements ModelInterface
     private $createdAt;
 
     private $updatedAt;
-
-    public function __construct()
-    {
-        $this->files = new ArrayCollection();
-    }
 
     public function getId()
     {
@@ -284,20 +277,21 @@ class Encoding implements ModelInterface
 
     public function addFile($file)
     {
-        $this->files->add($file);
+        $this->files[] = $file;
     }
 
     public function removeFile($file)
     {
-        $this->files->removeElement($file);
+        $key = array_search($file, $this->files);
+
+        if (false !== $key) {
+            unset($this->files[$key]);
+        }
     }
 
     public function setFiles(array $files)
     {
-        $this->files->clear();
-        foreach ($files as $file) {
-            $this->files->add($file);
-        }
+        $this->files = $files;
     }
 
     public function getErrorMessage()
