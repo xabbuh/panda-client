@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Xabbuh\PandaClient\Util;
+namespace Xabbuh\PandaClient\Signer;
 
 use Xabbuh\PandaClient\Api\Account;
 
@@ -18,7 +18,7 @@ use Xabbuh\PandaClient\Api\Account;
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-class Signing
+class PandaSigner
 {
     /**
      * Panda cloud id
@@ -166,14 +166,14 @@ class Signing
      * @param string  $cloudId The cloud id
      * @param Account $account The authorization details
      *
-     * @return Signing The generated Signing instance
+     * @return PandaSigner The generated Signing instance
      */
     public static function getInstance($cloudId, Account $account)
     {
-        $signing = new Signing();
-        $signing->setCloudId($cloudId);
-        $signing->setAccount($account);
+        $signer = new PandaSigner();
+        $signer->setCloudId($cloudId);
+        $signer->setAccount($account);
 
-        return $signing;
+        return $signer;
     }
 }

@@ -12,23 +12,23 @@
 namespace Xabbuh\PandaClient\Tests\Util;
 
 use Xabbuh\PandaClient\Api\Account;
-use Xabbuh\PandaClient\Util\Signing;
+use Xabbuh\PandaClient\Signer\PandaSigner;
 
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-class SigningTest extends \PHPUnit_Framework_TestCase
+class PandaSignerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Signing
+     * @var PandaSigner
      */
-    private $signing;
+    private $signer;
 
     protected function setUp()
     {
         $cloudId = '123456789';
         $account = new Account('abcdefgh', 'ijklmnop', 'api.pandastream.com');
-        $this->signing = Signing::getInstance($cloudId, $account);
+        $this->signer = PandaSigner::getInstance($cloudId, $account);
     }
 
     public function testSignParams()
@@ -38,7 +38,7 @@ class SigningTest extends \PHPUnit_Framework_TestCase
             'cloud_id' => '123456789',
             'timestamp' => '2011-03-01T15:39:10.260762Z',
         );
-        $params = $this->signing->signParams('GET', '/videos.json', $params);
+        $params = $this->signer->signParams('GET', '/videos.json', $params);
 
         $this->assertEquals(
             'kVnZs/NX13ldKPdhFYoVnoclr8075DwiZF0TGgIbMsc=',
@@ -49,7 +49,7 @@ class SigningTest extends \PHPUnit_Framework_TestCase
     public function testSignParamsWithoutAccessData()
     {
         $params = array('timestamp' => '2011-03-01T15:39:10.260762Z');
-        $params = $this->signing->signParams('GET', '/videos.json', $params);
+        $params = $this->signer->signParams('GET', '/videos.json', $params);
 
         $this->assertEquals(
             'kVnZs/NX13ldKPdhFYoVnoclr8075DwiZF0TGgIbMsc=',
@@ -61,7 +61,7 @@ class SigningTest extends \PHPUnit_Framework_TestCase
 
     public function testSignParamsWithoutTimestamp()
     {
-        $params = $this->signing->signParams('GET', '/videos.json');
+        $params = $this->signer->signParams('GET', '/videos.json');
 
         $this->assertTrue(isset($params['cloud_id']));
         $this->assertTrue(isset($params['access_key']));
@@ -75,7 +75,7 @@ class SigningTest extends \PHPUnit_Framework_TestCase
             'cloud_id' => '123456789',
             'timestamp' => '2011-03-01T15:39:10.260762Z',
         );
-        $signature = $this->signing->signature('GET', '/videos.json', $params);
+        $signature = $this->signer->signature('GET', '/videos.json', $params);
 
         $this->assertEquals(
             'kVnZs/NX13ldKPdhFYoVnoclr8075DwiZF0TGgIbMsc=',
@@ -88,7 +88,7 @@ class SigningTest extends \PHPUnit_Framework_TestCase
         $params = array(
             'timestamp' => '2011-03-01T15:39:10.260762Z',
         );
-        $signature = $this->signing->signature('GET', '/videos.json', $params);
+        $signature = $this->signer->signature('GET', '/videos.json', $params);
 
         $this->assertEquals(
             'kVnZs/NX13ldKPdhFYoVnoclr8075DwiZF0TGgIbMsc=',

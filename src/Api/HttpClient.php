@@ -14,7 +14,7 @@ namespace Xabbuh\PandaClient\Api;
 use Guzzle\Http\Client;
 use Xabbuh\PandaClient\Exception\ApiException;
 use Xabbuh\PandaClient\Exception\HttpException;
-use Xabbuh\PandaClient\Util\Signing;
+use Xabbuh\PandaClient\Signer\PandaSigner;
 
 /**
  * Panda REST client implementation using the PHP cURL extension.
@@ -134,8 +134,8 @@ class HttpClient implements HttpClientInterface
     private function request($method, $path, array $params)
     {
         // sign the request parameters
-        $signing = Signing::getInstance($this->cloudId, $this->account);
-        $params = $signing->signParams($method, $path, $params);
+        $signer = PandaSigner::getInstance($this->cloudId, $this->account);
+        $params = $signer->signParams($method, $path, $params);
 
         // ensure to use relative paths
         if (0 === strpos($path, '/')) {
