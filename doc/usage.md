@@ -47,11 +47,11 @@ the ``getCloud()``:
 $cloud = $api->getCloud('your-cloud');
 ```
 
-Note: If you only have one cloud to use, you can use the static ``createCloud()``
+Note: If you only have one cloud to use, you can use the static ``getCloudInstance()``
 shortcut method:
 
 ```php
-$cloud = Api::createCloud(
+$cloud = Api::getCloudInstance(
     'your-access-key',
     'your-secret-key',
     'api.pandastream.com',

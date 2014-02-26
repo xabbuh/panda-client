@@ -293,4 +293,38 @@ abstract class AbstractApi
     {
         return $this->cloudManager->getCloud($name);
     }
+
+    /**
+     * Creates a cloud.
+     *
+     * @param string $accessKey The access key
+     * @param string $secretKey The secret key
+     * @param string $apiHost   The api host
+     * @param string $cloudId   The cloud id
+     *
+     * @return \Xabbuh\PandaClient\Api\CloudInterface The cloud
+     */
+    public static function getCloudInstance($accessKey, $secretKey, $apiHost, $cloudId)
+    {
+        $config = array(
+            'accounts' => array(
+                'default' => array(
+                    'access_key' => $accessKey,
+                    'secret_key' => $secretKey,
+                    'api_host' => $apiHost,
+                ),
+            ),
+            'clouds' => array(
+                'default' => array(
+                    'id' => $cloudId,
+                    'account' => 'default',
+                )
+            ),
+        );
+
+        /** @var \Xabbuh\PandaClient\AbstractApi $api */
+        $api = new static($config);
+
+        return $api->getCloud('default');
+    }
 }
