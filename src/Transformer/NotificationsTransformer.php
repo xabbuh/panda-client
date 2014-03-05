@@ -65,44 +65,37 @@ class NotificationsTransformer extends BaseTransformer implements NotificationsT
     {
         $params = new ParameterBag();
 
-        if ($notifications instanceof Notifications) {
-            if (null !== $notifications->getUrl()) {
-                $params->set('url', $notifications->getUrl());
-            }
+        if (null !== $notifications->getUrl()) {
+            $params->set('url', $notifications->getUrl());
+        }
 
-            if ($notifications->hasNotificationEvent('video-created')) {
-                $videoCreatedEvent = $notifications->getNotificationEvent('video_created');
-                $params->set(
-                    'events[video_created]',
-                    $videoCreatedEvent->isActive() ? 'true' : 'false'
-                );
-            }
+        if ($notifications->hasNotificationEvent('video-created')) {
+            $this->addRequestParamForEvent($notifications, 'video_created', $params);
+        }
 
-            if ($notifications->hasNotificationEvent('video-encoded')) {
-                $videoEncodedEvent = $notifications->getNotificationEvent('video_encoded');
-                $params->set(
-                    'events[video_encoded]',
-                    $videoEncodedEvent->isActive() ? 'true' : 'false'
-                );
-            }
+        if ($notifications->hasNotificationEvent('video-encoded')) {
+            $this->addRequestParamForEvent($notifications, 'video_encoded', $params);
+        }
 
-            if ($notifications->hasNotificationEvent('encoding-progress')) {
-                $encodingProgressEvent = $notifications->getNotificationEvent('encoding_progress');
-                $params->set(
-                    'events[encoding_progress]',
-                    $encodingProgressEvent->isActive() ? 'true' : 'false'
-                );
-            }
+        if ($notifications->hasNotificationEvent('encoding-progress')) {
+            $this->addRequestParamForEvent($notifications, 'encoding_progress', $params);
+        }
 
-            if ($notifications->hasNotificationEvent('encoding-completed')) {
-                $encodingCompletedEvent = $notifications->getNotificationEvent('encoding_completed');
-                $params->set(
-                    'events[encoding_completed]',
-                    $encodingCompletedEvent->isActive() ? 'true' : 'false'
-                );
-            }
+        if ($notifications->hasNotificationEvent('encoding-completed')) {
+            $this->addRequestParamForEvent($notifications, 'encoding_completed', $params);
         }
 
         return $params;
+    }
+
+    private function addRequestParamForEvent(Notifications $notifications, $eventName, ParameterBag $params)
+    {
+        $event = $notifications->getNotificationEvent($eventName);
+
+        if ($event->isActive()) {
+            $params->set('events['.$eventName.']', 'true');
+        } else {
+            $params->set('events['.$eventName.']', 'false');
+        }
     }
 }
