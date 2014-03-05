@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the XabbuhPandaClient package.
  *
  * (c) Christian Flothmann <christian.flothmann@xabbuh.de>
@@ -16,6 +16,6 @@ namespace Xabbuh\PandaClient\Exception;
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-class HttpException extends \Exception implements PandaException
+class HttpException extends PandaException
 {
 }

@@ -16,19 +16,6 @@ namespace Xabbuh\PandaClient\Exception;
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-interface PandaException
+class PandaException extends \Exception
 {
-    /**
-     * Returns the exception code.
-     *
-     * @return int The code
-     */
-    public function getCode();
-
-    /**
-     * Returns the exception message.
-     *
-     * @return string The message
-     */
-    public function getMessage();
 }
