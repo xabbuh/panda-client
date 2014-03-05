@@ -148,6 +148,8 @@ class HttpClient implements HttpClientInterface
         }
 
         // prepare the request
+        $request = null;
+
         switch ($method) {
             case 'GET':
                 $request = $this->guzzleClient->get($path);

@@ -32,17 +32,17 @@ class Normalizer extends GetSetMethodNormalizer
         }
 
         // check if the data is a collection
-        if (isset($data[0]) && is_array($data[0])) {
+        if (is_array($data) && isset($data[0]) && is_array($data[0])) {
             $collection = array();
 
             foreach ($data as &$item) {
-                $collection[] = $this->doDenormalize($item, $class, $format, $context);
+                $collection[] = $this->doDenormalize($item, $class);
             }
 
             return $collection;
         }
 
-        return $this->doDenormalize($data, $class, $format, $context);
+        return $this->doDenormalize($data, $class);
     }
 
     private function doDenormalize($data, $class)
