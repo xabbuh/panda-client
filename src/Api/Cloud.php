@@ -260,13 +260,10 @@ class Cloud implements CloudInterface
      */
     public function createEncodingWithProfileId(Video $video, $profileId)
     {
-        $response = $this->httpClient->post(
-            '/encodings.json',
-            array('video_id' => $video->getId(), 'profile_id' => $profileId)
-        );
-        $transformer = $this->transformers->getEncodingTransformer();
-
-        return $transformer->stringToEncoding($response);
+        return $this->doCreateEncoding(array(
+            'video_id' => $video->getId(),
+            'profile_id' => $profileId,
+        ));
     }
 
     /**
@@ -274,13 +271,10 @@ class Cloud implements CloudInterface
      */
     public function createEncodingWithProfileName(Video $video, $profileName)
     {
-        $response = $this->httpClient->post(
-            '/encodings.json',
-            array('video_id' => $video->getId(), 'profile_name' => $profileName,)
-        );
-        $transformer = $this->transformers->getEncodingTransformer();
-
-        return $transformer->stringToEncoding($response);
+        return $this->doCreateEncoding(array(
+            'video_id' => $video->getId(),
+            'profile_name' => $profileName,
+        ));
     }
 
     /**
@@ -428,5 +422,13 @@ class Cloud implements CloudInterface
         $response = $this->httpClient->put('/notifications.json', $data);
 
         return $transformer->stringToNotifications($response);
+    }
+
+    private function doCreateEncoding(array $params)
+    {
+        $response = $this->httpClient->post('/encodings.json', $params);
+        $transformer = $this->transformers->getEncodingTransformer();
+
+        return $transformer->stringToEncoding($response);
     }
 }

@@ -112,13 +112,7 @@ abstract class AbstractApi
         }
 
         foreach ($config['accounts'] as $name => $accountConfig) {
-            foreach (array('access_key', 'secret_key', 'api_host') as $option) {
-                if (!isset($accountConfig[$option])) {
-                    throw new \InvalidArgumentException(
-                        sprintf('Missing option %s for account %s', $option, $name)
-                    );
-                }
-            }
+            $this->validateMandatoryOptions($accountConfig, 'account', $name, array('access_key', 'secret_key', 'api_host'));
 
             $this->accountManager->registerAccount(
                 $name,
@@ -143,13 +137,7 @@ abstract class AbstractApi
         }
 
         foreach ($config['clouds'] as $name => $cloudConfig) {
-            foreach (array('id', 'account') as $option) {
-                if (!isset($cloudConfig[$option])) {
-                    throw new \InvalidArgumentException(
-                        sprintf('Missing option %s for cloud %s', $option, $name)
-                    );
-                }
-            }
+            $this->validateMandatoryOptions($cloudConfig, 'cloud', $name, array('id', 'account'));
 
             try {
                 $account = $this->accountManager->getAccount($cloudConfig['account']);
@@ -326,5 +314,16 @@ abstract class AbstractApi
         $api = new static($config);
 
         return $api->getCloud('default');
+    }
+
+    private function validateMandatoryOptions(array $config, $section, $name, array $options)
+    {
+        foreach ($options as $option) {
+            if (!isset($config[$option])) {
+                throw new \InvalidArgumentException(
+                    sprintf('Missing option %s for %s %s', $option, $section, $name)
+                );
+            }
+        }
     }
 }

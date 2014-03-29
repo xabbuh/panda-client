@@ -90,20 +90,7 @@ class PandaSigner
      */
     public function signParams($method, $path, array $params = array())
     {
-        if (!isset($params['cloud_id'])) {
-            $params['cloud_id'] = $this->cloudId;
-        }
-
-        if (!isset($params['access_key'])) {
-            $params['access_key'] = $this->account->getAccessKey();
-        }
-
-        if (!isset($params['timestamp'])) {
-            $oldTz = date_default_timezone_get();
-            date_default_timezone_set('UTC');
-            $params['timestamp'] = date('c');
-            date_default_timezone_set($oldTz);
-        }
+        $params = $this->completeParams($params);
 
         // generate the signature
         $params['signature'] = $this->signature($method, $path, $params);
@@ -122,20 +109,7 @@ class PandaSigner
      */
     public function signature($method, $path, array $params = array())
     {
-        if (!isset($params['cloud_id'])) {
-            $params['cloud_id'] = $this->cloudId;
-        }
-
-        if (!isset($params['access_key'])) {
-            $params['access_key'] = $this->account->getAccessKey();
-        }
-
-        if (!isset($params['timestamp'])) {
-            $oldTz = date_default_timezone_get();
-            date_default_timezone_set('UTC');
-            $params['timestamp'] = date('c');
-            date_default_timezone_set($oldTz);
-        }
+        $params = $this->completeParams($params);
 
         ksort($params);
 
@@ -175,5 +149,25 @@ class PandaSigner
         $signer->setAccount($account);
 
         return $signer;
+    }
+
+    private function completeParams(array $params)
+    {
+        if (!isset($params['cloud_id'])) {
+            $params['cloud_id'] = $this->cloudId;
+        }
+
+        if (!isset($params['access_key'])) {
+            $params['access_key'] = $this->account->getAccessKey();
+        }
+
+        if (!isset($params['timestamp'])) {
+            $oldTz = date_default_timezone_get();
+            date_default_timezone_set('UTC');
+            $params['timestamp'] = date('c');
+            date_default_timezone_set($oldTz);
+        }
+
+        return $params;
     }
 }
