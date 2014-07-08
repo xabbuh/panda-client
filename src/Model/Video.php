@@ -22,6 +22,8 @@ class Video extends AbstractMedium
 
     private $sourceUrl;
 
+    private $payload;
+
     public function getOriginalFilename() {
         return $this->originalFilename;
     }
@@ -36,5 +38,13 @@ class Video extends AbstractMedium
 
     public function setSourceUrl($sourceUrl) {
         $this->sourceUrl = $sourceUrl;
+    }
+
+    public function getPayload() {
+        return $this->payload;
+    }
+
+    public function setPayload($payload) {
+        $this->payload = $payload;
     }
 }
