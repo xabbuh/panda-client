@@ -329,6 +329,32 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('360', $video->getHeight());
     }
 
+    public function testDeserializeVideoWithPayload()
+    {
+        $data = '{
+          "id":"130466751aaaac1f88eb7e31c93ce40c",
+          "source_url": "http://example.com/test2.mp4",
+          "extname":".mp4",
+          "path":"130466751aaaac1f88eb7e31c93ce40c",
+          "video_codec":"h264",
+          "audio_codec":"aac",
+          "height":360,
+          "width":640,
+          "payload": "foo"
+        }';
+        $video = $this->videoSerializer->deserialize($data, 'Video');
+
+        $this->assertEquals('130466751aaaac1f88eb7e31c93ce40c', $video->getId());
+        $this->assertEquals('http://example.com/test2.mp4', $video->getSourceUrl());
+        $this->assertEquals('.mp4', $video->getExtname());
+        $this->assertEquals('130466751aaaac1f88eb7e31c93ce40c', $video->getPath());
+        $this->assertEquals('h264', $video->getVideoCodec());
+        $this->assertEquals('aac', $video->getAudioCodec());
+        $this->assertEquals('640', $video->getWidth());
+        $this->assertEquals('360', $video->getHeight());
+        $this->assertEquals('foo', $video->getPayload());
+    }
+
     /**
      * @expectedException        \InvalidArgumentException
      * @expectedExceptionMessage Denormalization error: Unknown attribute source_file in model
