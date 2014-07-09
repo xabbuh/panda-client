@@ -110,20 +110,37 @@ interface CloudInterface
      * Send a request to the Panda encoding service to encode a video file that
      * can be found under a particular url.
      *
-     * @param string $url The url where the encoding service can fetch the video
+     * See the
+     * {@link http://www.pandastream.com/docs/api#videos_post_videos_json_optional_parameters Panda API documentation}
+     * for a description of the optional parameters
+     *
+     * @param string $url        The url where the encoding service can fetch
+     *                           the video
+     * @param array  $profiles   Profile names or profile ids to be used during
+     *                           the encoding process
+     * @param string $pathFormat The complete video path
+     * @param string $payload    Arbitrary string to be stored with the video
      *
      * @return Video The encoded video
      */
-    public function encodeVideoByUrl($url);
+    public function encodeVideoByUrl($url, array $profiles = array(), $pathFormat = null, $payload = null);
 
     /**
      * Upload a video file to the Panda encoding service.
      *
-     * @param string $localPath The path to the local video file
+     * See the
+     * {@link http://www.pandastream.com/docs/api#videos_post_videos_json_optional_parameters Panda API documentation}
+     * for a description of the optional parameters
+     *
+     * @param string $localPath  The path to the local video file
+     * @param array  $profiles   Profile names or profile ids to be used during
+     *                           the encoding process
+     * @param string $pathFormat The complete video path
+     * @param string $payload    Arbitrary string to be stored with the video
      *
      * @return Video The encoded video
      */
-    public function encodeVideoFile($localPath);
+    public function encodeVideoFile($localPath, array $profiles = array(), $pathFormat = null, $payload = null);
 
     /**
      * Register an upload session for a specific file.

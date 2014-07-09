@@ -171,6 +171,56 @@ class CloudTest extends \PHPUnit_Framework_TestCase
         $this->cloud->encodeVideoByUrl($url);
     }
 
+    public function testEncodeVideoByUrlWithProfiles()
+    {
+        $url = 'http://www.example.com/video.mp4';
+        $this->validateRequest('post', '/videos.json', array(
+            'source_url' => $url,
+            'profiles' => 'profile1,profile2',
+        ));
+        $this->validateTransformer('Video', 'stringToVideo');
+
+        $this->cloud->encodeVideoByUrl($url, array('profile1', 'profile2'));
+    }
+
+    public function testEncodeVideoByUrlWithPathFormat()
+    {
+        $url = 'http://www.example.com/video.mp4';
+        $this->validateRequest('post', '/videos.json', array(
+            'source_url' => $url,
+            'path_format' => 'foo/:id',
+        ));
+        $this->validateTransformer('Video', 'stringToVideo');
+
+        $this->cloud->encodeVideoByUrl($url, array(), 'foo/:id');
+    }
+
+    public function testEncodeVideoByUrlWithPayload()
+    {
+        $url = 'http://www.example.com/video.mp4';
+        $this->validateRequest('post', '/videos.json', array(
+            'source_url' => $url,
+            'payload' => 'foo',
+        ));
+        $this->validateTransformer('Video', 'stringToVideo');
+
+        $this->cloud->encodeVideoByUrl($url, array(), null, 'foo');
+    }
+
+    public function testEncodeVideoByUrlWithPayOptions()
+    {
+        $url = 'http://www.example.com/video.mp4';
+        $this->validateRequest('post', '/videos.json', array(
+            'source_url' => $url,
+            'profiles' => 'profile1,profile2',
+            'path_format' => 'foo/:id',
+            'payload' => 'foo',
+        ));
+        $this->validateTransformer('Video', 'stringToVideo');
+
+        $this->cloud->encodeVideoByUrl($url, array('profile1', 'profile2'), 'foo/:id', 'foo');
+    }
+
     public function testEncodeVideoFile()
     {
         $filename = 'video.mp4';
@@ -178,6 +228,56 @@ class CloudTest extends \PHPUnit_Framework_TestCase
         $this->validateTransformer('Video', 'stringToVideo');
 
         $this->cloud->encodeVideoFile($filename);
+    }
+
+    public function testEncodeVideoFileWithProfiles()
+    {
+        $filename = 'video.mp4';
+        $this->validateRequest('post', '/videos.json', array(
+            'file' => '@'.$filename,
+            'profiles' => 'profile1,profile2',
+        ));
+        $this->validateTransformer('Video', 'stringToVideo');
+
+        $this->cloud->encodeVideoFile($filename, array('profile1', 'profile2'));
+    }
+
+    public function testEncodeVideoFileWithPathFormat()
+    {
+        $filename = 'video.mp4';
+        $this->validateRequest('post', '/videos.json', array(
+            'file' => '@'.$filename,
+            'path_format' => 'foo/:id',
+        ));
+        $this->validateTransformer('Video', 'stringToVideo');
+
+        $this->cloud->encodeVideoFile($filename, array(), 'foo/:id');
+    }
+
+    public function testEncodeVideoFileWithPayload()
+    {
+        $filename = 'video.mp4';
+        $this->validateRequest('post', '/videos.json', array(
+            'file' => '@'.$filename,
+            'payload' => 'foo',
+        ));
+        $this->validateTransformer('Video', 'stringToVideo');
+
+        $this->cloud->encodeVideoFile($filename, array(), null, 'foo');
+    }
+
+    public function testEncodeVideoFileWithPayOptions()
+    {
+        $filename = 'video.mp4';
+        $this->validateRequest('post', '/videos.json', array(
+            'file' => '@'.$filename,
+            'profiles' => 'profile1,profile2',
+            'path_format' => 'foo/:id',
+            'payload' => 'foo',
+        ));
+        $this->validateTransformer('Video', 'stringToVideo');
+
+        $this->cloud->encodeVideoFile($filename, array('profile1', 'profile2'), 'foo/:id', 'foo');
     }
 
     public function testRegisterUpload()

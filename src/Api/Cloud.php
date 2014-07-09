@@ -135,23 +135,17 @@ class Cloud implements CloudInterface
     /**
      * {@inheritDoc}
      */
-    public function encodeVideoByUrl($url)
+    public function encodeVideoByUrl($url, array $profiles = array(), $pathFormat = null, $payload = null)
     {
-        $response = $this->httpClient->post('/videos.json', array('source_url' => $url));
-        $transformer = $this->transformers->getVideoTransformer();
-
-        return $transformer->stringToVideo($response);
+        return $this->doEncodeVideo(array('source_url' => $url), $profiles, $pathFormat, $payload);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function encodeVideoFile($localPath)
+    public function encodeVideoFile($localPath, array $profiles = array(), $pathFormat = null, $payload = null)
     {
-        $response = $this->httpClient->post('/videos.json', array('file' => '@'.$localPath));
-        $transformer = $this->transformers->getVideoTransformer();
-
-        return $transformer->stringToVideo($response);
+        return $this->doEncodeVideo(array('file' => '@'.$localPath), $profiles, $pathFormat, $payload);
     }
 
     /**
@@ -422,6 +416,26 @@ class Cloud implements CloudInterface
         $response = $this->httpClient->put('/notifications.json', $data);
 
         return $transformer->stringToNotifications($response);
+    }
+
+    private function doEncodeVideo(array $parameters, array $profiles, $pathFormat, $payload)
+    {
+        if (count($profiles) > 0) {
+            $parameters['profiles'] = implode(',', $profiles);
+        }
+
+        if (null !== $pathFormat) {
+            $parameters['path_format'] = $pathFormat;
+        }
+
+        if (null !== $payload) {
+            $parameters['payload'] = $payload;
+        }
+
+        $response = $this->httpClient->post('/videos.json', $parameters);
+        $transformer = $this->transformers->getVideoTransformer();
+
+        return $transformer->stringToVideo($response);
     }
 
     private function doCreateEncoding(array $params)
