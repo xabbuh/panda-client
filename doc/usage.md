@@ -76,5 +76,5 @@ $cloud->deleteVideo('a-video-id');
 ```
 
 See the official [API documentation](http://www.pandastream.com/docs/api) and
-the [CloudInterface](../src/Api/CloudInterface.php) for an overview of all
-available REST endpoints and their corresponding API methods.
+the [PHP documentation](http://dev.xabbuh.de/docs/panda-client/) for an overview
+of all available REST endpoints and their corresponding API methods.
