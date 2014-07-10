@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+1.1.0
+-----
+
 * ignore additional properties that are not reflected in the model classes
   during deserealisation
 
