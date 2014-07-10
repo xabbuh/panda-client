@@ -102,10 +102,6 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($encodingId, $encoding->getId());
     }
 
-    /**
-     * @expectedException        \InvalidArgumentException
-     * @expectedExceptionMessage Denormalization error: Unknown attribute videosid in model
-     */
     public function testDeserializeEncodingWithUnknownProperty()
     {
         $data = '{
@@ -211,10 +207,6 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('2009/10/14 19:38:42 +0000', $profile->getUpdatedAt());
     }
 
-    /**
-     * @expectedException        \InvalidArgumentException
-     * @expectedExceptionMessage Denormalization error: Unknown attribute profile_name in model
-     */
     public function testDeserializeProfileWithUnknownProperty()
     {
         $data = '{
@@ -355,10 +347,6 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $video->getPayload());
     }
 
-    /**
-     * @expectedException        \InvalidArgumentException
-     * @expectedExceptionMessage Denormalization error: Unknown attribute source_file in model
-     */
     public function testDeserializeVideoWithUnknownProperty()
     {
         $data = '{

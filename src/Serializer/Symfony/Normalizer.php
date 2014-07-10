@@ -54,10 +54,6 @@ class Normalizer extends GetSetMethodNormalizer
 
             if (method_exists($object, $setter)) {
                 $object->$setter($value);
-            } else {
-                throw new \InvalidArgumentException(
-                    'Denormalization error: Unknown attribute '.$attribute.' in model'
-                );
             }
         }
 
