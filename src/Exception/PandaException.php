@@ -12,7 +12,7 @@
 namespace Xabbuh\PandaClient\Exception;
 
 /**
- * Marker interface for all exceptions regarding the panda api.
+ * Base class for all exceptions regarding the panda api.
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
