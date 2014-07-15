@@ -148,7 +148,7 @@ interface CloudInterface
      * @param string   $filename       The name of the file to transfer
      * @param string   $fileSize       The size of the file in bytes
      * @param string[] $profiles       Array of profile names for which encodings will be created (by default no encodings will be created)
-     * @param boolean  $useAllProfiles If true create encodings for all profiles (is only taken in account if the list of profile names is null)
+     * @param bool     $useAllProfiles If true create encodings for all profiles (is only taken in account if the list of profile names is null)
      *
      * @return \stdClass An object containing the id of the video after uploading and a URL to which the file needs to be pushed.
      */

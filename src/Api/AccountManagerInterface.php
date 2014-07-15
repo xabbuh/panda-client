@@ -31,8 +31,8 @@ interface AccountManagerInterface
      *
      * @param string $key The key to check for
      *
-     * @return boolean True if an Account is registered with the given key,
-     *                 false otherwise
+     * @return bool True if an Account is registered with the given key,
+     *              false otherwise
      */
     public function hasAccount($key);
 

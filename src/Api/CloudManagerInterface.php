@@ -31,8 +31,8 @@ interface CloudManagerInterface
      *
      * @param string $key The key to check for
      *
-     * @return boolean True if a Cloud is registered with the given key,
-     *                 false otherwise
+     * @return bool True if a Cloud is registered with the given key,
+     *              false otherwise
      */
     public function hasCloud($key);
 
