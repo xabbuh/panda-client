@@ -13,32 +13,18 @@ Installation
 The recommended way to install the Panda client is using
 [Composer](http://getcomposer.org/):
 
-1. Download and install Composer:
+1. [Download and install](http://getcomposer.org/doc/00-intro.md) Composer.
 
-        curl -sS http://getcomposer.org/installer | php
+1. Add ``xabbuh/panda-client`` as a dependency of your project:
 
-   For more details on how to install composer have a look at the official
-   [documentation](http://getcomposer.org/doc/00-intro.md).
-
-1. Add ``xabbuh/panda-client`` as a dependency in your project's
-   ``composer.json`` file:
-
-    ```yaml
-    {
-        "require": {
-            "xabbuh/panda-client": "~1.0"
-        }
-    }
+    ```bash
+    $ composer require xabbuh/panda-client "~1.0"
     ```
 
-1. Install your dependencies:
-
-        php composer.phar install
-
-1. Require Composer's autoloader:
+1. And require Composer's autoloader:
 
    ``` php
-   require 'vendor/autoload.php';
+   require_once __DIR__.'/vendor/autoload.php';
    ```
 
 Usage
