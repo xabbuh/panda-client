@@ -24,7 +24,7 @@ The recommended way to install the Panda client is using
 1. And require Composer's autoloader:
 
    ``` php
-   require_once __DIR__.'/vendor/autoload.php';
+   require __DIR__.'/vendor/autoload.php';
    ```
 
 Usage
