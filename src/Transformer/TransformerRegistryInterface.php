@@ -68,4 +68,3 @@ interface TransformerRegistryInterface
      */
     public function getVideoTransformer();
 }
- 

@@ -231,4 +231,3 @@ abstract class AbstractMedium implements ModelInterface
         $this->updatedAt = $updatedAt;
     }
 }
- 
