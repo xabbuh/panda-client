@@ -23,7 +23,7 @@ use Xabbuh\PandaClient\Serializer\SerializerInterface;
 class Serializer implements SerializerInterface
 {
     /**
-     * @var SymfonySerializer
+     * @var \Symfony\Component\Serializer\SerializerInterface
      */
     private $serializer;
 
