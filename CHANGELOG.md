@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+1.1.1
+-----
+
+* update installation instructions regarding the BC break introduced in 1.1.0
+
 1.1.0
 -----
 

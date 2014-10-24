@@ -9,6 +9,10 @@ PandaClient
 The PandaClient package provides an easy to use implementation of the
 [Panda encoding services](https://www.pandastream.com/) REST API.
 
+**Caution:** Version 1.1.0 introduced a BC break for users implementing the
+`CloudInterface`. Read the [upgrade instructions](UPGRADE-1.1.md) for more
+information.
+
 Installation
 ------------
 
