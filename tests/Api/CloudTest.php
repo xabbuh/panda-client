@@ -162,6 +162,15 @@ class CloudTest extends \PHPUnit_Framework_TestCase
         $this->cloud->deleteVideo($video);
     }
 
+    public function testDeleteVideoSource()
+    {
+        $videoId = md5(uniqid());
+        $video = new Video();
+        $video->setId($videoId);
+        $this->validateRequest('delete', '/videos/'.$videoId.'/source.json');
+        $this->cloud->deleteVideoSource($video);
+    }
+
     public function testEncodeVideoByUrl()
     {
         $url = 'http://www.example.com/video.mp4';

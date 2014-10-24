@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+1.2.0
+-----
+
+* added API method to only delete the source file from the storage
+
 1.1.1
 -----
 

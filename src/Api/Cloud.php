@@ -133,6 +133,18 @@ class Cloud implements CloudInterface
     }
 
     /**
+     * Deletes the source of a video from the storage.
+     *
+     * @param Video $video The video whose source will be deleted
+     *
+     * @return string The server response
+     */
+    public function deleteVideoSource(Video $video)
+    {
+        return $this->httpClient->delete('/videos/'.$video->getId().'/source.json');
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function encodeVideoByUrl($url, array $profiles = array(), $pathFormat = null, $payload = null)
