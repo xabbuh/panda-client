@@ -5,6 +5,7 @@ PandaClient
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/xabbuh/panda-client/badges/quality-score.png?s=e8204a1032cc74bef0c5e538c17b19d33f67e79c)](https://scrutinizer-ci.com/g/xabbuh/panda-client/)
 [![Code Coverage](https://scrutinizer-ci.com/g/xabbuh/panda-client/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/xabbuh/panda-client/?branch=master)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/ddfd19e8-fe75-4b16-aeaf-1947cebaf0ce/mini.png)](https://insight.sensiolabs.com/projects/ddfd19e8-fe75-4b16-aeaf-1947cebaf0ce)
+[![Code Climate](https://codeclimate.com/github/xabbuh/panda-client/badges/gpa.svg)](https://codeclimate.com/github/xabbuh/panda-client)
 
 The PandaClient package provides an easy to use implementation of the
 [Panda encoding services](https://www.pandastream.com/) REST API.
