@@ -22,6 +22,11 @@
             "Xabbuh\\PandaClient\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Xabbuh\\PandaClient\\Tests\\": "tests/"
+        }
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "1.2.x-dev"
