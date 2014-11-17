@@ -2,14 +2,32 @@ sudo: false
 
 language: php
 
-php:
-  - 5.3
-  - 5.4
-  - 5.5
-  - 5.6
-  - hhvm-nightly
+env:
+  global:
+    - SYMFONY_VERSION=""
 
-before_script: composer install
+matrix:
+  include:
+    - php: 5.3
+    - php: 5.4
+    - php: 5.5
+    - php: 5.6
+      env: SYMFONY_VERSION="2.3.x"
+    - php: 5.6
+      env: SYMFONY_VERSION="2.4.x"
+    - php: 5.6
+      env: SYMFONY_VERSION="2.5.x"
+    - php: 5.6
+      env: SYMFONY_VERSION="2.6.x@dev"
+    - php: 5.6
+      env: SYMFONY_VERSION="2.7.x@dev"
+    - php: hhvm-nightly
+
+before_install:
+  - if [ "$SYMFONY_VERSION" != "" ]; then composer require --dev --no-update symfony/symfony:"$SYMFONY_VERSION"; fi
+
+install:
+  - composer install
 
 script:
   - phpunit --coverage-clover=coverage.clover
