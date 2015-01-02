@@ -75,7 +75,7 @@ abstract class AbstractApi
      */
     protected $cloudManager;
 
-    public final function __construct(array $config)
+    final public function __construct(array $config)
     {
         // create the transformation layer
         $this->transformers = $this->createTransformerRegistry();
@@ -160,7 +160,7 @@ abstract class AbstractApi
      *
      * @return \Xabbuh\PandaClient\Api\AccountManagerInterface
      */
-    protected abstract function createAccountManager();
+    abstract protected function createAccountManager();
 
     /**
      * Creates an {@link Account} for the given configuration.
@@ -181,7 +181,7 @@ abstract class AbstractApi
      *
      * @return \Xabbuh\PandaClient\Api\CloudManagerInterface
      */
-    protected abstract function createCloudManager();
+    abstract protected function createCloudManager();
 
     /**
      * Creates the {@link HttpClientInterface HttpClient} that performs the HTTP
@@ -192,7 +192,7 @@ abstract class AbstractApi
      *
      * @return \Xabbuh\PandaClient\Api\HttpClientInterface
      */
-    protected abstract function createHttpClient(Account $account, $cloudId);
+    abstract protected function createHttpClient(Account $account, $cloudId);
 
     /**
      * Creates a {@link Cloud} instances that maps Panda API REST endpoints to
@@ -200,7 +200,7 @@ abstract class AbstractApi
      *
      * @return \Xabbuh\PandaClient\Api\CloudInterface
      */
-    protected abstract function createCloud();
+    abstract protected function createCloud();
 
     /**
      * Creates the {@link TransformerRegistryInterface registry} that manages
@@ -208,7 +208,7 @@ abstract class AbstractApi
      *
      * @return \Xabbuh\PandaClient\Transformer\TransformerRegistryInterface
      */
-    protected abstract function createTransformerRegistry();
+    abstract protected function createTransformerRegistry();
 
     /**
      * Creates a transformer that transforms between the native API format and
@@ -216,7 +216,7 @@ abstract class AbstractApi
      *
      * @return \Xabbuh\PandaClient\Transformer\CloudTransformerInterface
      */
-    protected abstract function createCloudTransformer();
+    abstract protected function createCloudTransformer();
 
     /**
      * Creates a transformer that transforms between the native API format and
@@ -224,7 +224,7 @@ abstract class AbstractApi
      *
      * @return \Xabbuh\PandaClient\Transformer\EncodingTransformerInterface
      */
-    protected abstract function createEncodingTransformer();
+    abstract protected function createEncodingTransformer();
 
     /**
      * Creates a transformer that transforms between the native API format and
@@ -232,7 +232,7 @@ abstract class AbstractApi
      *
      * @return \Xabbuh\PandaClient\Transformer\NotificationsTransformerInterface
      */
-    protected abstract function createNotificationsTransformer();
+    abstract protected function createNotificationsTransformer();
 
     /**
      * Creates a transformer that transforms between the native API format and
@@ -240,7 +240,7 @@ abstract class AbstractApi
      *
      * @return \Xabbuh\PandaClient\Transformer\ProfileTransformerInterface
      */
-    protected abstract function createProfileTransformer();
+    abstract protected function createProfileTransformer();
 
     /**
      * Creates a transformer that transforms between the native API format and
@@ -248,7 +248,7 @@ abstract class AbstractApi
      *
      * @return \Xabbuh\PandaClient\Transformer\VideoTransformerInterface
      */
-    protected abstract function createVideoTransformer();
+    abstract protected function createVideoTransformer();
 
     /**
      * Returns the created {@link AccountManagerInterface AccountManager}.

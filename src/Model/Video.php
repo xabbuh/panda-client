@@ -24,27 +24,33 @@ class Video extends AbstractMedium
 
     private $payload;
 
-    public function getOriginalFilename() {
+    public function getOriginalFilename()
+    {
         return $this->originalFilename;
     }
 
-    public function setOriginalFilename($originalFilename) {
+    public function setOriginalFilename($originalFilename)
+    {
         $this->originalFilename = $originalFilename;
     }
 
-    public function getSourceUrl() {
+    public function getSourceUrl()
+    {
         return $this->sourceUrl;
     }
 
-    public function setSourceUrl($sourceUrl) {
+    public function setSourceUrl($sourceUrl)
+    {
         $this->sourceUrl = $sourceUrl;
     }
 
-    public function getPayload() {
+    public function getPayload()
+    {
         return $this->payload;
     }
 
-    public function setPayload($payload) {
+    public function setPayload($payload)
+    {
         $this->payload = $payload;
     }
 }

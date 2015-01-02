@@ -36,13 +36,12 @@ class Account
      */
     private $apiHost;
 
-
     /**
      * Constructs an Account with the given authorisation data.
      *
      * @param string $accessKey The access key
      * @param string $secretKey The secret key
-     * @param string $apiHost The api host
+     * @param string $apiHost   The api host
      */
     public function __construct($accessKey, $secretKey, $apiHost)
     {

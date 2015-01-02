@@ -69,11 +69,13 @@ abstract class AbstractMedium implements ModelInterface
         $this->id = $id;
     }
 
-    public function getMimeType() {
+    public function getMimeType()
+    {
         return $this->mimeType;
     }
 
-    public function setMimeType($mimeType) {
+    public function setMimeType($mimeType)
+    {
         $this->mimeType = $mimeType;
     }
 
@@ -87,107 +89,133 @@ abstract class AbstractMedium implements ModelInterface
         $this->path = $path;
     }
 
-    public function getExtname() {
+    public function getExtname()
+    {
         return $this->extname;
     }
 
-    public function setExtname($extname) {
+    public function setExtname($extname)
+    {
         $this->extname = $extname;
     }
 
-    public function getDuration() {
+    public function getDuration()
+    {
         return $this->duration;
     }
 
-    public function setDuration($duration) {
+    public function setDuration($duration)
+    {
         $this->duration = $duration;
     }
 
-    public function getWidth() {
+    public function getWidth()
+    {
         return $this->width;
     }
 
-    public function setWidth($width) {
+    public function setWidth($width)
+    {
         $this->width = $width;
     }
 
-    public function getHeight() {
+    public function getHeight()
+    {
         return $this->height;
     }
 
-    public function setHeight($height) {
+    public function setHeight($height)
+    {
         $this->height = $height;
     }
 
-    public function getFileSize() {
+    public function getFileSize()
+    {
         return $this->fileSize;
     }
 
-    public function setFileSize($fileSize) {
+    public function setFileSize($fileSize)
+    {
         $this->fileSize = $fileSize;
     }
 
-    public function getVideoBitrate() {
+    public function getVideoBitrate()
+    {
         return $this->videoBitrate;
     }
 
-    public function setVideoBitrate($videoBitrate) {
+    public function setVideoBitrate($videoBitrate)
+    {
         $this->videoBitrate = $videoBitrate;
     }
 
-    public function getAudioBitrate() {
+    public function getAudioBitrate()
+    {
         return $this->audioBitrate;
     }
 
-    public function setAudioBitrate($audioBitrate) {
+    public function setAudioBitrate($audioBitrate)
+    {
         $this->audioBitrate = $audioBitrate;
     }
 
-    public function getAudioCodec() {
+    public function getAudioCodec()
+    {
         return $this->audioCodec;
     }
 
-    public function setAudioCodec($audioCodec) {
+    public function setAudioCodec($audioCodec)
+    {
         $this->audioCodec = $audioCodec;
     }
 
-    public function getVideoCodec() {
+    public function getVideoCodec()
+    {
         return $this->videoCodec;
     }
 
-    public function setVideoCodec($videoCodec) {
+    public function setVideoCodec($videoCodec)
+    {
         $this->videoCodec = $videoCodec;
     }
 
-    public function getFps() {
+    public function getFps()
+    {
         return $this->fps;
     }
 
-    public function setFps($fps) {
+    public function setFps($fps)
+    {
         $this->fps = $fps;
     }
 
-    public function getAudioChannels() {
+    public function getAudioChannels()
+    {
         return $this->audioChannels;
     }
 
-    public function setAudioChannels($audioChannels) {
+    public function setAudioChannels($audioChannels)
+    {
         $this->audioChannels = $audioChannels;
     }
 
-    public function getAudioSampleRate() {
+    public function getAudioSampleRate()
+    {
         return $this->audioSampleRate;
     }
 
-    public function setAudioSampleRate($audioSampleRate) {
+    public function setAudioSampleRate($audioSampleRate)
+    {
         $this->audioSampleRate = $audioSampleRate;
     }
 
-    public function getStatus() {
+    public function getStatus()
+    {
         return $this->status;
     }
 
-    public function setStatus($status) {
+    public function setStatus($status)
+    {
         $this->status = $status;
     }
 

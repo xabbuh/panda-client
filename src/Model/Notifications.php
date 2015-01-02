@@ -20,18 +20,19 @@ namespace Xabbuh\PandaClient\Model;
 class Notifications implements ModelInterface
 {
     private $url;
-    
+
     private $events;
-    
-    public function getUrl() {
+
+    public function getUrl()
+    {
         return $this->url;
     }
 
-    public function setUrl($url) {
+    public function setUrl($url)
+    {
         $this->url = $url;
     }
-    
-    
+
     public function addNotificationEvent(NotificationEvent $event)
     {
         $this->events[$event->getEvent()] = $event;
@@ -48,6 +49,7 @@ class Notifications implements ModelInterface
     {
         // normalise the event name
         $eventName = strtr($eventName, '_', '-');
+
         return isset($this->events[$eventName]);
     }
 

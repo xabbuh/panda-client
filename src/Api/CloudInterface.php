@@ -224,8 +224,8 @@ interface CloudInterface
      *
      * @see PandaApi::getEncodings()
      *
-     * @param Video    $video   Id of the video to filter by
-     * @param string[] $filter  Additional optional filters (see {@link PandaApi::getEncodings() PandaApi::getEncodings()} for a description of the filters which can be used)
+     * @param Video    $video  Id of the video to filter by
+     * @param string[] $filter Additional optional filters (see {@link PandaApi::getEncodings() PandaApi::getEncodings()} for a description of the filters which can be used)
      *
      * @return Encoding[] The encodings
      */

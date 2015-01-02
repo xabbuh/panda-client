@@ -20,9 +20,9 @@ namespace Xabbuh\PandaClient\Model;
 class NotificationEvent
 {
     private $event;
-    
+
     private $active;
-    
+
     public function __construct($event, $active)
     {
         // normalise event names
@@ -39,12 +39,12 @@ class NotificationEvent
         $this->event = $event;
         $this->active = $active;
     }
-    
+
     public function getEvent()
     {
         return $this->event;
     }
-    
+
     public function isActive()
     {
         return $this->active;

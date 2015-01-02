@@ -163,7 +163,8 @@ class Cloud implements CloudInterface
     /**
      * {@inheritDoc}
      */
-    public function registerUpload($filename, $fileSize, array $profiles = null, $useAllProfiles = false) {
+    public function registerUpload($filename, $fileSize, array $profiles = null, $useAllProfiles = false)
+    {
         if (null !== $profiles) {
             $options = array(
                 'file_name' => $filename,

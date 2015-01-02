@@ -20,7 +20,7 @@ class TransformerRegistry implements TransformerRegistryInterface
 {
     /**
      * The generated transformers
-     * 
+     *
      * @var array
      */
     private $transformers = array();

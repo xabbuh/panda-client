@@ -70,7 +70,7 @@ interface HttpClientInterface
      * Helper method to send PUT requests to the Panda API.
      *
      * @param string $path   The path to send requests to
-     * @param  array $params Parameters
+     * @param array  $params Parameters
      *
      * @return string The server response
      */
@@ -79,8 +79,8 @@ interface HttpClientInterface
     /**
      * Helper method to send DELETE requests to the Panda API.
      *
-     * @param  string $path   The path to send requests to
-     * @param  array  $params Parameters
+     * @param string $path   The path to send requests to
+     * @param array  $params Parameters
      *
      * @return string The server response
      */
