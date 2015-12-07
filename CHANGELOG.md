@@ -1,10 +1,16 @@
 CHANGELOG
 =========
 
-1.2.1
+1.2.2
 -----
 
 * compatibility with Symfony 3.0 components
+
+1.2.1
+-----
+
+This release is the same as `1.2.0` as the tag was created on the wrong
+commit hash.
 
 1.2.0
 -----
