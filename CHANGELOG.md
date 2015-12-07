@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+1.2.1
+-----
+
+* compatibility with Symfony 3.0 components
+
 1.2.0
 -----
 
