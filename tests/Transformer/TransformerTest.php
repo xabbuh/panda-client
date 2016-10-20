@@ -34,6 +34,6 @@ abstract class TransformerTest extends \PHPUnit_Framework_TestCase
 
     private function createSerializer()
     {
-        $this->serializer = $this->getMock('\Xabbuh\PandaClient\Serializer\SerializerInterface');
+        $this->serializer = $this->getMockBuilder('\Xabbuh\PandaClient\Serializer\SerializerInterface')->getMock();
     }
 }

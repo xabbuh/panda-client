@@ -81,13 +81,10 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 
     private function createGuzzleMock($method, $statusCode = 200, $body = '')
     {
-        $response = $this->getMock(
-            'Guzzle\Http\Message\Response',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $response = $this->getMockBuilder('Guzzle\Http\Message\Response')
+            ->disableOriginalConstructor()
+            ->setMethods(array())
+            ->getMock();
         $response->expects($this->any())
             ->method('getStatusCode')
             ->will($this->returnValue($statusCode));
@@ -96,18 +93,15 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
             ->with(true)
             ->will($this->returnValue($body));
 
-        $request = $this->getMock(
-            'Guzzle\Http\Message\Request',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $request = $this->getMockBuilder('Guzzle\Http\Message\Request')
+            ->disableOriginalConstructor()
+            ->setMethods(array())
+            ->getMock();
         $request->expects($this->once())
             ->method('send')
             ->will($this->returnValue($response));
 
-        $this->guzzleClient = $this->getMock('\Guzzle\Http\Client');
+        $this->guzzleClient = $this->getMockBuilder('\Guzzle\Http\Client')->getMock();
         $this->httpClient->setGuzzleClient($this->guzzleClient);
         $this->guzzleClient
             ->expects($this->once())

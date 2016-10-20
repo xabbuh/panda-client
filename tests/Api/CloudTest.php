@@ -597,7 +597,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
 
     public function testSetProfile()
     {
-        $parameterBag = $this->getMock('Symfony\Component\HttpFoundation\ParameterBag');
+        $parameterBag = $this->getMockBuilder('Symfony\Component\HttpFoundation\ParameterBag')->getMock();
         $parameterBag->expects($this->once())
             ->method('all')
             ->will($this->returnValue(array()));
@@ -704,9 +704,7 @@ class CloudTest extends \PHPUnit_Framework_TestCase
 
     private function createHttpClient()
     {
-        $this->httpClient = $this->getMock(
-            'Xabbuh\PandaClient\Api\HttpClientInterface'
-        );
+        $this->httpClient = $this->getMockBuilder('Xabbuh\PandaClient\Api\HttpClientInterface')->getMock();
         $this->httpClient
             ->expects($this->any())
             ->method('getCloudId')
@@ -716,49 +714,37 @@ class CloudTest extends \PHPUnit_Framework_TestCase
 
     private function createTransformers()
     {
-        $this->transformerRegistry = $this->getMock(
-            '\Xabbuh\PandaClient\Transformer\TransformerRegistryInterface'
-        );
+        $this->transformerRegistry = $this->getMockBuilder('\Xabbuh\PandaClient\Transformer\TransformerRegistryInterface')->getMock();
 
-        $cloudTransformer = $this->getMock(
-            '\Xabbuh\PandaClient\Transformer\CloudTransformerInterface'
-        );
+        $cloudTransformer = $this->getMockBuilder('\Xabbuh\PandaClient\Transformer\CloudTransformerInterface')->getMock();
         $this->transformerRegistry
             ->expects($this->any())
             ->method('getCloudTransformer')
             ->will($this->returnValue($cloudTransformer));
         $this->transformers['Cloud'] = $cloudTransformer;
 
-        $encodingTransformer = $this->getMock(
-            '\Xabbuh\PandaClient\Transformer\EncodingTransformerInterface'
-        );
+        $encodingTransformer = $this->getMockBuilder('\Xabbuh\PandaClient\Transformer\EncodingTransformerInterface')->getMock();
         $this->transformerRegistry
             ->expects($this->any())
             ->method('getEncodingTransformer')
             ->will($this->returnValue($encodingTransformer));
         $this->transformers['Encoding'] = $encodingTransformer;
 
-        $notificationsTransformer = $this->getMock(
-            '\Xabbuh\PandaClient\Transformer\NotificationsTransformerInterface'
-        );
+        $notificationsTransformer = $this->getMockBuilder('\Xabbuh\PandaClient\Transformer\NotificationsTransformerInterface')->getMock();
         $this->transformerRegistry
             ->expects($this->any())
             ->method('getNotificationsTransformer')
             ->will($this->returnValue($notificationsTransformer));
         $this->transformers['Notifications'] = $notificationsTransformer;
 
-        $profileTransformer = $this->getMock(
-            '\Xabbuh\PandaClient\Transformer\ProfileTransformer'
-        );
+        $profileTransformer = $this->getMockBuilder('\Xabbuh\PandaClient\Transformer\ProfileTransformerInterface')->getMock();
         $this->transformerRegistry
             ->expects($this->any())
             ->method('getProfileTransformer')
             ->will($this->returnValue($profileTransformer));
         $this->transformers['Profile'] = $profileTransformer;
 
-        $videoTransformer = $this->getMock(
-            '\Xabbuh\PandaClient\Transformer\VideoTransformerInterface'
-        );
+        $videoTransformer = $this->getMockBuilder('\Xabbuh\PandaClient\Transformer\VideoTransformerInterface')->getMock();
         $this->transformerRegistry
             ->expects($this->any())
             ->method('getVideoTransformer')

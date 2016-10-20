@@ -58,21 +58,11 @@ class TransformerRegistryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->transformers = new TransformerRegistry();
-        $this->cloudTransformer = $this->getMock(
-            'Xabbuh\PandaClient\Transformer\CloudTransformerInterface'
-        );
-        $this->encodingTransformer = $this->getMock(
-            'Xabbuh\PandaClient\Transformer\EncodingTransformerInterface'
-        );
-        $this->notificationsTransformer = $this->getMock(
-            'Xabbuh\PandaClient\Transformer\NotificationsTransformerInterface'
-        );
-        $this->profileTransformer = $this->getMock(
-            'Xabbuh\PandaClient\Transformer\ProfileTransformerInterface'
-        );
-        $this->videoTransformer = $this->getMock(
-            'Xabbuh\PandaClient\Transformer\VideoTransformerInterface'
-        );
+        $this->cloudTransformer = $this->getMockBuilder('Xabbuh\PandaClient\Transformer\CloudTransformerInterface')->getMock();
+        $this->encodingTransformer = $this->getMockBuilder('Xabbuh\PandaClient\Transformer\EncodingTransformerInterface')->getMock();
+        $this->notificationsTransformer = $this->getMockBuilder('Xabbuh\PandaClient\Transformer\NotificationsTransformerInterface')->getMock();
+        $this->profileTransformer = $this->getMockBuilder('Xabbuh\PandaClient\Transformer\ProfileTransformerInterface')->getMock();
+        $this->videoTransformer = $this->getMockBuilder('Xabbuh\PandaClient\Transformer\VideoTransformerInterface')->getMock();
     }
 
     public function testGetTransformer()
