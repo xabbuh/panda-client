@@ -9,25 +9,21 @@ language: php
 env:
   global:
     - SYMFONY_VERSION=""
-    - deps=""
+    - COMPOSER_OPTIONS="--prefer-stable"
 
 matrix:
   fast_finish: true
   include:
     - php: 5.3
-      env: deps="low"
+      env: COMPOSER_OPTIONS="--prefer-lowest --prefer-stable"
     - php: 5.4
     - php: 5.5
-      env: COVERAGE=yes
-    - php: 5.6
-      env: SYMFONY_VERSION="2.3.x"
-    - php: 5.6
-      env: SYMFONY_VERSION="2.6.x"
     - php: 5.6
       env: SYMFONY_VERSION="2.7.x"
     - php: 5.6
       env: SYMFONY_VERSION="2.8.x"
     - php: 7.0
+      env: COMPOSER_OPTIONS="" COVERAGE=yes
     - php: hhvm
 
 before_install:
@@ -35,8 +31,7 @@ before_install:
   - if [ "$SYMFONY_VERSION" != "" ]; then composer require --dev --no-update symfony/symfony:"$SYMFONY_VERSION"; fi
 
 install:
-  - if [ "$deps" = "" ]; then composer install; fi
-  - if [ "$deps" = "low" ]; then composer update --prefer-lowest; fi
+  - composer update $COMPOSER_OPTIONS
 
 script:
   - if [ "$COVERAGE" = "yes" ]; then vendor/bin/simple-phpunit --coverage-clover=coverage.clover; else vendor/bin/simple-phpunit; fi
