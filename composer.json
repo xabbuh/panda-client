@@ -17,6 +17,10 @@
         "symfony/http-foundation": "~2.2|~3.0",
         "symfony/serializer": "~2.2|~3.0"
     },
+    "require-dev": {
+        "symfony/phpunit-bridge": "~3.3"
+    },
+    "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
             "Xabbuh\\PandaClient\\": "src/"
