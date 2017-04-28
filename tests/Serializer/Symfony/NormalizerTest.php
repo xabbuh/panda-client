@@ -11,9 +11,10 @@
 
 namespace Xabbuh\PandaClient\Tests\Serializer\Symfony;
 
+use PHPUnit\Framework\TestCase;
 use Xabbuh\PandaClient\Serializer\Symfony\Normalizer;
 
-class NormalizerTest extends \PHPUnit_Framework_TestCase
+class NormalizerTest extends TestCase
 {
     /**
      * @var Normalizer;

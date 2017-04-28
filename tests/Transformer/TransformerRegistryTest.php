@@ -11,6 +11,7 @@
 
 namespace Xabbuh\PandaClient\Tests\Transformer;
 
+use PHPUnit\Framework\TestCase;
 use Xabbuh\PandaClient\Transformer\CloudTransformerInterface;
 use Xabbuh\PandaClient\Transformer\EncodingTransformerInterface;
 use Xabbuh\PandaClient\Transformer\NotificationsTransformerInterface;
@@ -23,7 +24,7 @@ use Xabbuh\PandaClient\Transformer\VideoTransformerInterface;
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-class TransformerRegistryTest extends \PHPUnit_Framework_TestCase
+class TransformerRegistryTest extends TestCase
 {
     /**
      * @var TransformerRegistry

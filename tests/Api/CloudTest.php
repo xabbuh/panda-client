@@ -11,6 +11,7 @@
 
 namespace Xabbuh\PandaClient\Tests\Api;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Xabbuh\PandaClient\Api\Cloud;
 use Xabbuh\PandaClient\Api\HttpClientInterface;
@@ -25,7 +26,7 @@ use Xabbuh\PandaClient\Transformer\TransformerRegistryInterface;
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-class CloudTest extends \PHPUnit_Framework_TestCase
+class CloudTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|HttpClientInterface

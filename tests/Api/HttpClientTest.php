@@ -11,13 +11,14 @@
 
 namespace Xabbuh\PandaClient\Tests\Api;
 
+use PHPUnit\Framework\TestCase;
 use Xabbuh\PandaClient\Api\Account;
 use Xabbuh\PandaClient\Api\HttpClient;
 
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-class HttpClientTest extends \PHPUnit_Framework_TestCase
+class HttpClientTest extends TestCase
 {
     /**
      * @var HttpClient

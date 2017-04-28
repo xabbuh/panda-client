@@ -11,12 +11,13 @@
 
 namespace Xabbuh\PandaClient\Tests\Api;
 
+use PHPUnit\Framework\TestCase;
 use Xabbuh\PandaClient\Api\CloudManager;
 
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-class CloudManagerTest extends \PHPUnit_Framework_TestCase
+class CloudManagerTest extends TestCase
 {
     /**
      * @var \Xabbuh\PandaClient\Api\Cloud

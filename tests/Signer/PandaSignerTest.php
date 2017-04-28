@@ -11,13 +11,14 @@
 
 namespace Xabbuh\PandaClient\Tests\Util;
 
+use PHPUnit\Framework\TestCase;
 use Xabbuh\PandaClient\Api\Account;
 use Xabbuh\PandaClient\Signer\PandaSigner;
 
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-class PandaSignerTest extends \PHPUnit_Framework_TestCase
+class PandaSignerTest extends TestCase
 {
     /**
      * @var PandaSigner

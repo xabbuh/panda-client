@@ -11,6 +11,7 @@
 
 namespace Xabbuh\PandaClient\Tests\Transformer;
 
+use PHPUnit\Framework\TestCase;
 use Xabbuh\PandaClient\Model\Notifications;
 use Xabbuh\PandaClient\Transformer\NotificationsTransformer;
 
@@ -19,7 +20,7 @@ use Xabbuh\PandaClient\Transformer\NotificationsTransformer;
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-class NotificationsTransformerTest extends \PHPUnit_Framework_TestCase
+class NotificationsTransformerTest extends TestCase
 {
     /**
      * @var NotificationsTransformer

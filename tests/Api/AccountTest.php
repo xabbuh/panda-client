@@ -11,6 +11,7 @@
 
 namespace Xabbuh\PandaClient\Tests\Api;
 
+use PHPUnit\Framework\TestCase;
 use Xabbuh\PandaClient\Api\Account;
 
 /**
@@ -18,7 +19,7 @@ use Xabbuh\PandaClient\Api\Account;
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-class AccountTest extends \PHPUnit_Framework_TestCase
+class AccountTest extends TestCase
 {
     /**
      * Test the Account's getter methods.

@@ -11,6 +11,7 @@
 
 namespace Xabbuh\PandaClient\Tests\Serializer\Symfony;
 
+use PHPUnit\Framework\TestCase;
 use Xabbuh\PandaClient\Model\Cloud;
 use Xabbuh\PandaClient\Model\Encoding;
 use Xabbuh\PandaClient\Model\Notifications;
@@ -21,7 +22,7 @@ use Xabbuh\PandaClient\Serializer\Symfony\Serializer;
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-class SerializerTest extends \PHPUnit_Framework_TestCase
+class SerializerTest extends TestCase
 {
     /**
      * @var Serializer

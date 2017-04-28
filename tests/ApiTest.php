@@ -11,9 +11,10 @@
 
 namespace Xabbuh\PandaClient\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Xabbuh\PandaClient\Api;
 
-class ApiTest extends \PHPUnit_Framework_TestCase
+class ApiTest extends TestCase
 {
     public function testDefaultApi()
     {

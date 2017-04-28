@@ -11,13 +11,14 @@
 
 namespace Xabbuh\PandaClient\Tests\Api;
 
+use PHPUnit\Framework\TestCase;
 use Xabbuh\PandaClient\Api\Account;
 use Xabbuh\PandaClient\Api\AccountManager;
 
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-class AccountManagerTest extends \PHPUnit_Framework_TestCase
+class AccountManagerTest extends TestCase
 {
     public function testRegisterAccount()
     {

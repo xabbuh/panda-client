@@ -11,10 +11,12 @@
 
 namespace Xabbuh\PandaClient\Tests\Transformer;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
  */
-abstract class TransformerTest extends \PHPUnit_Framework_TestCase
+abstract class TransformerTest extends TestCase
 {
     /**
      * @var \Xabbuh\PandaClient\Transformer\BaseTransformer;
