@@ -120,7 +120,7 @@ class PandaSigner
         $canonicalQueryString = str_replace(
             array('+', '%5B', '%5D'),
             array('%20', '[', ']'),
-            http_build_query($params)
+            http_build_query($params, '', '&')
         );
         $stringToSign = sprintf(
             "%s\n%s\n%s\n%s",

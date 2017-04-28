@@ -144,7 +144,7 @@ class HttpClient implements HttpClientInterface
 
         // append request parameters to the URL
         if ('GET' === $method || 'DELETE' === $method) {
-            $path .= '?'.http_build_query($params);
+            $path .= '?'.http_build_query($params, '', '&');
         }
 
         // prepare the request
