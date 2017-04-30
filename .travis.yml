@@ -14,18 +14,15 @@ env:
 matrix:
   fast_finish: true
   include:
-    - php: 5.3
+    - php: 5.6
       env: COMPOSER_OPTIONS="--prefer-lowest --prefer-stable"
-    - php: 5.4
-    - php: 5.5
-    - php: 5.6
+    - php: 7.0
       env: SYMFONY_VERSION="2.7.x"
-    - php: 5.6
+    - php: 7.0
       env: SYMFONY_VERSION="2.8.x"
     - php: 7.0
-      env: COMPOSER_OPTIONS=""
     - php: 7.1
-      env: COVERAGE=yes
+      env: COVERAGE=yes COMPOSER_OPTIONS=""
     - php: hhvm
 
 before_install:
