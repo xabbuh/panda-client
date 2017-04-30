@@ -1,0 +1,5 @@
+---------------------------------------------------------------------------
+
+by stof at 2017-04-30T08:34:56Z
+
+@xabbuh I suggest you to merge this PR and tag a 1.2.1 release fixing the compat with PHP 7.1, before doing the work of migrating to HTTPlug.
