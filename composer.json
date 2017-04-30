@@ -12,10 +12,10 @@
         }
     ],
     "require": {
-        "php": ">=5.3.0",
+        "php": "^5.6 || ^7.0",
         "guzzle/guzzle": "~3.7",
-        "symfony/http-foundation": "~2.2|~3.0",
-        "symfony/serializer": "~2.2|~3.0"
+        "symfony/http-foundation": "^2.7 || ^3.2",
+        "symfony/serializer": "^2.7 || ^3.2"
     },
     "require-dev": {
         "symfony/phpunit-bridge": "~3.3"

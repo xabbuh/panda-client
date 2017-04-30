@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+2.0.0
+-----
+
+* dropped support for PHP versions before 5.6
+* dropped support for unsupported versions of the `symfony/http-foundation` and
+  `symfony/serializer` packages
+
 1.2.3
 -----
 
