@@ -185,9 +185,9 @@ class Cloud implements CloudInterface
     /**
      * {@inheritDoc}
      */
-    public function getEncodings(array $filter = array())
+    public function getEncodings(array $filter = null)
     {
-        $response = $this->httpClient->get('/encodings.json', $filter);
+        $response = $this->httpClient->get('/encodings.json', null === $filter ? array() : $filter);
         $transformer = $this->transformers->getEncodingTransformer();
 
         return $transformer->stringToEncodingCollection($response);
@@ -196,8 +196,12 @@ class Cloud implements CloudInterface
     /**
      * {@inheritDoc}
      */
-    public function getEncodingsWithStatus($status, array $filter = array())
+    public function getEncodingsWithStatus($status, array $filter = null)
     {
+        if (null === $filter) {
+            $filter = array();
+        }
+
         $filter['status'] = $status;
 
         return $this->getEncodings($filter);
@@ -206,8 +210,12 @@ class Cloud implements CloudInterface
     /**
      * {@inheritDoc}
      */
-    public function getEncodingsForProfile(Profile $profile, array $filter = array())
+    public function getEncodingsForProfile(Profile $profile, array $filter = null)
     {
+        if (null === $filter) {
+            $filter = array();
+        }
+
         $filter['profile_id'] = $profile->getId();
 
         return $this->getEncodings($filter);
@@ -218,6 +226,10 @@ class Cloud implements CloudInterface
      */
     public function getEncodingsForProfileById($profileId, array $filter = null)
     {
+        if (null === $filter) {
+            $filter = array();
+        }
+
         $filter['profile_id'] = $profileId;
 
         return $this->getEncodings($filter);
@@ -226,8 +238,12 @@ class Cloud implements CloudInterface
     /**
      * {@inheritDoc}
      */
-    public function getEncodingsForProfileByName($profileName, array $filter = array())
+    public function getEncodingsForProfileByName($profileName, array $filter = null)
     {
+        if (null === $filter) {
+            $filter = array();
+        }
+
         $filter['profile_name'] = $profileName;
 
         return $this->getEncodings($filter);
@@ -236,8 +252,12 @@ class Cloud implements CloudInterface
     /**
      * {@inheritDoc}
      */
-    public function getEncodingsForVideo(Video $video, array $filter = array())
+    public function getEncodingsForVideo(Video $video, array $filter = null)
     {
+        if (null === $filter) {
+            $filter = array();
+        }
+
         $filter['video_id'] = $video->getId();
 
         return $this->getEncodings($filter);

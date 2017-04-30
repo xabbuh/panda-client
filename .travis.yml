@@ -23,7 +23,9 @@ matrix:
     - php: 5.6
       env: SYMFONY_VERSION="2.8.x"
     - php: 7.0
-      env: COMPOSER_OPTIONS="" COVERAGE=yes
+      env: COMPOSER_OPTIONS=""
+    - php: 7.1
+      env: COVERAGE=yes
     - php: hhvm
 
 before_install:
