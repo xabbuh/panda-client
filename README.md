@@ -25,7 +25,7 @@ The recommended way to install the Panda client is using
 1. Add ``xabbuh/panda-client`` as a dependency of your project:
 
     ```bash
-    $ composer require xabbuh/panda-client "~1.0"
+    $ composer require xabbuh/panda-client php-http/guzzle6-adapter
     ```
 
 1. And require Composer's autoloader:
@@ -33,6 +33,10 @@ The recommended way to install the Panda client is using
    ``` php
    require __DIR__.'/vendor/autoload.php';
    ```
+   
+Note: The Panda client relies on [HTTPlug](http://httplug.io/) to perform HTTP requests.
+So you will need to install a client implementation to use the PandaClient. The command above
+uses the Guzzle 6 adapter, but you can use any implementation.
 
 Usage
 -----

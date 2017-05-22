@@ -11,29 +11,40 @@
 
 namespace Xabbuh\PandaClient\Api;
 
-use Guzzle\Http\Client;
+use Http\Discovery\HttpClientDiscovery;
+use Http\Discovery\MessageFactoryDiscovery;
+use Http\Discovery\StreamFactoryDiscovery;
+use Http\Message\RequestFactory;
+use Http\Message\StreamFactory;
 use Xabbuh\PandaClient\Exception\ApiException;
 use Xabbuh\PandaClient\Exception\HttpException;
 use Xabbuh\PandaClient\Signer\PandaSigner;
 
-@trigger_error('Xabbuh\PandaClient\Api\HttpClient is deprecated since 1.3.0 and will be removed in 2.0. Use Xabbuh\PandaClient\Api\HttplugClient instead.', E_USER_DEPRECATED);
-
 /**
- * Panda REST client implementation using the PHP cURL extension.
+ * Panda REST client implementation using the Httplug library.
  *
- * Send signed requests (GET, POST, PUT or DELETE) to the Panda encoding
+ * Sends signed requests (GET, POST, PUT or DELETE) to the Panda encoding
  * webservice.
  *
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
- *
- * @deprecated since 1.3.0, will be removed in 2.0. Use HttplugClient instead.
+ * @author Christophe Coevoet <stof@notk.org>
  */
-class HttpClient implements HttpClientInterface
+class HttplugClient implements HttpClientInterface
 {
     /**
-     * @var Client
+     * @var \Http\Client\HttpClient
      */
-    private $guzzleClient;
+    private $httpClient;
+
+    /**
+     * @var RequestFactory
+     */
+    private $requestFactory;
+
+    /**
+     * @var StreamFactory
+     */
+    private $streamFactory;
 
     /**
      * Panda cloud id
@@ -48,6 +59,20 @@ class HttpClient implements HttpClientInterface
      * @var Account
      */
     private $account;
+
+    /**
+     * HttplugClient constructor.
+     *
+     * @param \Http\Client\HttpClient|null $httpClient
+     * @param RequestFactory|null          $requestFactory
+     * @param StreamFactory|null           $streamFactory
+     */
+    public function __construct(\Http\Client\HttpClient $httpClient = null, RequestFactory $requestFactory = null, StreamFactory $streamFactory = null)
+    {
+        $this->httpClient = $httpClient ?: HttpClientDiscovery::find();
+        $this->requestFactory = $requestFactory ?: MessageFactoryDiscovery::find();
+        $this->streamFactory = $streamFactory ?: StreamFactoryDiscovery::find();
+    }
 
     /**
      * {@inheritDoc}
@@ -79,16 +104,6 @@ class HttpClient implements HttpClientInterface
     public function getAccount()
     {
         return $this->account;
-    }
-
-    public function setGuzzleClient(Client $guzzleClient)
-    {
-        $this->guzzleClient = $guzzleClient;
-    }
-
-    public function getGuzzleClient()
-    {
-        return $this->guzzleClient;
     }
 
     /**
@@ -151,40 +166,36 @@ class HttpClient implements HttpClientInterface
             $path .= '?'.http_build_query($params, '', '&');
         }
 
-        // prepare the request
-        $request = null;
+        $body = null;
+        $headers = array();
 
-        switch ($method) {
-            case 'GET':
-                $request = $this->guzzleClient->get($path);
-                break;
-            case 'DELETE':
-                $request = $this->guzzleClient->delete($path);
-                break;
-            case 'PUT':
-                $request = $this->guzzleClient->put($path, null, $params);
-                break;
-            case 'POST':
-                $request = $this->guzzleClient->post($path, null, $params);
-                break;
+        if ('PUT' === $method || 'POST' === $method) {
+            $body = $this->streamFactory->createStream(http_build_query($params, '', '&'));
+            $headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8';
         }
+
+        // prepare the request
+        $uri = 'https://'.$this->account->getApiHost().'/v2/'.$path;
+        $request = $this->requestFactory->createRequest($method, $uri, $headers, $body);
 
         // and execute it
         try {
-            $response = $request->send();
+            $response = $this->httpClient->sendRequest($request);
         } catch (\Exception $e) {
             // throw an exception if the http request failed
             throw new HttpException($e->getMessage(), $e->getCode());
         }
 
+        $responseBody = (string) $response->getBody();
+
         // throw an API exception if the API response is not valid
         if ($response->getStatusCode() < 200 || $response->getStatusCode() > 207) {
-            $decodedResponse = json_decode($response->getBody(true));
+            $decodedResponse = json_decode($responseBody);
             $message = $decodedResponse->error.': '.$decodedResponse->message;
 
             throw new ApiException($message, $response->getStatusCode());
         }
 
-        return $response->getBody(true);
+        return $responseBody;
     }
 }
