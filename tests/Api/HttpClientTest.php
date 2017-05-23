@@ -17,6 +17,8 @@ use Xabbuh\PandaClient\Api\HttpClient;
 
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
+ *
+ * @group legacy
  */
 class HttpClientTest extends TestCase
 {

@@ -11,12 +11,11 @@
 
 namespace Xabbuh\PandaClient;
 
-use Guzzle\Http\Client;
 use Xabbuh\PandaClient\Api\Account;
 use Xabbuh\PandaClient\Api\AccountManager;
 use Xabbuh\PandaClient\Api\Cloud;
 use Xabbuh\PandaClient\Api\CloudManager;
-use Xabbuh\PandaClient\Api\HttpClient;
+use Xabbuh\PandaClient\Api\HttplugClient;
 use Xabbuh\PandaClient\Serializer\Symfony\Serializer;
 use Xabbuh\PandaClient\Transformer\CloudTransformer;
 use Xabbuh\PandaClient\Transformer\EncodingTransformer;
@@ -54,11 +53,9 @@ class Api extends AbstractApi
      */
     protected function createHttpClient(Account $account, $cloudId)
     {
-        $guzzleClient = new Client('https://'.$account->getApiHost().'/v2');
-        $httpClient = new HttpClient();
+        $httpClient = new HttplugClient();
         $httpClient->setAccount($account);
         $httpClient->setCloudId($cloudId);
-        $httpClient->setGuzzleClient($guzzleClient);
 
         return $httpClient;
     }

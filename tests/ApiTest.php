@@ -11,11 +11,17 @@
 
 namespace Xabbuh\PandaClient\Tests;
 
+use Http\Discovery\HttpClientDiscovery;
 use PHPUnit\Framework\TestCase;
 use Xabbuh\PandaClient\Api;
 
 class ApiTest extends TestCase
 {
+    protected function setUp()
+    {
+        HttpClientDiscovery::prependStrategy('Http\Discovery\Strategy\MockClientStrategy');
+    }
+
     public function testDefaultApi()
     {
         $accessKey = md5(uniqid());
