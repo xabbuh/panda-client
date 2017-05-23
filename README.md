@@ -35,8 +35,9 @@ The recommended way to install the Panda client is using
    ```
    
 Note: The Panda client relies on [HTTPlug](http://httplug.io/) to perform HTTP requests.
-So you will need to install a client implementation to use the PandaClient. The command above
-uses the Guzzle 6 adapter, but you can use any implementation.
+So you will need to install a [client implementation](https://packagist.org/providers/php-http/client-implementation)
+to use the PandaClient. The command above uses the Guzzle 6 adapter, but you can use
+any implementation.
 
 Usage
 -----
