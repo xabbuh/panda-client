@@ -21,7 +21,6 @@
         "symfony/serializer": "^2.7 || ^3.2"
     },
     "require-dev": {
-        "guzzle/guzzle": "~3.7",
         "guzzlehttp/psr7": "^1.4",
         "php-http/mock-client": "^1.0",
         "symfony/phpunit-bridge": "~3.3|~4.0"
