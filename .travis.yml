@@ -23,7 +23,6 @@ matrix:
     - php: 7.0
     - php: 7.1
       env: COVERAGE=yes COMPOSER_OPTIONS=""
-    - php: hhvm
 
 before_install:
   - if [ "$COVERAGE" != "yes" -a "$TRAVIS_PHP_VERSION" != "hhvm" ]; then phpenv config-rm xdebug.ini; fi
