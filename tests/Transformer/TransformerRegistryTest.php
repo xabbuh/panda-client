@@ -96,38 +96,43 @@ class TransformerRegistryTest extends TestCase
         );
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
     public function testInvalidArgumentExceptionWithoutCloudTransformer()
     {
-        $this->setExpectedException('\InvalidArgumentException');
-
         $this->transformers->getCloudTransformer();
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
     public function testInvalidArgumentExceptionWithoutEncodingTransformer()
     {
-        $this->setExpectedException('\InvalidArgumentException');
-
         $this->transformers->getEncodingTransformer();
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
     public function testInvalidArgumentExceptionWithoutNotificationsTransformer()
     {
-        $this->setExpectedException('\InvalidArgumentException');
-
         $this->transformers->getNotificationsTransformer();
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
     public function testInvalidArgumentExceptionWithoutProfileTransformer()
     {
-        $this->setExpectedException('\InvalidArgumentException');
-
         $this->transformers->getProfileTransformer();
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
     public function testInvalidArgumentExceptionWithoutVideoTransformer()
     {
-        $this->setExpectedException('\InvalidArgumentException');
-
         $this->transformers->getVideoTransformer();
     }
 }
