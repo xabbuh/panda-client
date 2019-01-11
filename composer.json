@@ -24,7 +24,7 @@
         "guzzle/guzzle": "~3.7",
         "guzzlehttp/psr7": "^1.4",
         "php-http/mock-client": "^1.0",
-        "symfony/phpunit-bridge": "~3.3|~4.0"
+        "symfony/phpunit-bridge": "^3.4.19 || ^4.1.8"
     },
     "minimum-stability": "dev",
     "autoload": {
