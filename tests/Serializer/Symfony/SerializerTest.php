@@ -109,7 +109,9 @@ class SerializerTest extends TestCase
           "id":"d891d9a45c698d587831466f236c6c6c",
           "videosid":"d891d9a45c698d587831466f236c6c6c"
         }';
-        $this->encodingSerializer->deserialize($data, 'Encoding');
+        $encoding = $this->encodingSerializer->deserialize($data, 'Encoding');
+
+        $this->assertInstanceOf('Xabbuh\PandaClient\Model\Encoding', $encoding);
     }
 
     public function testDeserializeEncodings()
@@ -214,7 +216,9 @@ class SerializerTest extends TestCase
           "id":"40d9f8711d64aaa74f88462e9274f39a",
           "profile_name":"h264"
         }';
-        $this->profileSerializer->deserialize($data, 'Profile');
+        $profile = $this->profileSerializer->deserialize($data, 'Profile');
+
+        $this->assertInstanceOf('Xabbuh\PandaClient\Model\Profile', $profile);
     }
 
     public function testDeserializeProfiles()
@@ -354,7 +358,9 @@ class SerializerTest extends TestCase
           "id":"d891d9a45c698d587831466f236c6c6c",
           "source_file":"test.mp4"
         }';
-        $this->videoSerializer->deserialize($data, 'Video');
+        $video = $this->videoSerializer->deserialize($data, 'Video');
+
+        $this->assertInstanceOf('Xabbuh\PandaClient\Model\Video', $video);
     }
 
     public function testDeserializeVideos()
