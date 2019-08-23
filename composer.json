@@ -36,5 +36,10 @@
         "psr-4": {
             "Xabbuh\\PandaClient\\Tests\\": "tests/"
         }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-1.x": "1.4.x-dev"
+        }
     }
 }
