@@ -4,7 +4,7 @@ CHANGELOG
 1.4.0
 -----
 
-* added support for HTTPlug
+* added support for HTTPlug 2
 
 * dropped support for unsupported versions of the `symfony/http-foundation` and
   `symfony/serializer` packages
