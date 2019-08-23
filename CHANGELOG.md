@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+1.4.0
+-----
+
+* added support for HTTPlug
+
 1.3.0
 -----
 
