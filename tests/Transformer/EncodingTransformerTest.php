@@ -18,7 +18,7 @@ use Xabbuh\PandaClient\Transformer\EncodingTransformer;
  */
 class EncodingTransformerTest extends TransformerTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->transformer = new EncodingTransformer();
 

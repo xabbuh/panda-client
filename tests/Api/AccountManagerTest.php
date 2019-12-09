@@ -34,31 +34,28 @@ class AccountManagerTest extends TestCase
         $this->assertSame($defaultAccount, $accountManager->getDefaultAccount());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testGetNonExistingDefaultAccount()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $account = new Account('', '', '');
         $accountManager = new AccountManager('default-key');
         $accountManager->registerAccount('the-key', $account);
         $accountManager->getDefaultAccount();
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testGetNonExistingDefaultAccountWithEmptyAccountManager()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $accountManager = new AccountManager('default-key');
         $accountManager->getDefaultAccount();
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testGetNonExistingAccount()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $account = new Account('', '', '');
         $accountManager = new AccountManager('default-key');
         $accountManager->registerAccount('the-key', $account);

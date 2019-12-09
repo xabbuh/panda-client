@@ -27,7 +27,7 @@ class NotificationsTransformerTest extends TestCase
      */
     private $transformer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->transformer = new NotificationsTransformer();
     }

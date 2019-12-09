@@ -18,7 +18,7 @@ use Xabbuh\PandaClient\Transformer\ProfileTransformer;
  */
 class ProfileTransformerTest extends TransformerTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->transformer = new ProfileTransformer();
 
