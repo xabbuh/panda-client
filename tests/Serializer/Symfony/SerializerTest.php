@@ -44,7 +44,7 @@ class SerializerTest extends TestCase
      */
     private $videoSerializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cloudSerializer = new Serializer();
         $this->encodingSerializer = new Serializer();

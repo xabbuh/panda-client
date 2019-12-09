@@ -17,7 +17,7 @@ use Xabbuh\PandaClient\Api;
 
 class ApiTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         HttpClientDiscovery::prependStrategy('Http\Discovery\Strategy\MockClientStrategy');
     }
@@ -40,31 +40,28 @@ class ApiTest extends TestCase
         $this->assertEquals(1, count($cloudManager->getClouds()));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testWithoutAccount()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $config = $this->createDefaultConfig();
         unset($config['accounts']);
         new Api($config);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testWithoutCloud()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $config = $this->createDefaultConfig();
         unset($config['clouds']);
         new Api($config);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testCloudWithoutAccount()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $config = $this->createDefaultConfig();
         unset($config['clouds']['default']['account']);
         new Api($config);

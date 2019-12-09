@@ -28,7 +28,7 @@ abstract class TransformerTest extends TestCase
      */
     protected $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->createSerializer();
         $this->transformer->setSerializer($this->serializer);

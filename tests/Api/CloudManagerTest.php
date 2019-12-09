@@ -34,7 +34,7 @@ class CloudManagerTest extends TestCase
      */
     private $cloudManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $mockBuilder = $this->getMockBuilder('Xabbuh\PandaClient\Api\Cloud');
         $mockBuilder->disableOriginalConstructor();
@@ -55,28 +55,25 @@ class CloudManagerTest extends TestCase
         $this->assertSame($this->cloud2, $this->cloudManager->getDefaultCloud());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testGetNonExistingDefaultCloud()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->cloudManager->registerCloud('the-key', $this->cloud1);
         $this->cloudManager->getDefaultCloud();
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testGetNonExistingDefaultCloudWithEmptyCloudManager()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->cloudManager->getDefaultCloud();
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testGetNonExistingCloud()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->cloudManager->registerCloud('the-key', $this->cloud1);
         $this->cloudManager->getCloud('another-key');
     }

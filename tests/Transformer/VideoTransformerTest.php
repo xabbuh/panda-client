@@ -18,7 +18,7 @@ use Xabbuh\PandaClient\Transformer\VideoTransformer;
  */
 class VideoTransformerTest extends TransformerTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->transformer = new VideoTransformer();
 

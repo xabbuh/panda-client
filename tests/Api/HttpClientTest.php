@@ -14,6 +14,7 @@ namespace Xabbuh\PandaClient\Tests\Api;
 use PHPUnit\Framework\TestCase;
 use Xabbuh\PandaClient\Api\Account;
 use Xabbuh\PandaClient\Api\HttpClient;
+use Xabbuh\PandaClient\Exception\ApiException;
 
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
@@ -29,7 +30,7 @@ class HttpClientTest extends TestCase
 
     private $guzzleClient;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->httpClient = new HttpClient();
         $this->httpClient->setAccount(new Account(
@@ -68,12 +69,11 @@ class HttpClientTest extends TestCase
         $this->httpClient->put('/foo');
     }
 
-    /**
-     * @expectedException \Xabbuh\PandaClient\Exception\ApiException
-     * @expectedExceptionCode 208
-     */
     public function testApiException()
     {
+        $this->expectException(ApiException::class);
+        $this->expectExceptionCode(208);
+
         $error = new \stdClass();
         $error->error = 500;
         $error->message = 'error message';

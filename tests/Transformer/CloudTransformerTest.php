@@ -18,7 +18,7 @@ use Xabbuh\PandaClient\Transformer\CloudTransformer;
  */
 class CloudTransformerTest extends TransformerTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->transformer = new CloudTransformer();
 

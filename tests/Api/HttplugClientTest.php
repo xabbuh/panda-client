@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Xabbuh\PandaClient\Api\Account;
 use Xabbuh\PandaClient\Api\HttplugClient;
+use Xabbuh\PandaClient\Exception\ApiException;
 
 /**
  * @author Christian Flothmann <christian.flothmann@xabbuh.de>
@@ -34,7 +35,7 @@ class HttplugClientTest extends TestCase
      */
     private $mockClient;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockClient = new Client();
         $this->httpClient = new HttplugClient($this->mockClient);
@@ -86,12 +87,11 @@ class HttplugClientTest extends TestCase
         $this->assertRequestMethod('PUT');
     }
 
-    /**
-     * @expectedException \Xabbuh\PandaClient\Exception\ApiException
-     * @expectedExceptionCode 208
-     */
     public function testApiException()
     {
+        $this->expectException(ApiException::class);
+        $this->expectExceptionCode(208);
+
         $error = new \stdClass();
         $error->error = 500;
         $error->message = 'error message';

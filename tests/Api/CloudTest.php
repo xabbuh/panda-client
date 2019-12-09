@@ -48,7 +48,7 @@ class CloudTest extends TestCase
      */
     private $cloud;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->createHttpClient();
         $this->createTransformers();

@@ -25,7 +25,7 @@ class PandaSignerTest extends TestCase
      */
     private $signer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $cloudId = '123456789';
         $account = new Account('abcdefgh', 'ijklmnop', 'api.pandastream.com');

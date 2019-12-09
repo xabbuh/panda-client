@@ -56,7 +56,7 @@ class TransformerRegistryTest extends TestCase
      */
     private $videoTransformer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->transformers = new TransformerRegistry();
         $this->cloudTransformer = $this->getMockBuilder('Xabbuh\PandaClient\Transformer\CloudTransformerInterface')->getMock();
@@ -96,43 +96,38 @@ class TransformerRegistryTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testInvalidArgumentExceptionWithoutCloudTransformer()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->transformers->getCloudTransformer();
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testInvalidArgumentExceptionWithoutEncodingTransformer()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->transformers->getEncodingTransformer();
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testInvalidArgumentExceptionWithoutNotificationsTransformer()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->transformers->getNotificationsTransformer();
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testInvalidArgumentExceptionWithoutProfileTransformer()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->transformers->getProfileTransformer();
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testInvalidArgumentExceptionWithoutVideoTransformer()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->transformers->getVideoTransformer();
     }
 }
