@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+1.5.0
+-----
+
+* added support for Symfony 5.1+
+* dropped support for Symfony <4.4
+* added support for PHP 8
+
 1.4.0
 -----
 
